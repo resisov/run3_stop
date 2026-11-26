@@ -8,6 +8,7 @@ if __package__ in (None,''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT,internal_path,luminosity_fb
+from TROTASR.utils.selection_contract import require_current_llcr
 from TROTASR.gnn4lowdm.configuration import configuration
 from TROTASR.workflows.diagnostic_common import record_years
 from TROTASR.utils.io import read_json,write_json
@@ -18,6 +19,40 @@ from TROTASR.workflows.prediction_plot_inputs import (
 from TROTASR.workflows.plotting_gnn_controls import distribution_blocks
 from TROTASR.workflows.plotting_nominal_distributions import draw_distribution
 from TROTASR.utils.sr_merge import load_merge
+
+
+def _llcr_prefit_models(output):
+    """Build only an unfitted CR model. The original acceptance already has its workspace."""
+    import os
+    import subprocess
+    from TROTASR.workflows.build_nominal_grid import prepare_llcr_prefit_cards
+    from TROTASR.workflows.combine_limits import runtime
+    model = output/'model'
+    before, after = prepare_llcr_prefit_cards(model)
+    before_workspace = ROOT/'stats/run3/cronly/workspace.root'
+    if not before_workspace.is_file():
+        raise FileNotFoundError(before_workspace)
+    after = internal_path(after)
+    # If the full updated grid was already published, the card preparer simply
+    # returns that same accepted card. Keep the converted workspace bound to it.
+    model.mkdir(parents=True,exist_ok=True)
+    workspace = model/('workspace_after.root' if after.parent == model else 'workspace_after_grid.root')
+    if not workspace.is_file():
+        pending = model/(workspace.stem+'.pending.'+str(os.getpid())+'.root')
+        if pending.exists():
+            raise FileExistsError(pending)
+        try:
+            command = ['text2workspace.py',str(after),'-m','120','-o',str(pending),'--X-allow-no-signal']
+            with (model/'workspace_after.log').open('a') as log:
+                subprocess.run(command,cwd=after.parent,env=runtime(model/'software_runtime'),
+                               stdout=log,stderr=subprocess.STDOUT,check=True)
+            if not pending.is_file() or pending.stat().st_size == 0:
+                raise RuntimeError('Conversion produced no new LLCR workspace')
+            os.replace(pending,workspace)
+        finally:
+            if pending.is_file():
+                pending.unlink()
+    return before,before_workspace,after,workspace
 
 
 def cronly_fit_plots(result, output, *, refit=None):
@@ -39,16 +74,26 @@ def cronly_fit_plots(result, output, *, refit=None):
     plots = [renderer.draw_cronly_prefit_postfit(payload,
         output/'cronly_prefit_postfit',luminosity)]
     artifacts = [output/'cronly_prefit_postfit.png',output/'cronly_prefit_postfit.pdf']
-    if refit:
+    selected = result == ROOT/'stats/run3/top_pt/cronly'
+    if refit or selected:
         import subprocess
         extractor = ROOT/'workflows/diagnostic_payload.py'
-        pulls = output/'pulls.json'
         stem = output/'cronly_nuisance_pulls_ylim6_split2'
-        fit_path, _ = cronly_refit_paths(result, refit)
-        subprocess.run([sys.executable,str(extractor),'--operation','extract_cronly',
-            '--fit-diagnostics',str(fit_path),
-            '--standard-normal-reference',str(result/read_json(result/'publication.json')['payload']),
-            '--output',str(pulls)],check=True)
+        if selected:
+            pulls = result/'pulls.json'
+            record = read_json(pulls)
+            if (record.get('sr_observed_data_used') is not False
+                    or internal_path(record['source_card']) != internal_path(ROOT/payload['fit_source']['card'])
+                    or record.get('fit_status') != payload['fit']['status']
+                    or record.get('covariance_quality') != payload['fit']['covariance_quality']):
+                raise ValueError('Pulls do not belong to the same saved CR-only fit')
+        else:
+            pulls = output/'pulls.json'
+            fit_path, _ = cronly_refit_paths(result, refit)
+            subprocess.run([sys.executable,str(extractor),'--operation','extract_cronly',
+                '--fit-diagnostics',str(fit_path),
+                '--standard-normal-reference',str(result/read_json(result/'publication.json')['payload']),
+                '--output',str(pulls)],check=True)
         subprocess.run([sys.executable,str(extractor),'--operation','plot_cronly',
             '--input',str(pulls),'--output-stem',str(stem),'--ylim','6','--parts','2',
             '--era-label','2022-2025 (13.6 TeV)'],check=True,stdout=subprocess.DEVNULL)
@@ -59,7 +104,7 @@ def cronly_fit_plots(result, output, *, refit=None):
         plots=plots,files=files,fit=payload['fit'],dataset=payload['dataset'],
         sr_observations_included=False,fit_recalculated=False,
         uncertainty_method=payload['uncertainty_method'],covariance_samples=500))
-    print(dict(status='generated_pending_visual_QA',bins=66,plots=len(plots),
+    print(dict(status='generated_pending_visual_QA',bins=plots[0]['bins'],plots=len(plots),
                fit_recalculated=False,covariance_quality=payload['fit']['covariance_quality']))
 
 
@@ -82,6 +127,9 @@ def prepare(payload, *, combine_era_sr=False, display_years=None):
     years=prediction_years(payload)
     expected={f'{y}/{r}/{m}' for y in years for m,rs in
               (('highdm',('SR',)),('lowdm',('SR','LLCR','QCDCR','GCR'))) for r in rs}
+    if payload.get('merged_sr_only'):
+        if not six_era or not payload.get('era_merged'):raise ValueError('Expected six-era merged SR input')
+        expected={f'{y}/SR/{m}' for y in years for m in ('highdm','lowdm')}
     if set(payload['channels'])!=expected:
         raise ValueError('Missing/extra year or plot channel')
     merge=load_merge(payload['sr_merge']) if payload.get('sr_merge') else None
@@ -121,6 +169,9 @@ def main():
     inputs.add_argument('--input',type=Path,help='Compact export from these verified cards')
     inputs.add_argument('--cronly-result',type=Path,
         help='Accepted observed CR-only fit; draw prefit/postfit and correlated uncertainty bands, no refit')
+    inputs.add_argument('--llcr-prefit-comparison',nargs=4,type=Path,
+        metavar=('BEFORE_CARD','BEFORE_WORKSPACE','AFTER_CARD','AFTER_WORKSPACE'),
+        help='Plot only the six-era LLCR before/after prefit model and observed CR counts; no fit')
     p.add_argument('--cronly-refit',nargs='?',const='fixed',choices=('fixed','matched'),
         help='Plot the saved, normally terminated CR-only refit, without replacing its provisional figures')
     p.add_argument('--year',choices=('2022','2022EE','2023','2023BPix','2024','2025'),
@@ -138,6 +189,33 @@ def main():
     selection.add_argument('--low-sr-only',action='store_true',help='Produce only low-dM SR with unchanged score boundaries')
     selection.add_argument('--cr-only',action='store_true',help='Produce only the three combined CRs with the shared distribution template')
     a=p.parse_args();output=internal_path(a.output)
+    if a.llcr_prefit_comparison:
+        if (a.cronly_refit or a.year or a.era_group or a.combine_era_sr or a.sr_only
+                or a.high_sr_only or a.low_sr_only or a.cr_only):
+            p.error('LLCR prefit comparison cannot be mixed with other projections')
+        product = ROOT/'stats/run3/new_signal/llcr_mtb'
+        if product/'plots' not in output.parents:
+            p.error('LLCR comparison belongs in its own LLCR product plots directory')
+        from TROTASR.workflows.prediction_plot_inputs import llcr_prefit_comparison
+        from TROTASR.utils.renderers.llcr_mtb import render_prefit_comparison
+        from contextlib import ExitStack
+        import fcntl
+        with ExitStack() as stack:
+            if not a.validate_only:
+                output.mkdir(parents=True,exist_ok=True)
+                lock=stack.enter_context((output/'plot.lock').open('a'))
+                fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            payload=llcr_prefit_comparison(*a.llcr_prefit_comparison)
+            if a.validate_only:
+                return
+            write_json(output/'prediction_payload.json',payload)
+            if not a.export_only:
+                rendered=render_prefit_comparison(payload,output/'llcr_prefit_before_after')
+                write_json(output/'plot_manifest.json',dict(status='generated_pending_visual_QA',
+                    files=[Path(v).name for v in rendered.values()],fit_executed=False,
+                    payload='prediction_payload.json'))
+        return
+    require_current_llcr(a.cronly_result, a.manifest, a.input, output)
     if a.cronly_refit and (not a.cronly_result or a.validate_only or a.export_only):
         p.error('--cronly-refit requires --cronly-result and a figure destination')
     if a.cronly_result:
@@ -238,6 +316,7 @@ def main():
         else:
             info=renderer.draw_flat_blocks(flat_blocks(record,mode,region,merge),output/name,
                 xlabel='Search bin' if region=='SR' else 'GNN bin',luminosity_fb=combined_luminosity,
+                x_tick_rotation=90,  # AN high-dM SR: label all 118 search bins vertically.
                 uncertainty_label_override='MC stat+syst unc.' if region=='SR' else 'Prefit stat+syst unc.')
             expected_bins=high_bins if region=='SR' else (5 if region=='LLCR' else 10)
             if info['bins']!=expected_bins or info.get('dropped_input_bins_1based'):

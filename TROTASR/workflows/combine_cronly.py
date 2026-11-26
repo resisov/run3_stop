@@ -20,11 +20,15 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.selection_contract import require_current_llcr
 from TROTASR.utils.io import read_json, write_json
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
     cr_channels, freeze_contract, CommandRunner, require_success, workspace,
     published_diagnostic, admitted_popen, live_resources, CommandFailure, process_active)
 
+CRONLY_MODEL_REVISION = 'photon_gnn_highdm_llcr_mtb175'
+RUN3 = ROOT / 'stats/run3'
+LLCR_MTB = RUN3 / 'new_signal/llcr_mtb'
 SOURCES = ['workflows/combine_cronly.py', 'workflows/diagnostic_common.py',
            'workflows/diagnostic_payload.py', 'workflows/extract_cronly_covariance.py',
            'workflows/renderers/cronly_pulls.py', 'workflows/combine_limits.py',
@@ -43,7 +47,7 @@ def fit_command(workspace_path):
             '--cminFallbackAlgo', 'Minuit2,Migrad,1:0.1']
 
 
-def validate_fit(path):
+def validate_fit(path, *, photon_gnn=False, both_nb=False):
     import ROOT as root
     source = root.TFile.Open(str(internal_path(path)))
     try:
@@ -53,6 +57,21 @@ def validate_fit(path):
         result = dict(fit_status=int(fit.status()), covariance_quality=int(fit.covQual()), edm=float(fit.edm()))
         if result['fit_status'] != 0 or result['covariance_quality'] < 2 or not math.isfinite(result['edm']):
             raise ValueError('CR fit did not pass status 0 / covariance quality >= 2 / finite EDM: ' + str(result))
+        if photon_gnn:
+            from TROTASR.workflows.cr_linked_workspace import GNN_BY_GROUP, PHOTON_GROUPS, RECOIL_BY_GROUP
+            groups = PHOTON_GROUPS if both_nb else ("Nb1",)
+            gnn = [name for nb in groups for name in GNN_BY_GROUP[nb]]
+            recoil = [name for nb in groups for name in RECOIL_BY_GROUP[nb]]
+            floats = fit.floatParsFinal()
+            fixed = fit.constPars().find('r')
+            tree = source.Get('tree_fit_b')
+            r = tree.GetLeaf('r') if tree else None
+            if (floats.find('r') or (fixed and fixed.getVal() != 0)
+                    or (r and (tree.GetEntry(0) <= 0 or r.GetValue() != 0))
+                    or (not fixed and not r)
+                    or any(not floats.find(name) for name in gnn)
+                    or any(floats.find(name) for name in recoil)):
+                raise ValueError('Fit must keep r=0 and float only the adopted low Photon GNN parametrization')
         return result
     finally:
         if source:
@@ -244,8 +263,49 @@ def robust_hesse_commands(target):
         yield 'robust_hesse_s'+str(strategy),command
 
 
+def _changed_cr_model(manifest, output):
+    """The LLCR cut revision must never overwrite the frozen CR fit."""
+    manifest, output = internal_path(manifest), internal_path(output)
+    current=RUN3/'top_pt'
+    if manifest==current/'grid/manifest.json' or output==current/'cronly':
+        if manifest!=current/'grid/manifest.json' or output!=current/'cronly':
+            raise ValueError('Bind the TT CR-only fit to its own updated grid')
+        m=read_json(manifest)
+        if not m.get('tt_card_input') or m.get('bins')!=208 or m.get('floating_normalization_parameters')!=44:
+            raise ValueError('Missing TT and high-tail card inputs')
+        return True
+    selected = (manifest == LLCR_MTB/'grid/manifest.json' or output == LLCR_MTB/'cronly')
+    if selected and (manifest != LLCR_MTB/'grid/manifest.json' or output != LLCR_MTB/'cronly'
+            or read_json(manifest).get('highdm_llcr_mtb_min_gev') != 175.0):
+        raise ValueError('Expected the changed LLCR grid and its separate CR-only result path')
+    return selected
+
+
+def _linked_cr_products(output, linked):
+    return (output/'linked_card.txt', output/'linked_data_obs.root') if linked else ()
+
+
+def _linked_cr_workspace(runner, card, manifest, output):
+    """Keep the native card preparation, conversion and graft receipts separate."""
+    linked_card, linked_data = _linked_cr_products(output, True)
+    native, target = output/'native_cr_workspace.root', output/'workspace.root'
+    worker = ['python3', ROOT/'workflows/combine_cronly.py', '--native-runtime',
+              '--manifest', manifest, '--output', output, '--workspace-step']
+    require_success(runner.run(
+        [*worker, 'prepare', '--workspace-input', card], output,
+        output/'workspace_prepare.log', [linked_card, linked_data]))
+    require_success(runner.run(
+        ['text2workspace.py', linked_card, '-m', '120', '-o', native, '--X-allow-no-signal'],
+        output, output/'workspace_native.log', [native]))
+    require_success(runner.run(
+        [*worker, 'link', '--workspace-input', native], output,
+        output/'workspace_link.log', [target]))
+    return target
+
+
 def recover(manifest, output, covariance=False, robust=False):
     output = internal_path(output)
+    linked = _changed_cr_model(manifest, output)
     card, origins = grid_card(manifest, 'cronly')
     with (output/'controller.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
@@ -299,6 +359,8 @@ def recover(manifest, output, covariance=False, robust=False):
             commands=(robust_hesse_commands(target) if robust else covariance_commands(target,starting)
                       if covariance else recovery_commands(target))
             for name,command in commands:
+                if linked:
+                    command += ['--forceRecreateNLL']
                 here=out/name;here.mkdir(exist_ok=True)
                 fit=here/'fitDiagnostics_cronly.root'
                 receipt=runner.run(command,here,here/'combine.log',[fit])
@@ -312,7 +374,10 @@ def recover(manifest, output, covariance=False, robust=False):
                 record['robust_hesse_dropped_parameters']=dropped
                 try:
                     require_success(receipt)
-                    record.update(validate_fit(fit));record['passed']=True
+                    from TROTASR.workflows.cr_linked_workspace import TOP_PT_CRONLY_REVISION
+                    record.update(validate_fit(fit, photon_gnn=linked,
+                                               both_nb=original.get('model_revision') == TOP_PT_CRONLY_REVISION))
+                    record['passed']=True
                 except Exception as exc: record.update(passed=False,error=repr(exc))
                 if not any(a['name']==name for a in state['attempts']): state['attempts'].append(record)
                 write_json(out/'state.json',state)
@@ -340,7 +405,8 @@ def recover(manifest, output, covariance=False, robust=False):
             original.update(status='fits_complete_pending_plots',stage='fit_complete',pid=None,
                 recovery_state=str((out/'state.json').relative_to(ROOT)),fit_status=accepted['fit_status'],
                 covariance_quality=accepted['covariance_quality'],edm=accepted['edm'],
-                products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (target,fit,parameters,pulls)),
+                products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (
+                    target,fit,parameters,pulls,*_linked_cr_products(output, linked))),
                 plotted_nuisances=sum(p['constraint_model']=='standard_normal' for p in payload['parameters'].values()))
             original.pop('error',None);write_json(output/'state.json',original)
             state['status']='fits_complete_pending_plots';return 0
@@ -352,8 +418,11 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
     if not math.isfinite(ylim) or ylim <= 0:
         raise ValueError('Invalid pull range')
     output = internal_path(output)
+    linked = _changed_cr_model(manifest, output)
     published=published_diagnostic(output,manifest,'cronly')
     if published is not None:
+        if linked:
+            raise ValueError('The changed LLCR model requires its own native fit receipt')
         with (output/'controller.lock').open('a') as lock:
             fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
             if published.get('status') == 'provisional':
@@ -371,14 +440,29 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
     output.mkdir(parents=True, exist_ok=True)
     with (output / 'controller.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        if not (plot_only and (output/'fit_recovery/state.json').exists()):
-            freeze_contract(output, origins, SOURCES, dict(signal_strength=0, workers=1, strategy=0, pull_ylim=ylim))
-        runner = CommandRunner(output)
+        from TROTASR.workflows.cr_linked_workspace import TOP_PT_CRONLY_REVISION
         state_path = output / 'state.json'
         state = read_json(state_path) if state_path.exists() else dict(
             status='running', started=time.time(), origins=origins, sr_observed_data_used=False,
-            channels=cr_channels(card.read_text(), tuple(read_json(card.with_suffix('.manifest.json'))['years'])), workers=1, strategy=0, auto_mc_stats=[10, 1, 1],
-            full_workflow_complete=False)
+            channels=cr_channels(card.read_text(), tuple(read_json(card.with_suffix('.manifest.json'))['years'])),
+            workers=1, strategy=0, auto_mc_stats=[10, 1, 1], full_workflow_complete=False)
+        if linked:
+            default_revision = TOP_PT_CRONLY_REVISION if output.parent == RUN3/'top_pt' else CRONLY_MODEL_REVISION
+            state.setdefault('model_revision', default_revision)
+            state['fitted_card'] = str((output/'linked_card.txt').relative_to(ROOT))
+        both_nb = state.get('model_revision') == TOP_PT_CRONLY_REVISION
+        if not (plot_only and (output/'fit_recovery/state.json').exists()):
+            options = dict(signal_strength=0, workers=1, strategy=0, pull_ylim=ylim)
+            sources = SOURCES
+            if linked:
+                sources = [*SOURCES, 'workflows/cr_linked_workspace.py']
+                options.update(model_revision=state['model_revision'],
+                    photon_cr_structure_donor=str((RUN3/'cronly/current_workspace.root').relative_to(ROOT)),
+                    photon_cr_donor_fit_values_used=False,
+                    photon_cr_observation_scope=('lowdm_both_Nb_GNN' if both_nb else 'lowdm_Nb1_GNN'),
+                    force_recreate_nll=True)
+            freeze_contract(output, origins, sources, options)
+        runner = CommandRunner(output)
         try:
             state['pid'] = os.getpid()
             if plot_only:
@@ -387,14 +471,24 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
                 pulls = output/'pulls.json'
                 if not pulls.is_file() or read_json(pulls).get('sr_observed_data_used') is not False:
                     raise ValueError('Completed CR fit lacks its blinded pull payload')
+                if linked and any(not p.is_file() or str(p.relative_to(ROOT)) not in state.get('products', {})
+                                  for p in _linked_cr_products(output, linked)):
+                    raise ValueError('Completed CR fit lacks its registered linked observations')
                 return 0
             else:
-                target = workspace(runner, card, output, cr_only=True)
+                if linked:
+                    state.update(status='running', stage='workspace')
+                    write_json(state_path, state)
+                target = (_linked_cr_workspace(runner, card, internal_path(manifest), output)
+                          if linked else workspace(runner, card, output, cr_only=True))
                 fit = output / 'fitDiagnostics_cronly.root'
                 state.update(status='running', stage='fit')
                 write_json(state_path, state)
-                require_success(runner.run(fit_command(target), output, output / 'combine.log', [fit]))
-                state.update(validate_fit(fit))
+                command = fit_command(target)
+                if linked:
+                    command += ['--forceRecreateNLL']
+                require_success(runner.run(command, output, output / 'combine.log', [fit]))
+                state.update(validate_fit(fit, photon_gnn=linked, both_nb=both_nb))
                 parameters = output / 'fit_parameters.json'
                 require_success(runner.run(['python3', ROOT / 'workflows/diagnostic_payload.py',
                     '--operation', 'extract_cronly', '--fit-diagnostics', fit, '--output', parameters],
@@ -411,7 +505,8 @@ def _run_once(manifest, output, plot_only=False, ylim=6.0):
                 retain_pulls(pulls, payload)
                 state.update(status='fits_complete_pending_plots', stage='fit_complete', finished=time.time(),
                     plotted_nuisances=sum(p['constraint_model'] == 'standard_normal' for p in payload['parameters'].values()),
-                    products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (target, fit, parameters, pulls)))
+                    products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (
+                        target, fit, parameters, pulls, *_linked_cr_products(output, linked))))
             grid_card(manifest, 'cronly')  # unchanged card and TH1 files after execution
         except BaseException as error:
             state.update(status='needs_attention', error=repr(error), finished=time.time())
@@ -637,6 +732,7 @@ def recover_profile_pulls(manifest, output, workers, *, continuation=False, warm
     root.gROOT.SetBatch(True);root.EnableThreadSafety()
     if not 1<=workers<=90:raise ValueError('Invalid shared worker limit')
     output=internal_path(output);card,origins=grid_card(manifest,'cronly')
+    linked = _changed_cr_model(manifest, output)
     with (output/'controller.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         parent=read_json(output/'state.json')
@@ -782,7 +878,8 @@ def recover_profile_pulls(manifest, output, workers, *, continuation=False, warm
                 plotted_uncertainties='asymmetric_profile_likelihood',global_covariance_accepted=False)
             pulls=output/'pulls.json'
             retain_pulls(pulls, payload)
-            products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (target,central,original,pulls))
+            products=dict.fromkeys(str(p.relative_to(ROOT)) for p in (
+                target,central,original,pulls,*_linked_cr_products(output, linked)))
             for record in recovered.values():
                 if 'profile_products' in record:products.update(record['profile_products'])
                 else:products[str((ROOT/record['folder']/('higgsCombine'+record['tag']+'.MultiDimFit.mH120.root')).relative_to(ROOT))]=None
@@ -854,12 +951,29 @@ if __name__ == '__main__':
     p.add_argument('--refit-initial-values', help='Explicit initial parameter values for the requested refit')
     p.add_argument('--pull-ylim', type=float, default=6.0)
     p.add_argument('--native-runtime', action='store_true', help=argparse.SUPPRESS)
+    p.add_argument('--workspace-step', choices=('prepare', 'link'), help=argparse.SUPPRESS)
+    p.add_argument('--workspace-input', type=Path, help=argparse.SUPPRESS)
     a = p.parse_args()
+    require_current_llcr(a.manifest, a.output, a.workspace_input)
     if a.refit_initial_values and not a.refit_current:
         p.error('--refit-initial-values requires --refit-current')
     if a.refit_current and a.plot_only:
         p.error('Choose a refit or plotting')
+    if bool(a.workspace_step) != bool(a.workspace_input) or (
+            a.workspace_step and (a.refit_current or a.plot_only)):
+        p.error('Invalid native CR-only workspace step')
     native_runtime(a.output)
+    if a.workspace_step:
+        from TROTASR.workflows.cr_linked_workspace import cronly_workspace_step
+        if not _changed_cr_model(a.manifest, a.output):
+            raise ValueError('The chosen workspace step requires the changed LLCR model')
+        output, source = internal_path(a.output), internal_path(a.workspace_input)
+        expected = (grid_card(a.manifest, 'cronly')[0] if a.workspace_step == 'prepare'
+                    else output/'native_cr_workspace.root')
+        if source != expected:
+            raise ValueError('Unexpected source for the native CR-only workspace step')
+        cronly_workspace_step(a.workspace_step, source, output, RUN3)
+        raise SystemExit(0)
     if a.refit_current:
         raise SystemExit(refit_current(a.manifest, a.output, initial_values=a.refit_initial_values))
     raise SystemExit(run(a.manifest, a.output, a.plot_only, a.pull_ylim))

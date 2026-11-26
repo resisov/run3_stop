@@ -34,14 +34,34 @@ class ThroughputTests(unittest.TestCase):
         return ak.Array(a)
 
     def test_buffers_shared_without_changing_decisions(self):
-        a=self.example();context=selections.topology_buffers(a)
-        self.assertEqual(context[2],[{7:{10}}])
-        for region in ('SR','LLCR','QCDCR'):
-            original=selections.topology_counts(a,{},region)
-            prepared=selections.topology_counts(a,{},region,context)
-            for i in (0,3):np.testing.assert_array_equal(original[i],prepared[i])
-            self.assertEqual(ak.to_list(original[1]),ak.to_list(prepared[1]))
-            self.assertEqual(original[2],prepared[2])
+        a = self.example()
+        resolved = {(1, 2): [dict(index=0, jets=[10, 11], score=.98, eta=0., mass=170.)]}
+        with patch.object(selections, 'boosted_overlap_vetoed_ak4_indices',
+                          wraps=selections.boosted_overlap_vetoed_ak4_indices) as footprint:
+            context = selections.topology_buffers(a)
+            self.assertEqual(footprint.call_count, 0)
+            with patch.object(ak, 'to_list', side_effect=AssertionError('No full jagged materialization')):
+                for region in ('SR', 'LLCR', 'QCDCR'):
+                    counts, clean, audit, baseline = selections.topology_counts(a, resolved, region, context)
+                    np.testing.assert_array_equal(counts, [[1, 0, 0, 0]])
+                    np.testing.assert_array_equal(baseline, counts)
+                    self.assertEqual(clean.tolist(), [[True]])
+                    self.assertEqual(audit, {'mixed_overlap': 0, 'resolved_overlap': 1,
+                                             'w_overlap': 0, 'mixed_and_independent_w': 0})
+            self.assertEqual(footprint.call_count, 3)
+
+    def test_no_unused_footprint_is_calculated(self):
+        empty = ak.with_field(self.example(), ak.Array([[False]]), 'fatjet_boosted_top_pass_all')
+        with patch.object(selections, 'boosted_overlap_vetoed_ak4_indices',
+                          wraps=selections.boosted_overlap_vetoed_ak4_indices) as footprint, \
+             patch.object(selections, '_references',
+                          return_value=(ak.Array([[0.]]), ak.Array([[0.]]))):
+            counts, clean, audit, baseline = selections.topology_counts(empty, {}, 'SR')
+        np.testing.assert_array_equal(counts, [[0, 0, 0, 0]])
+        np.testing.assert_array_equal(baseline, counts)
+        self.assertEqual(clean.tolist(), [[False]])
+        self.assertFalse(any(audit.values()))
+        self.assertEqual(footprint.call_count, 0)
 
     def test_buffers_are_rebuilt_for_each_shift(self):
         a=self.example()

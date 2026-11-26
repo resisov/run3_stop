@@ -1,4 +1,4 @@
-"""Canonical six-era merged-channel likelihood; adopted benchmark algebra unchanged."""
+"""Combine six eras into eight likelihood channels with shared CR rates."""
 from collections import OrderedDict
 from functools import lru_cache
 import math
@@ -8,14 +8,22 @@ import re
 import tempfile
 from TROTASR.utils.paths import internal_path
 from TROTASR.utils.io import read_json, write_json
+from TROTASR.utils.cr_binning import N_HIGH_CR, N_RATES, N_BINS
 
 
 ERAS = ('2022', '2022EE', '2023', '2023BPix', '2024', '2025')
 CHANNEL_BINS = {'SR_highdm_c1': 118, 'SR_lowdm_c1': 30,
-    'LLCR_highdm_c1': 12, 'LLCR_lowdm_c1': 10,
-    'QCDCR_highdm_c1': 12, 'QCDCR_lowdm_c1': 10,
-    'GCR_highdm_c1': 12, 'GCR_lowdm_c1': 10}
+    'LLCR_highdm_c1': N_HIGH_CR, 'LLCR_lowdm_c1': 10,
+    'QCDCR_highdm_c1': N_HIGH_CR, 'QCDCR_lowdm_c1': 10,
+    'GCR_highdm_c1': N_HIGH_CR, 'GCR_lowdm_c1': 10}
 RATE_NAME = re.compile(r'^(CMS_NPS26012_(?:qcd_norm|ll_norm|sgamma_shape)_.+)_(2022EE|2023BPix|2022|2023|2024|2025)$')
+HIGHDM_Z_SHAPE = 'highdm_z_shape_coefficients'
+HIGHDM_PHOTON = re.compile(r'CMS_NPS26012_sgamma_shape_highdm_(Nb1|Nb2plus)_bin[0-4]')
+
+
+def highdm_z_shape_group(parameter):
+    match = HIGHDM_PHOTON.fullmatch(parameter)
+    return match[1] if match else None
 
 
 def merged_channel(channel):
@@ -181,9 +189,10 @@ def merged_card_plan(card, text, output):
             original_initial=initial, original_bounds=[0.01, 5.],
             target_channel=channel, target_process=process)
         rate_map.append(dict(source=row[0], target=name, source_channel=row[2],
-                             target_channel=channel, process=process, original_initial=initial))
-    if len(old_rates) != 288 or len(shared_rates) != 48:
-        raise ValueError('Benchmark requires exactly 288 to 48 normalization names')
+                             source_process=row[3], target_channel=channel, process=process,
+                             original_initial=initial))
+    if len(old_rates) != len(ERAS)*N_RATES or len(shared_rates) != N_RATES:
+        raise ValueError('Unexpected normalization inventory for the pooled high-dM tail')
     # Declare every floating alpha first; dependent expressions are not new
     # floating parameters. alpha/a_ref is the shared residual beta.
     direct_rows, formula_rows, alpha_bounds = [], [], {}
@@ -220,6 +229,82 @@ def merged_card_plan(card, text, output):
         target_rate_count=len(shared_rates), signal_names=signal_names,
         residual_bounds=shared_rates, representative_initials=representatives,
         alpha_bounds=alpha_bounds, formula_count=len(formula_rows))
+
+
+def highdm_z_shape_coefficients(plan, background):
+    """Use the fitted SR columns' nominal, recoil-corrected Z yields as weights."""
+    sums = {era: {nb: {} for nb in ('Nb1', 'Nb2plus')} for era in ERAS}
+    for item in plan['rate_map']:
+        name = item['target']
+        nb = highdm_z_shape_group(name)
+        if item['target_channel'] != 'SR_highdm_c1' or nb is None:
+            continue
+        channel, process = item['source_channel'], item['source_process']
+        era = merged_channel(channel)[1]
+        if not process.startswith(f'ZJet_{nb}_u'):
+            raise ValueError('Unexpected high-dM Z transfer target: ' + process)
+        value = math.fsum(background[channel, process]['nominal']) * item['original_initial']
+        if not math.isfinite(value) or value < 0.:
+            raise ValueError('Invalid nominal Z transfer yield: ' + process)
+        group = sums[era][nb]
+        group[name] = group.get(name, 0.) + value
+    coefficients = {}
+    for era, groups in sums.items():
+        coefficients[era] = {}
+        for nb, yields in groups.items():
+            total = math.fsum(yields.values())
+            if total <= 0.:
+                raise ValueError(f'No nominal Z transfer support for {era}/{nb}')
+            coefficients[era][nb] = {
+                name: value / total / plan['representative_initials'][name]
+                for name, value in sorted(yields.items()) if value > 0.
+            }
+    return coefficients
+
+
+def highdm_z_shape_formula(parameter, scale, weights):
+    arguments = [parameter] + [other for other in sorted(weights) if other != parameter]
+    denominator = '+'.join(f'@{i}*{weights[arg]:.17g}'
+                           for i, arg in enumerate(arguments) if arg in weights)
+    return f'(@0*{scale:.17g}/({denominator}))', arguments
+
+
+def normalize_highdm_z_rates(plan, coefficients):
+    """Apply the fitted recoil ratios with the common SR Z scale divided out."""
+    replacements = {}
+    for item in plan['rate_map']:
+        name, channel, process = item['target'], item['target_channel'], item['process']
+        nb = highdm_z_shape_group(name)
+        if channel != 'SR_highdm_c1' or nb is None:
+            continue
+        era = merged_channel(item['source_channel'])[1]
+        weights = coefficients[era][nb]
+        scale = item['original_initial'] / item['reference_initial']
+        formula, arguments = highdm_z_shape_formula(name, scale, weights)
+        effective = name + '__zShape_' + process
+        replacements[channel, process] = [effective, 'rateParam', channel, process,
+                                          formula, ','.join(arguments)]
+        item.pop('scale_ratio', None)
+        item.update(binding_kind='highdm_z_shape', effective_name=effective,
+                    formula=formula, arguments=arguments)
+
+    remaining, replaced, direct = [], set(), set()
+    for line in plan['lines']:
+        row = line.split()
+        if len(row) == 6 and row[1] == 'rateParam':
+            key = tuple(row[2:4])
+            if key in replacements:
+                replaced.add(key)
+                plan['formula_count'] += row[5].startswith('[')
+                continue
+            if row[5].startswith('['):
+                direct.add(row[0])
+        remaining.append(line)
+    arguments = {name for row in replacements.values() for name in row[5].split(',')}
+    if not replacements or replaced != replacements.keys() or not arguments <= direct:
+        raise ValueError('High-dM Z shape must be linked to the retained GCR parameters')
+    remaining[-1:-1] = [' '.join(row) for row in replacements.values()]
+    plan['lines'] = remaining
 
 
 def sum_template_observations(plan, channels, background):
@@ -381,6 +466,8 @@ def prepare_merged_cards(path, text, metadata, channels, template_background):
     if metadata.get('fit_ready') is not True or metadata.get('sr_data_blinded') is not True:
         raise ValueError('Era-merged cards require ready blinded template inputs')
     plan = merged_card_plan(path, text, path)
+    z_shape = highdm_z_shape_coefficients(plan, template_background)
+    normalize_highdm_z_rates(plan, z_shape)
     bindings = observation_bindings(path, plan['source'])
     target = plan['data_root']
     receipt_path = target.parent.parent/'observation_construction.json'
@@ -412,16 +499,18 @@ def prepare_merged_cards(path, text, metadata, channels, template_background):
     if not target.is_file() or not target.stat().st_size:
         raise ValueError('Merged observation ROOT is missing or empty')
     return dict(observation_bindings=bindings, observation_receipt=str(receipt_path),
-                data_obs_root=str(target), reference_plan=plan)
+                data_obs_root=str(target), reference_plan=plan, **{HIGHDM_Z_SHAPE: z_shape})
 
 
 def merged_card_metadata(metadata, merge):
     """Common provenance for new and already completed canonical card pairs."""
-    return dict(metadata, era_merged=True, official_result=True, comparison_only=False,
-        observed_sr_used=False, rate_parameters=48, floating_normalization_parameters=48,
-        source_channels=48, source_bins=1284, source_rate_parameters=288,
-        target_channels=8, target_bins=214, target_rate_parameters=48,
-        normalization_model='shared alpha with preserved era-dependent rateParam formula scales',
+    return dict(metadata, era_merged=True, official_result=metadata.get('official_result', True),
+        comparison_only=False,
+        observed_sr_used=False, rate_parameters=N_RATES, floating_normalization_parameters=N_RATES,
+        source_channels=48, source_bins=len(ERAS)*N_BINS, source_rate_parameters=len(ERAS)*N_RATES,
+        target_channels=8, target_bins=N_BINS, target_rate_parameters=N_RATES,
+        normalization_model='shared alpha with era-dependent scales and high-dM Z shape-only transfer',
+        **{HIGHDM_Z_SHAPE: merge[HIGHDM_Z_SHAPE]},
         original_histograms_and_nuisance_functions_preserved=True,
         data_obs_root=merge['data_obs_root'], data_obs_construction_receipt=merge['observation_receipt'])
 
@@ -431,6 +520,7 @@ def render_merged_signal_card(path, text, metadata, merge):
     if metadata.get('fit_ready') is not True or metadata.get('sr_data_blinded') is not True:
         raise ValueError('Only ready blinded cards can be merged')
     plan = merged_card_plan(path, text, path)
+    normalize_highdm_z_rates(plan, merge[HIGHDM_Z_SHAPE])
     if observation_bindings(path, plan['source']) != merge['observation_bindings']:
         raise ValueError('Observation references differ; do not assume common data')
     model = merged_card_metadata(metadata, merge)
@@ -441,10 +531,11 @@ def render_merged_signal_card(path, text, metadata, merge):
 
 def publication_metadata(merge):
     return dict(era_merged=True, canonical_model='era_merged', official_result=True,
-        comparison_only=False, bins=214, source_bins=1284, likelihood_channels=8,
-        source_likelihood_channels=48, rate_parameters=48, floating_normalization_parameters=48,
+        comparison_only=False, bins=N_BINS, source_bins=len(ERAS)*N_BINS, likelihood_channels=8,
+        source_likelihood_channels=48, rate_parameters=N_RATES, floating_normalization_parameters=N_RATES,
         displayed_model_points=sum(DISPLAY_COUNTS.values()), merged_points_by_model=DISPLAY_COUNTS,
-        th1_channels=CHANNEL_BINS, data_obs_construction_receipt=merge['observation_receipt'])
+        th1_channels=CHANNEL_BINS, data_obs_construction_receipt=merge['observation_receipt'],
+        **{HIGHDM_Z_SHAPE: merge[HIGHDM_Z_SHAPE]})
 
 
 

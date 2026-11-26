@@ -9,13 +9,18 @@ import re
 import numpy as np
 
 from TROTASR.utils.io import read_json
+from TROTASR.utils.era_merge import HIGHDM_Z_SHAPE, highdm_z_shape_formula, highdm_z_shape_group
 from TROTASR.utils.paths import EARLY_ERAS, ERAS, ROOT, internal_path
 from TROTASR.utils.sr_binning import NATIVE_EDGES
 from TROTASR.utils.statistics_model import build_rz_covariance, rate_parameter, rz_value
 from TROTASR.utils.statistics_inputs import UT_BOUNDS, _extras
+from TROTASR.utils.vr_binning import HIGH_VR_DEFINITION, N_LOW_BINS, N_VR_BINS
+from TROTASR.utils.vr_prediction import N_CELL, N_NB, N_RECOIL
 from TROTASR.workflows.build_nominal_grid import CR12_POLICY, cr12_parameter
-from TROTASR.workflows.cr_linked_workspace import GNN, RECOIL, _weights
-from TROTASR.workflows.diagnostic_common import provisional_cronly_products
+from TROTASR.workflows.cr_linked_workspace import (
+    GNN_BY_GROUP, PHOTON_GROUPS, RECOIL_BY_GROUP, TOP_PT_CRONLY_REVISION, _weights,
+)
+from TROTASR.workflows.diagnostic_common import grid_card, provisional_cronly_products
 
 
 NB = ("Nb1", "Nb2plus")
@@ -23,11 +28,9 @@ FAMILIES = {"Top": "Top", "WtoLNu": "WJet", "QCD": "QCD", "Zto2Nu": "ZJet",
             "GJ": "PhotonJet", "PhotonJet": "PhotonJet", "DY": "DYJet",
             "VV": "VV", "VV_VVV": "VV"}
 BENCHMARK = ("T2tt", "mStop1200_mLSP500")
-N_BINS = 148
-N_CELLS = N_BINS * 16
 
 
-def _card(path):
+def _card(path, highdm_z_shape=None):
     rows = [row.split() for row in path.read_text().splitlines()
             if row.strip() and not row.lstrip().startswith("#")]
     bin_rows = [r[1:] for r in rows if r[0] == "bin"]
@@ -47,11 +50,27 @@ def _card(path):
                 raise ValueError(f"Unexpected CR rate binding {key!r}")
             if tail.startswith("["):
                 rates[key] = (name, 1., float(value))
+            elif "__zShape_" in name:
+                parameter = tail.split(",")[0]
+                era = proc.rsplit("_", 1)[-1]
+                nb = highdm_z_shape_group(parameter)
+                match = re.match(r"\(@0\*([0-9.eE+-]+)/\(", value)
+                if (ch != "SR_highdm_c1" or nb is None or not proc.startswith(f"ZJet_{nb}_u")
+                        or not highdm_z_shape or not match or name != parameter + "__zShape_" + proc):
+                    raise ValueError(f"Missing or invalid high-dM Z shape binding {name}")
+                scale = float(match[1])
+                expression, arguments = highdm_z_shape_formula(parameter, scale, highdm_z_shape[era][nb])
+                if scale <= 0. or value != expression or tail != ",".join(arguments):
+                    raise ValueError(f"High-dM Z shape expression disagrees with the grid: {name}")
+                rates[key] = (parameter, scale, None)
             else:
                 match = re.fullmatch(r"\(@0\*([0-9.eE+-]+)\)", value)
                 if not match or "__eraScale_" not in name:
                     raise ValueError(f"Unsupported rate expression {name}")
                 rates[key] = (tail, float(match[1]), None)
+            if (ch == "SR_highdm_c1" and highdm_z_shape and highdm_z_shape_group(rates[key][0])
+                    and "__zShape_" not in name):
+                raise ValueError(f"Missing shape normalization on SR transfer {name}")
         if kind not in ("shape", "lnN"):
             continue
         if len(args) != len(cols):
@@ -160,9 +179,9 @@ def _projection_inputs(payload, cols, rates, lnns, shapes, control_rates, measur
             blocks[key], extra_shapes[key], factors[key] = {}, defaultdict(
                 lambda: {"down": {}, "up": {}}), defaultdict(list)
             for cell in sorted(_cells(record)):
-                vr_bin, rem = divmod(cell, 16)
-                nb, recoil = divmod(rem, 8)
-                mode = "lowdm" if vr_bin < 30 else "highdm"
+                vr_bin, rem = divmod(cell, N_NB * N_RECOIL)
+                nb, recoil = divmod(rem, N_RECOIL)
+                mode = "lowdm" if vr_bin < N_LOW_BINS else "highdm"
                 column, rate = _binding(era, family, mode, NB[nb], recoil,
                                         rates, control_rates, transfer_columns)
                 blocks[key][cell] = "/".join(column)
@@ -198,8 +217,8 @@ def _projection_inputs(payload, cols, rates, lnns, shapes, control_rates, measur
                         for side in ("up", "down"):
                             value = record["nominal"].get(str(cell), (0., 0., 0.))[0]
                             extra_shapes[key][name][side][str(cell)] = float(value) * term[side]
-                    if mode == "lowdm" and nb == 0:
-                        projection = gamma_bin
+                    if mode == "lowdm":
+                        projection = (PHOTON_GROUPS[nb], gamma_bin)
                 lnn = tuple(sorted((uniform or {}).items()))
                 factors[key][(rate, norm, projection, lnn)].append(cell)
             # Extra shapes are absolute. Outside the affected recoil cells
@@ -211,28 +230,42 @@ def _projection_inputs(payload, cols, rates, lnns, shapes, control_rates, measur
     return blocks, extra_shapes, factors
 
 
-def _factor_evaluator(specs, photon):
+def _factor_evaluator(specs, photon, highdm_z_shape=None):
     from TROTASR.utils.vr_prediction import asym_pow, photon_recoil_factors
 
     grouped = {key: [(entry, np.asarray(cells, dtype=np.intp))
                      for entry, cells in v.items()] for key, v in specs.items()}
     last = None
     projections = {}
+    normalizers = {}
 
     def evaluate(era, sample, parameters):
         nonlocal last
-        out = np.ones(N_CELLS)
+        out = np.ones(N_CELL)
         if parameters is not last:
             last = parameters
-            for e, w in photon.items():
-                projections[e] = photon_recoil_factors(w, [parameters[name] for name in GNN])
+            for nb, weights in photon.items():
+                theta = [parameters[name] for name in GNN_BY_GROUP[nb]]
+                for e, w in weights.items():
+                    projections[e, nb] = photon_recoil_factors(w, theta)
+            for e, groups in (highdm_z_shape or {}).items():
+                for nb, coefficients in groups.items():
+                    total = math.fsum(parameters[name] * c for name, c in coefficients.items())
+                    if not math.isfinite(total) or total <= 0.:
+                        raise ValueError(f"Invalid high-dM Z shape normalization for {e}/{nb}")
+                    normalizers[e, nb] = total
         for (rate, scale, projection, lnns), cells in grouped[era, sample]:
             result = scale
             if rate is not None:
                 name, relative, _ = rate
                 result *= parameters[name] * relative
+                nb = highdm_z_shape_group(name)
+                if highdm_z_shape and nb is not None:
+                    result /= normalizers[era, nb]
             if projection is not None:
-                result *= projections[era][projection]
+                nb, recoil = projection
+                if (era, nb) in projections:
+                    result *= projections[era, nb][recoil]
             for name, (down, up) in lnns:
                 result *= float(asym_pow(parameters[name], down, up))
             out[cells] = result
@@ -241,25 +274,83 @@ def _factor_evaluator(specs, photon):
     return evaluate
 
 
-def _load_fit(run_root, needed, rate_names, gaussian_names):
+def fit_product_root(path):
+    """Resolve an explicitly selected, separate Run 3 statistical product."""
+    path = internal_path(path)
+    baseline = ROOT / "stats" / "run3"
+    if (baseline not in path.parents or path.relative_to(baseline).parts[0] in
+            {"grid", "cronly", "limits", "impacts", "plots", "vr"}):
+        raise ValueError("Select a separate Run 3 model product with its own grid and CR fit")
+    return path
+
+
+def completed_cr_fit_inputs(run_root, expected_card=None):
+    """Bind the registered blinded CR card to a completed native fit receipt.
+
+    Call while holding a shared CR controller lock. The command outcome and
+    fit quality are the scientific checks; no content hashes are required.
+    """
+    run_root = fit_product_root(run_root)
+    grid, result = run_root / "grid", run_root / "cronly"
+    card, origins = grid_card(grid / "manifest.json", "cronly")
+    if card.parent != grid / "datacards" or (expected_card is not None and card != expected_card):
+        raise ValueError("Fit requires the selected product's own CR-only card")
+    state = read_json(result / "state.json")
+    contract = read_json(result / "contract.json")
+    if (state.get("status") not in ("fits_complete_pending_plots", "generated_pending_visual_QA")
+            or state.get("stage") not in ("fit_complete", "profile_pulls_complete")
+            or state.get("pid") is not None or state.get("sr_observed_data_used") is not False
+            or state.get("origins") != origins or contract.get("origins") != origins
+            or contract.get("options", {}).get("signal_strength") != 0
+            or state.get("fit_status") != 0 or state.get("covariance_quality") not in (2, 3)
+            or not math.isfinite(float(state.get("edm", math.nan)))):
+        raise ValueError("The selected model has no matching completed observed CR-only B-only r0 fit")
+    products = {internal_path(ROOT / name) for name in state.get("products", ())}
+    workspace, pulls = result / "workspace.root", result / "pulls.json"
+    if not {workspace, pulls} <= products:
+        raise ValueError("The completed CR receipt must register its workspace and pulls")
+    fit_result = result / "fitDiagnostics_cronly.root"
+    receipt_path = result / "state.json"
+    if state.get("recovery_state"):
+        receipt_path = internal_path(ROOT / state["recovery_state"])
+        if result not in receipt_path.parents or receipt_path.name != "state.json":
+            raise ValueError("CR recovery receipt belongs to a different fit")
+        recovery = read_json(receipt_path)
+        accepted = [row for row in recovery.get("attempts", ())
+                    if row.get("passed") is True and row.get("exit_code") == 0]
+        fields = ("fit_status", "covariance_quality", "edm")
+        if (recovery.get("status") != "fits_complete_pending_plots" or recovery.get("pid") is not None
+                or len(accepted) != 1
+                or any(accepted[0].get(k) != state[k] for k in fields)):
+            raise ValueError("No matching successful CR recovery attempt")
+        fit_result = internal_path(ROOT / accepted[0]["fit"])
+        if receipt_path.parent not in fit_result.parents:
+            raise ValueError("CR recovery result belongs to a different attempt")
+    if (fit_result not in products
+            or any(not f.is_file() or not f.stat().st_size for f in (workspace, pulls, fit_result))):
+        raise ValueError("The accepted CR fit products are missing")
+    payload = read_json(pulls)
+    if (payload.get("sr_observed_data_used") is not False
+            or internal_path(payload["source_card"]) != card
+            or set(payload.get("channels", ())) != set(state.get("channels", ()))):
+        raise ValueError("CR fit payload is not bound to the selected blinded card")
+    publication = dict(status="completed_fit_receipt", canonical_model="era_merged", kind="cronly",
+                       dataset="observed CR-only B-only r0", sr_observed_data_used=False,
+                       complete=True, process_exit_code=0, termination="normal",
+                       fit_status=state["fit_status"], covariance_quality=state["covariance_quality"],
+                       edm=state["edm"], manifest=origins["manifest"], card=origins["card"],
+                       model_revision=state.get("model_revision"),
+                       receipt=str(receipt_path.relative_to(ROOT)))
+    return card, dict(workspace=workspace, fit_result=fit_result), publication
+
+
+def _load_fit(run_root, needed, rate_names, gaussian_names, *, explicit_card=None):
     import ROOT as root
 
     root.gROOT.SetBatch(True)
     root.gSystem.Load("libHiggsAnalysisCombinedLimit")
     root.RooMsgService.instance().setGlobalKillBelow(root.RooFit.ERROR)
     r = run_root / "cronly"
-    pub = read_json(r / "publication.json")
-    products = provisional_cronly_products(r, pub, required=("workspace", "fit_result"))
-    if products is None:
-        if (pub.get("kind") != "cronly" or pub.get("complete") is not True
-                or pub.get("dataset") != "observed CR-only B-only r0"
-                or pub.get("sr_observed_data_used") is not False):
-            raise ValueError("Expected the accepted observed CR-only fit")
-        products = {key: internal_path(r / pub.get(key, default)) for key, default in (
-            ("workspace", "workspace.root"), ("fit_result", "fitDiagnostics_cronly.root"))}
-        if any(path.parent != r for path in products.values()):
-            raise ValueError("CR-only fit inputs must belong to the accepted result directory")
-
     def ident(p):
         stat = p.stat()
         return dict(file=p.name, size=stat.st_size, mtime_ns=stat.st_mtime_ns)
@@ -267,6 +358,20 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
     with ExitStack() as stack:
         lock = stack.enter_context((r / "controller.lock").open("rb"))
         fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+        if explicit_card is not None:
+            _, products, pub = completed_cr_fit_inputs(run_root, explicit_card)
+        else:
+            pub = read_json(r / "publication.json")
+            products = provisional_cronly_products(r, pub, required=("workspace", "fit_result"))
+            if products is None:
+                if (pub.get("kind") != "cronly" or pub.get("complete") is not True
+                        or pub.get("dataset") != "observed CR-only B-only r0"
+                        or pub.get("sr_observed_data_used") is not False):
+                    raise ValueError("Expected the accepted observed CR-only fit")
+                products = {key: internal_path(r / pub.get(key, default)) for key, default in (
+                    ("workspace", "workspace.root"), ("fit_result", "fitDiagnostics_cronly.root"))}
+                if any(path.parent != r for path in products.values()):
+                    raise ValueError("CR-only fit inputs must belong to the accepted result directory")
         files = []
         for key in ("workspace", "fit_result"):
             f = root.TFile.Open(str(products[key]), "READ")
@@ -279,30 +384,39 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
                 or int(result.covQual()) < 2 or not math.isfinite(float(result.edm()))
                 or w.var("r") is None or w.cat("CMS_channel") is None):
             raise ValueError("Invalid saved CR-only fit_b")
+        if explicit_card is not None and (int(result.status()), int(result.covQual()),
+                float(result.edm())) != (pub["fit_status"], pub["covariance_quality"], pub["edm"]):
+            raise ValueError("Saved CR fit_b does not match its fit-quality receipt")
         channels = {str(p.first) for p in w.cat("CMS_channel")}
         if channels != {f"{c}_{m}_c1" for c in ("LLCR", "QCDCR", "GCR")
                         for m in ("lowdm", "highdm")}:
             raise ValueError("Only the six CRs are allowed in the donor workspace")
         w.var("r").setVal(0.)
-        photon = {era: np.asarray(values, dtype=float) for era, values in _weights(w).items()}
+        groups = PHOTON_GROUPS if pub.get("model_revision") == TOP_PT_CRONLY_REVISION else ("Nb1",)
+        gnn = {name for nb in groups for name in GNN_BY_GROUP[nb]}
+        fixed_legacy = {name for nb in groups for name in RECOIL_BY_GROUP[nb]}
+        needed = needed | gnn
+        photon = {
+            nb: {era: np.asarray(values, dtype=float) for era, values in _weights(w, nb).items()}
+            for nb in groups
+        }
         if any(a.shape != (5, 5) or np.any(a < 0) or np.any(a.sum(1) <= 0)
-               or not np.isfinite(a).all() for a in photon.values()):
+               or not np.isfinite(a).all() for weights in photon.values() for a in weights.values()):
             raise ValueError("Invalid prefit photon weights for GNN-to-recoil projection")
         floats = {str(x.GetName()): float(x.getVal()) for x in result.floatParsFinal()}
         fixed_r = result.constPars().find("r")
         if "r" in floats or (fixed_r and float(fixed_r.getVal()) != 0):
             raise ValueError("Expected the saved B-only fit with r fixed to zero")
         if (not all(math.isfinite(value) for value in floats.values())
-                or not set(GNN).issubset(floats) or set(RECOIL) & floats.keys()):
+                or not gnn.issubset(floats) or fixed_legacy & floats.keys()):
             raise ValueError("The saved fit does not use the accepted Photon CR GNN model")
-        fixed_legacy = set(RECOIL)
         bounded, prefit, constrained = {}, {}, {}
         for name in sorted(needed):
             v = w.var(name)
             if v:
                 prefit[name] = float(v.getVal())
                 bounded[name] = float(v.getMin()), float(v.getMax())
-                if name in rate_names or name in GNN:
+                if name in rate_names or name in gnn:
                     if name in fixed_legacy and not v.isConstant():
                         raise ValueError(f"Pre-GNN recoil coefficient is not fixed: {name}")
                     if name not in fixed_legacy and name not in floats:
@@ -313,7 +427,7 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
                         raise ValueError(f"Unknown prior for {name}")
                     constrained[name] = error
             else:
-                if name in rate_names or name in GNN or name in floats or name not in gaussian_names:
+                if name in rate_names or name in gnn or name in floats or name not in gaussian_names:
                     raise ValueError(f"Missing model parameter {name}")
                 # The benchmark card defines an independent Gaussian prior;
                 # it stays prefit if that background effect is absent in CR.
@@ -356,13 +470,16 @@ def _load_fit(run_root, needed, rate_names, gaussian_names):
                        constrained_from_fit=sorted(floating),
                        independent_unconstrained_in_cr=sorted(constrained.keys() - floating),
                        identity={key: ident(products[key]) for key in ("workspace", "fit_result")})
+        if explicit_card is not None:
+            quality.update(cr_manifest=pub["manifest"], cr_card=pub["card"], fit_receipt=pub["receipt"])
     return prefit, postfit, prior, draws, photon, quality
 
 
 def project(run_root, response):
     """Compute the two predictions before the renderer receives JetMET counts."""
-    from TROTASR.utils.vr_prediction import VRResponse, propagate
+    from TROTASR.utils.vr_prediction import VRResponse, propagate, validate_response_axes
 
+    validate_response_axes(response)
     if (response.get("status") != "complete"
             or response.get("all_applicable_responses_available") is not True
             or any(response.get("unsupported", {}).values())
@@ -378,17 +495,20 @@ def project(run_root, response):
     point = next(p for p in manifest["points"] if (p["model"], p["mass"]) == BENCHMARK)
     card = internal_path(ROOT / point["card"])
     if card.parent != grid / "datacards" or not card.is_file():
-        raise ValueError("Adopted background template card identity does not match")
-    cols, rates, lnns, shapes = _card(card)
+        raise ValueError("Background template card is missing from the grid")
+    highdm_z_shape = manifest.get(HIGHDM_Z_SHAPE)
+    cols, rates, lnns, shapes = _card(card, highdm_z_shape)
     cr_spec = manifest["cr_only_card"]
     cr_card = internal_path(ROOT / cr_spec["card"])
     if cr_card.parent != grid / "datacards" or not cr_card.is_file():
-        raise ValueError("Adopted CR card identity does not match")
+        raise ValueError("CR card is missing from the grid")
     _, control_rates, _, _ = _card(cr_card)
     measurements, hashes = _get_measurements(grid)
     blocks, extra, specs = _projection_inputs(response, cols, rates, lnns, shapes,
                                               control_rates, measurements)
-    needed = set(GNN)
+    needed = set()
+    needed.update(name for era in (highdm_z_shape or {}).values()
+                  for coefficients in era.values() for name in coefficients)
     for key, groups in specs.items():
         for rate, _, _, norms in groups:
             if rate is not None:
@@ -401,14 +521,14 @@ def project(run_root, response):
     gaussian_names = (set().union(*shapes.values(), *lnns.values()) |
                       set().union(*(set(v) for v in extra.values())))
     prefit, postfit, prior, draws, photon, fit = _load_fit(run_root, needed, rate_names, gaussian_names)
-    evaluate_factors = _factor_evaluator(specs, photon)
+    evaluate_factors = _factor_evaluator(specs, photon, highdm_z_shape)
     kernel = VRResponse.from_payload(response, blocks, extra_shapes=extra)
     views = {"highdm": ERAS, "lowdm_early": EARLY_ERAS, "lowdm_late": ERAS[-2:]}
-    indexes = {name: np.arange(30, 148) if name == "highdm" else np.arange(30)
+    indexes = {name: np.arange(N_LOW_BINS, N_VR_BINS) if name == "highdm" else np.arange(N_LOW_BINS)
                for name in views}
     selections = {}
     for name, eras in views.items():
-        mask = np.zeros(N_BINS)
+        mask = np.zeros(N_VR_BINS)
         mask[indexes[name]] = 1.
         selections[name] = {era: mask for era in eras}
     central_prefit = kernel.evaluate(prefit, factors=evaluate_factors)
@@ -418,7 +538,8 @@ def project(run_root, response):
         return np.concatenate([evaluated.view(selections[name])["total"][indexes[name]]
                                for name in views])
 
-    prior_cov = np.zeros((178, 178))
+    joint_size = sum(len(index) for index in indexes.values())
+    prior_cov = np.zeros((joint_size, joint_size))
     for down, up in prior.values():
         delta = (join(kernel.evaluate(up, factors=evaluate_factors))
                  - join(kernel.evaluate(down, factors=evaluate_factors))) / 2.
@@ -442,7 +563,7 @@ def project(run_root, response):
         index = indexes[name]
         where = slice(offset, offset + len(index))
         offset = where.stop
-        joint_index.extend(i * N_BINS + index)
+        joint_index.extend(i * N_VR_BINS + index)
         post = evaluated_postfit["views"][name]
         pre = central_prefit.view(selections[name])
         result[name] = dict(years=list(eras),
@@ -451,6 +572,7 @@ def project(run_root, response):
             postfit=stage(post, index, post["systematic_covariance"][np.ix_(index, index)]))
     pre_stat = np.concatenate([v["prefit"]["background_stat_unc"] for v in result.values()])
     return dict(schema="trotasr_vr_prefit_postfit_v1", status="complete", years=list(ERAS),
+                high_definition=HIGH_VR_DEFINITION,
                 response_scope=response.get("endpoint_scope", response["object_method"]),
                 fit=fit, views=result, vr_data_fitted=False, fit_recalculated=False,
                 sr_observations_used=False, sr_observations_included=False,
@@ -465,4 +587,7 @@ def project(run_root, response):
                     postfit_draws=evaluated_postfit["draws_with_native_clipping"]),
                 source=dict(card=point["card"], measurements=hashes,
                             cr_card=cr_spec["card"],
-                            photon_prefit_weights={k: a.tolist() for k, a in photon.items()}))
+                            photon_prefit_weights={k: a.tolist() for k, a in photon["Nb1"].items()},
+                            **({"photon_prefit_weights_nb2plus": {
+                                k: a.tolist() for k, a in photon["Nb2plus"].items()
+                            }} if "Nb2plus" in photon else {})))

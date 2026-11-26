@@ -56,9 +56,8 @@ def prepare(payload,rz,allow_validation=False):
         if (not cov.get('full_input_inventory') or cov.get('failed_files')!=0
                 or cov.get('expected_files')!=cov.get('completed_files')):
             raise ValueError('Complete full-file coverage required')
-    if (rz.get('status')!='complete' or rz.get('scope')!=payload['scope']
-            or str(rz.get('provenance',{}).get('campaign_year'))!=str(year)):
-        raise ValueError('Incomplete or different-year/scope RZ')
+    from TROTASR.workflows.plotting_nominal_distributions import require_measurement_scope
+    require_measurement_scope(payload,rz)
     edges=configuration(year)['cr_binning']['score_edges']
     result=dict(status='complete',year=year,scope=payload['scope'],score_edges=edges,
                 histograms={'nominal':{},'nominal_rz':{}},rz_application=[])
@@ -87,9 +86,15 @@ def prepare(payload,rz,allow_validation=False):
             if sources and region in ('DY2E','DY2M'):
                 container=endpoint_container(payload,'histograms','lowdm',region,nb,
                     'gnn_score',edges,sources)
-                for leaf in container.get('DY',{}).values():
-                    leaf['sumw']=(np.asarray(leaf['sumw'])*factor).tolist()
-                    leaf['sumw2']=(np.asarray(leaf['sumw2'])*factor**2).tolist()
+                for name,leaf in container.get('DY',{}).items():
+                    w=factor
+                    if 'tt_card_input' in payload and name in rz['inclusive_ttbar_endpoints']:
+                        endpoint=rz['inclusive_ttbar_endpoints'][name]['rz_low']['channels'][region][group]
+                        w=float(endpoint['RZ'])
+                        if not endpoint.get('fit_converged') or not np.isfinite(w) or w<0:
+                            raise ValueError('Invalid ttbar-varied DY control measurement')
+                    leaf['sumw']=(np.asarray(leaf['sumw'])*w).tolist()
+                    leaf['sumw2']=(np.asarray(leaf['sumw2'])*w**2).tolist()
                 result['dy_endpoint_containers'].setdefault(region,{})[category]=container
     return result
 
@@ -129,13 +134,13 @@ def current_card_controls(export,year):
     return result
 
 
-def score_interval_labels():
-    edges=read_json(ROOT/'gnn4lowdm/config.json')['cr_binning']['score_edges']
+def score_interval_labels(edges=None):
+    if edges is None:edges=configuration('2024')['cr_binning']['score_edges']
     return [f'[{low:.3g}, {high:.3g}{"]" if i==len(edges)-2 else ")"}'
             for i,(low,high) in enumerate(zip(edges[:-1],edges[1:]))]
 
 
-def distribution_blocks(record, region):
+def distribution_blocks(record, region, edges=None):
     """Native ten-bin prefit inputs; common template and real score labels."""
     fields = ('nbin','label','groups','background','background_unc',
               'background_stat_unc','data','data_unc','signals','signal_specs',
@@ -143,7 +148,7 @@ def distribution_blocks(record, region):
     blocks=[{k:deepcopy(block[k]) for k in fields}
             for block in flat_blocks(record, 'lowdm', region,pool_llcr_display=False)]
     for block in blocks:
-        block.update(xlabels=score_interval_labels(),variable='gnn_score')
+        block.update(xlabels=score_interval_labels(edges),variable='gnn_score')
     return blocks
 
 
@@ -165,7 +170,8 @@ def dy_distribution_blocks(payload,include_systematics=True):
         raw=renderer.combine_histogram_containers(*parts)
         old_lumi=renderer.LUMINOSITY_RELATIVE_UNCERTAINTY
         try:
-            renderer.LUMINOSITY_RELATIVE_UNCERTAINTY=0.
+            if not payload.get('tt_card_input') or not include_systematics:
+                renderer.LUMINOSITY_RELATIVE_UNCERTAINTY=0.
             block=renderer.lowdm_variable_record(
                 {'lowdm_variable_specs':{'gnn_score':{'bins':payload['score_edges']}}},
                 'DYCR','gnn_score',label,False,raw_override=raw)
@@ -174,7 +180,7 @@ def dy_distribution_blocks(payload,include_systematics=True):
         # template change must not silently add a luminosity uncertainty.
         if not include_systematics or not payload.get('dy_endpoint_containers'):
             block['background_unc']=block['background_stat_unc'].copy()
-        block.update(edges=[],xlabels=score_interval_labels(),blind_data=False)
+        block.update(edges=[],xlabels=score_interval_labels(payload['score_edges']),blind_data=False)
         blocks.append(block)
     return blocks
 
@@ -223,8 +229,9 @@ def export_loaded(h,rz,export,allow_validation=False):
         scope=payload['scope'],prediction_provenance=export['provenance'],
         rendering_entry_point='plotting_nominal_distributions.draw_distribution')
     with nominal_renderer(payload['year']):old_dy=dy_distribution_blocks(payload,False)
-    with nominal_renderer(payload['year'],payload.get('systematic_sources',[])):
-        prepared={region:distribution_blocks(record,region) for region,record in predictions.items()}
+    if 'tt_card_input' in h:payload['tt_card_input']=h['tt_card_input']
+    with nominal_renderer(payload['year'],payload.get('systematic_sources',[]),current_tt='tt_card_input' in h):
+        prepared={region:distribution_blocks(record,region,payload['score_edges']) for region,record in predictions.items()}
         prepared['DYCR']=dy_distribution_blocks(payload)
         for old,new in zip(old_dy,prepared['DYCR']):assert_band_only(old,new)
     return json_ready(dict(schema='trotasr_gnn_control_plot_inputs_v1',contract=contract,blocks=prepared,
@@ -232,10 +239,97 @@ def export_loaded(h,rz,export,allow_validation=False):
         nuisance_names={**{r:sorted(v['nuisance_deltas']) for r,v in predictions.items()},
                         'DYCR':payload.get('systematic_sources',[])},
         uncertainty_audit=dict(card=export.get('uncertainty_audit'),
-            auxiliary_dy='Existing RZ central plus stored event endpoints and MC statistics; no new luminosity term',
+            auxiliary_dy=('Measured channel/Nb RZ incl correlated ttbar endpoints; event variations, luminosity and MC statistics'
+                          if 'tt_card_input' in h else 'Existing RZ central plus stored event endpoints and MC statistics; no new luminosity term'),
             auxiliary_dy_rz_fit_uncertainty='Not propagated: no approved correlated display-error mapping',
             same_name_shifts_summed_before_envelope=True,mcstat_counted_once=True,
             central_sumw2_data_labels_axes_exactly_preserved=True)))
+
+
+def current_cr_export(manifest, output, mode='lowdm'):
+    """Project the fitted CR card back to its original era-tagged template columns."""
+    import uproot
+    from TROTASR.utils.era_merge import ERAS
+    from TROTASR.workflows.diagnostic_common import grid_card
+    from TROTASR.workflows.prediction_plot_inputs import parse_card,channel_prediction,_merged_rate_bindings,_prediction_metadata
+    root=ROOT/'stats/run3/top_pt'
+    if manifest!=root/'grid/manifest.json' or root/'plots' not in output.parents:
+        raise ValueError('Current linked top-pT card and plot output required')
+    original,origins=grid_card(manifest,'cronly');grid=read_json(manifest)
+    state=read_json(root/'cronly/state.json');fitted=internal_path(ROOT/state['fitted_card'])
+    if (state['origins']!=origins or state.get('sr_observed_data_used') is not False
+            or fitted!=root/'cronly/linked_card.txt' or state.get('fit_status')!=0):
+        raise ValueError('Wrong fitted CR-only model')
+    card=parse_card(fitted.read_text()); binds=_merged_rate_bindings(card['rateparams'],{})
+    initials={name:value for name,_,value in binds.values() if value is not None}
+    shapes={(r[2],r[1]):r for r in card['shapes'] if r[1]!='data_obs'}
+    if mode not in ('lowdm','highdm'):raise ValueError('Unrecognized control mode')
+    channels={};template_labels=read_json(internal_path(ROOT/grid['templates_manifest']))['channels']
+    workspace_prefit={}
+    for y in ERAS:
+        for region in REGIONS[:3]:
+            ch=region+'_'+mode+'_c1'; origin=ch+'_'+y
+            ids=[j for j,(c,p) in enumerate(card['columns']) if c==ch and p.endswith('_'+y)]
+            native=dict(columns=[],nuisances=[r[:2]+[r[2+j] for j in ids] for r in card['nuisances']],rateparams=[])
+            paths=set()
+            for j in ids:
+                c,p=card['columns'][j];name=p[:-(len(y)+1)];row=shapes[(c,p)]
+                if row[4:]!=[origin+'/'+name,origin+'/'+name+'_$SYSTEMATIC']:
+                    raise ValueError('Unexpected template binding')
+                native['columns'].append((origin,name));paths.add(internal_path(fitted.parent/row[3]))
+                if (c,p) in binds:
+                    param,factor,_=binds[c,p];value=initials[param]*factor
+                    native['rateparams'].append([param,'rateParam',origin,name,str(value),'[0.01,5]'])
+            if paths!={root/'grid/templates'/('template_'+mode+'_'+y+'.root')}:
+                raise ValueError('Wrong era template')
+            with uproot.open(paths.pop(),object_cache=None,array_cache=None) as f:
+                labels=template_labels[origin]
+                if mode=='lowdm' and labels!=expected_labels(origin):raise ValueError('Changed low-dM CR labels')
+                channels[y+'/'+region+'/'+mode]=channel_prediction(native,origin,f[origin],labels,(.01,5))
+                if mode=='highdm':
+                    # The native Combine ShapeTools.rebinH1 makes a TH1F copy
+                    # before construction of CMSHistFunc. Keep original TH1D
+                    # table values, and reproduce that rounding for closure.
+                    scales={r[3]:float(r[4]) for r in native['rateparams']}
+                    masses=workspace_prefit.setdefault(region,np.zeros(len(labels)))
+                    for _,p in native['columns']:
+                        raw=f[origin][p].values()
+                        masses+=np.asarray(raw,dtype=np.float32).astype(float)*scales.get(p,1.)
+    check=read_json(root/'plots/cronly/prediction_payload.json')
+    for r in REGIONS[:3]:
+        total=combine([channels[y+'/'+r+'/'+mode] for y in ERAS])
+        official=check['channels'][r+'_'+mode+'_c1']
+        np.testing.assert_array_equal(total['data'],official['data'])
+        closure=workspace_prefit[r] if mode=='highdm' else total['background']
+        np.testing.assert_allclose(closure,official['prefit']['background'],rtol=2e-8,atol=1.e-6)
+    payload=dict(_prediction_metadata(grid),schema=('trotasr_current_gnn_cr_export_v1' if mode=='lowdm'
+        else 'trotasr_current_recoil_cr_export_v1'),scope=grid['scope'],
+        prediction_stage='prefit',rate_initials_applied=True,sr_observations_included=False,status='complete',
+        provenance=dict(manifest=str(manifest.relative_to(ROOT)),card=str(fitted.relative_to(ROOT)),
+            checks='6-era total/data versus native CR-only workspace projection for each of 30 '+mode+' bins'),
+        channels=json_ready(channels))
+    payload.update({k:grid[k] for k in ('era_merged','likelihood_channels','floating_normalization_parameters',
+                       'source_bins','source_likelihood_channels','tt_card_input') if k in grid})
+    output.mkdir(exist_ok=True,parents=True);write_json(output/'predictions.json',payload)
+    return payload
+
+
+def render_late(export,output):
+    years=('2024','2025')
+    if export.get('schema')!='trotasr_current_gnn_cr_export_v1':
+        raise ValueError('Current signed per-era CR projection required')
+    output.mkdir(parents=True,exist_ok=True)
+    plots=[];files=[]
+    for r in REGIONS[:3]:
+        merged=combine([export['channels'][y+'/'+r+'/lowdm'] for y in years])
+        if configuration('2024')['cr_binning']['score_edges']!=configuration('2025')['cr_binning']['score_edges']:
+            raise ValueError('Different late GNN axes')
+        name='lowdm_'+r.lower()+'_gnn_nisr_merged'
+        plots.append(draw_distribution(distribution_blocks(merged,r),output/name,'GNN output',
+            sum(luminosity_fb(y) for y in years),'Prefit stat+syst unc.'))
+        files.extend(name+ext for ext in ('.pdf','.png'))
+    write_json(output/'plot_manifest.json',dict(status='generated_pending_visual_QA',files=files,plots=plots,
+        years=years,provenance=export['provenance'],same_name_shifts_summed_before_envelope=True))
 
 
 def main():
@@ -243,6 +337,9 @@ def main():
     inputs=p.add_mutually_exclusive_group(required=True)
     inputs.add_argument('--hists',type=Path)
     inputs.add_argument('--input',type=Path)
+    inputs.add_argument('--export-current-cards',type=Path)
+    p.add_argument('--highdm-channel-yields',action='store_true',help='Export era-resolved LLCR/QCDCR/GCR recoil-bin yields')
+    inputs.add_argument('--late-gnn',type=Path)
     p.add_argument('--rz-low',type=Path)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--export-only',action='store_true')
@@ -252,6 +349,12 @@ def main():
     p.add_argument('--manifest',type=Path,
                    help='Explicit current verified native grid; never default to a historical model')
     a=p.parse_args()
+    if a.export_current_cards:
+        current_cr_export(internal_path(a.export_current_cards),internal_path(a.output),
+                          'highdm' if a.highdm_channel_yields else 'lowdm');return
+    if a.highdm_channel_yields:p.error('--highdm-channel-yields requires --export-current-cards')
+    if a.late_gnn:
+        render_late(read_json(internal_path(a.late_gnn)),internal_path(a.output));return
     if a.input:
         if a.manifest or a.predictions or a.rz_low or a.export_only or a.allow_validation:
             raise ValueError('Compact GNN input already freezes all sources')

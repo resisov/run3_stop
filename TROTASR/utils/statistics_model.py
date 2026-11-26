@@ -20,6 +20,9 @@ def nps_nuisance_name(name: str, year: str) -> str:
         return name
     if name == "jesTotal":
         return f"CMS_scale_j_Total_{year}"
+    if name == "top_pt_reweight":
+        from .top_pt import NUISANCE
+        return NUISANCE
     # Common names correlate the listed variations across eras; yearly names
     # carry an era suffix. Scale/resolution and efficiency variations are
     # mapped separately. BTV fixed-WP correlated variations share a name,

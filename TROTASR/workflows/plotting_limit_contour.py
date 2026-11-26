@@ -76,7 +76,9 @@ def canonical_workflow_results(grid, workflow, state_path,
     if not isinstance(saved, dict):
         raise ValueError('Canonical workflow results must be a point mapping')
     analysis_root = canonical_analysis_root(workflow)
-    if live_snapshot:
+    # This live grid publishes accepted results atomically on each pool tick.
+    # Its unfinished point directories are owned by the active fit workers.
+    if live_snapshot and state_path.parent != ROOT/'stats/run3/top_pt/limits':
         # Add newly accepted point receipts without reopening ROOT or producer inputs.
         from TROTASR.workflows.combine_limits import accepted_analysis_root, saved_point_result
         saved = dict(saved)
@@ -194,6 +196,11 @@ def prepare(limits_dir, grid_manifest, allow_partial=False, live_snapshot=False)
                           or not grid.get('run3_systematics')):
         raise ValueError('Live snapshot requires an explicit partial six-era view')
     workflow_path, workflow = _workflow(limits_dir)
+    if workflow_path.parent == ROOT/'stats/run3/top_pt/limits' and (
+            internal_path(grid_manifest) != ROOT/'stats/run3/top_pt/grid/manifest.json'
+            or workflow.get('manifest') != 'stats/run3/top_pt/grid/manifest.json'
+            or canonical_analysis_root(workflow) != ROOT or not grid.get('tt_card_input')):
+        raise ValueError('The top-pT limits require the matching new-model grid')
     grid = dict(grid, canonical_limits_pipeline=True,
                 _canonical_analysis_root=str(canonical_analysis_root(workflow)))
     grid['points'] = [point for point in grid['points']
@@ -236,7 +243,7 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
     contract = dict(grid=str(grid_manifest), runtime=renderer.runtime_versions(),
         allow_partial=allow_partial, sr_bins_per_year=dict(highdm=high_bins, lowdm=low_bins),
         sr_merge=grid.get('sr_merge'), canonical_limits_pipeline=True,
-        analysis_root=grid['_canonical_analysis_root'])
+        analysis_root=grid['_canonical_analysis_root'], decay_boundary_guides=False)
     if grid.get('run3_systematics'):
         contract.update(years=list(eras), run3_systematics=grid['run3_systematics'],
             systematic_scope=grid['systematic_scope'], preliminary=True,
@@ -248,6 +255,10 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
             fit_or_histogram_recalculation=False)
     receipt = output / 'plot_manifest.json'
     plots = []
+    def drawable(record):
+        present = set(record['payload']['points'])
+        return len(present) >= 4 and (not live_snapshot or
+            support_mask(record['requested_masses'],present)[1]['verified_triangles'] > 0)
     if receipt.is_file():
         old = read_json(receipt)
         keys = ('allow_partial', 'sr_bins_per_year', 'sr_merge', 'years',
@@ -270,9 +281,9 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
             current = records[model]['payload']['points']
             if not prior.keys() <= current.keys():
                 raise ValueError('Current snapshot lost accepted fit support; preserve the previous contour')
-            if prior == current:
+            if prior == current and previous.get('decay_boundary_guides') is False:
                 plots.append(plot)
-        expected = {m for m, r in records.items() if len(r['payload']['points']) >= 4}
+        expected = {m for m, r in records.items() if drawable(r)}
         if {p['model'] for p in plots} == expected:
             if previous.get('snapshot_counts') == contract['snapshot_counts']:
                 return old
@@ -303,7 +314,7 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
             name += '_in_progress'
         png = output / (name + '.png')
         diagnostics = {}
-        if len(payload['points']) < 4:
+        if not drawable(record):
             continue
         with supported_contours(record['requested_masses'], set(payload['points']), diagnostics):
             complete = renderer.plot_contour(payload, png, run2_contours=refs[model],
@@ -331,17 +342,98 @@ def render(limits_dir, grid_manifest, output, allow_partial=False, live_snapshot
     return result
 
 
+def follow_current_limits(limits, grid, output):
+    """Consume this fit once, publish supported partials and then the final figures."""
+    import fcntl
+    import os
+    import shutil
+    import tempfile
+    from TROTASR.workflows.resources import resources
+    base = ROOT/'stats/run3/top_pt'
+    limits, grid, output = map(internal_path, (limits, grid, output))
+    if (limits, grid, output) != (base/'limits', base/'grid/manifest.json', base/'plots/limits'):
+        raise ValueError('Follow only the current top-pT fit in its own plotting directory')
+    g = read_json(grid)
+    wanted = {m: [p['mass'] for p in g['points'] if p.get('fit_ready') and p['model']==m] for m in MODELS}
+    if (not g.get('tt_card_input') or g.get('sr_data_blinded') is not True or
+            {m:len(v) for m,v in wanted.items()} != {'T2tt':205,'T2bW':345,'T2tb':345}):
+        raise ValueError('Expected the completed 895-point blinded top-pT grid')
+    home = output.parent
+    home.mkdir(parents=True,exist_ok=True)
+    state = home/'limit_plot_state.json'
+    expected = {m+'/'+mass for m in MODELS for mass in wanted[m]}
+    def note(status, **extra):
+        write_json(state,dict(status=status,pid=os.getpid(),updated=time.time(),**extra))
+    def publish(target,partial):
+        # Do not replace the last good figures if interpolation/export fails.
+        with tempfile.TemporaryDirectory(dir=home,prefix='.limit-render-') as tmp:
+            stage=Path(tmp)
+            old=target/'plot_manifest.json'
+            if old.is_file():
+                rec=read_json(old)
+                if internal_path(rec['contract']['grid']) != grid:
+                    raise ValueError('Refusing to mix contour grids')
+                for name in [*rec['files'],old.name]:
+                    if Path(name).name!=name:raise ValueError('Invalid contour filename')
+                    shutil.copy2(target/name,stage/name)
+            elif target.exists() and any(target.iterdir()):
+                raise FileExistsError(target)
+            rec=render(limits,grid,stage,allow_partial=partial,live_snapshot=partial)
+            if not partial and {x['model']:x['plotted_points'] for x in rec['plots']}!={m:len(wanted[m]) for m in MODELS}:
+                raise ValueError('Final contours lack complete topology coverage')
+            target.mkdir(exist_ok=True)
+            for name in [*rec['files'],'plot_manifest.json']:
+                os.replace(stage/name,target/name)
+            return {p['model']:p['plotted_points'] for p in rec['plots']}
+    with (home/'limit_plot.lock').open('a') as lock:
+        fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        last=None; published={}
+        try:
+            while True:
+                _,s=_workflow(limits)
+                if (s.get('manifest')!=str(grid.relative_to(ROOT)) or s.get('total')!=len(expected)
+                        or s.get('observed_sr_used') is not False):
+                    raise ValueError('Wrong live limit workflow')
+                keys=frozenset(k for k,r in s['results'].items() if r.get('status')=='complete')
+                if not keys<=expected or len(keys)!=s['completed']:
+                    raise ValueError('Inconsistent accepted point inventory')
+                n=len(keys); full=keys==expected
+                may_draw=full or (keys!=last and any(
+                    len(avail)>=4 and support_mask(masses,avail)[1]['verified_triangles']>0
+                    for m,masses in wanted.items() for avail in [{v for v in masses if m+'/'+v in keys}]))
+                if may_draw:
+                    jobs,mem=resources(all_account=True)
+                    if jobs>120 or mem<34*2**30 or shutil.disk_usage(home).free<80*2**30:
+                        note('waiting_for_resources',accepted=n,plotted=published);time.sleep(30);continue
+                    note('rendering',accepted=n,plotted=published)
+                    published=publish(output if full else home/'limits_in_progress',not full)
+                last=keys
+                note('complete' if full else 'following',accepted=n,plotted=published)
+                if full:return
+                if s['status'] not in ('running','draining'):
+                    raise RuntimeError('Limit workflow ended with incomplete coverage: '+s['status'])
+                time.sleep(30)
+        except Exception as exc:
+            note('needs_attention',error=repr(exc),plotted=published);raise
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--limits', required=True, type=Path)
     p.add_argument('--grid', required=True, type=Path)
     p.add_argument('--output', required=True, type=Path)
+    p.add_argument('--follow-current',action='store_true',help='Publish changed supported contours for this fit and exit after the final grid')
     p.add_argument('--sensitivity-map', action='store_true',
                    help='Render saved group-freeze results without inference')
     p.add_argument('--allow-partial', action='store_true',
                    help='Diagnostic only; never a completed contour grid')
     p.add_argument('--live-snapshot', action='store_true', help='Read-only view; requires --allow-partial')
     a = p.parse_args()
+    if a.follow_current:
+        if a.sensitivity_map or a.allow_partial or a.live_snapshot:
+            p.error('--follow-current manages its own intermediate and final outputs')
+        follow_current_limits(a.limits,a.grid,a.output)
+        return 0
     if a.live_snapshot and (not a.allow_partial or a.sensitivity_map):
         p.error('--live-snapshot requires a partial expected-limit contour')
     if a.sensitivity_map:

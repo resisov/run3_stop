@@ -86,6 +86,24 @@ def raw_fixture():
 
 
 class PredictionTests(unittest.TestCase):
+    def test_merged_sr_rate_projection_uses_declared_era_scaling_and_exact_z_formula(self):
+        from TROTASR.workflows.prediction_plot_inputs import _merged_rate_bindings
+        from TROTASR.utils.era_merge import highdm_z_shape_formula
+        alpha='CMS_NPS26012_sgamma_shape_highdm_Nb1_bin0'
+        beta='CMS_NPS26012_sgamma_shape_highdm_Nb1_bin1'
+        weights={alpha:.2,beta:.8};zproc='ZJet_Nb1_u0_part0_2022'
+        formula,args=highdm_z_shape_formula(alpha,1.25,weights)
+        zrow=[alpha+'__zShape_'+zproc,'rateParam','SR_highdm_c1',zproc,formula,','.join(args)]
+        rows=[[alpha,'rateParam','GCR_highdm_c1','PhotonJet_Nb1_u0_2022','1','[.01,5]'],
+              [alpha+'__eraScale_1','rateParam','GCR_highdm_c1','PhotonJet_Nb1_u0_2023','(@0*1.125)',alpha],
+              zrow]
+        rates=_merged_rate_bindings(rows,{'2022':{'Nb1':weights}})
+        self.assertEqual(rates['GCR_highdm_c1','PhotonJet_Nb1_u0_2022'],(alpha,1.,1.))
+        self.assertEqual(rates['GCR_highdm_c1','PhotonJet_Nb1_u0_2023'],(alpha,1.125,None))
+        self.assertEqual(rates['SR_highdm_c1',zproc],(alpha,1.25,None))
+        with self.assertRaises(ValueError):
+            _merged_rate_bindings(rows[:-1]+[[*zrow[:4],formula+'+1',zrow[-1]]],{'2022':{'Nb1':weights}})
+
     def test_provisional_cr_projection_accepts_covqual_two_without_writing(self):
         from TROTASR.utils.era_merge import CHANNEL_BINS, ERAS
         from TROTASR.workflows import prediction_plot_inputs as prediction
@@ -126,8 +144,8 @@ class PredictionTests(unittest.TestCase):
             scope='full_combined_systematic_production',prediction_stage='prefit',
             sr_observations_included=False,rate_initials_applied=True,channels={},
             sr_binning_sha256='fixture-layout',gnn_sha256='fixture-layout',sr_merge=merge,
-            years=list(ERAS), bins=214*len(ERAS), th1_channels=8*len(ERAS),
-            rate_parameters=48*len(ERAS), sr_data_blinded=True, signal_contamination=False,
+            years=list(ERAS), bins=208*len(ERAS), th1_channels=8*len(ERAS),
+            rate_parameters=44*len(ERAS), sr_data_blinded=True, signal_contamination=False,
             auto_mc_stats=[10,1,1], central_conventions_consistent=False)
         for key in ('run3_systematics','statistical_revision','systematic_evaluation_deferred',
                     'systematic_scope','luminosity_uncertainties','luminosity_model',

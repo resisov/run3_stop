@@ -339,10 +339,12 @@ class SourceWeights:
                     for ms, ml in zip(np.asarray(rows['mStop'], int), np.asarray(rows['mLSP'], int))])
                 if not set(expected_model) <= set(model_fields):
                     raise ValueError('Unknown GenModel among selected signal rows')
-            for block in np.unique(entries // self.block_size):
-                take = np.flatnonzero(entries // self.block_size == block)
-                start = int(block * self.block_size)
-                stop = min(start + self.block_size, tree.num_entries)
+            # Keep the bounded source windows, but avoid reading thousands of unused
+            # heavy PDF/scale rows around an isolated event. Restore input order via take.
+            order = np.argsort(entries, kind='stable')
+            blocks = entries[order] // self.block_size
+            for take in np.split(order, np.flatnonzero(blocks[1:] != blocks[:-1]) + 1):
+                start, stop = int(entries[take[0]]), int(entries[take[-1]]) + 1
                 raw = tree.arrays(['run', 'luminosityBlock', 'event', *specs, *model_fields],
                                   entry_start=start, entry_stop=stop)
                 matched = raw[entries[take] - start]
@@ -393,23 +395,29 @@ def member_histogram(coordinates, weights, ratios, edges):
         raise ValueError('LHE histogram row alignment differs')
     if not np.isfinite(weights).all() or not np.isfinite(ratios).all():
         raise ValueError('Nonfinite LHE histogram weight')
-    indices = np.column_stack([np.searchsorted(axis, coords[:, d], side='right') - 1
-                               for d, axis in enumerate(axes)])
-    for d, axis in enumerate(axes):
-        indices[coords[:, d] == axis[-1], d] = len(axis) - 2
+    # The ordinary nominal renderer folds finite under/overflow into the edge
+    # bins. In particular 1500 is a storage edge, not a high-MET selection.
+    indices = np.column_stack([np.clip(np.searchsorted(axis, coords[:, d], side='right') - 1,
+                                      0, len(axis) - 2) for d, axis in enumerate(axes)])
     keep = np.isfinite(coords).all(axis=1)
     keep &= np.all((indices >= 0) & (indices < np.asarray(shape)), axis=1)
     flat = np.ravel_multi_index(indices[keep].T, shape)
     nbin = math.prod(shape)
     def summed(w):
         return np.bincount(flat, weights=w, minlength=nbin).reshape(shape)
-    varied = weights[keep, None] * ratios[keep]
+    w = weights[keep]
+    members, members_sumw2 = [], []
+    for column in ratios.T:
+        # The source member matrix is already resident. Reduce one column without
+        # allocating a second (selected events x all PDF members) matrix.
+        varied = w * column[keep]
+        members.append(summed(varied).tolist())
+        members_sumw2.append(summed(varied ** 2).tolist())
     return {'edges': [axis.tolist() for axis in axes],
-            'nominal': summed(weights[keep]).tolist(),
-            'sumw2': summed(weights[keep] ** 2).tolist(),
+            'nominal': summed(w).tolist(),
+            'sumw2': summed(w ** 2).tolist(),
             'entries': summed(np.ones(np.count_nonzero(keep))).tolist(),
-            'members': np.asarray([summed(w) for w in varied.T]).tolist(),
-            'members_sumw2': np.asarray([summed(w ** 2) for w in varied.T]).tolist()}
+            'members': members, 'members_sumw2': members_sumw2}
 
 
 def merge_members(target, source):
@@ -1158,6 +1166,50 @@ def normalize_signal_members(merged, normalizations, *, atol=1e-7, rtol=1e-7):
                 population=SIGNAL_POPULATION, members_by_era=outputs, normalization_by_era=factors)
 
 
+def background_weight_pairs(histogram, spec, process):
+    """One-at-a-time generator variations at fixed nominal coordinates and bins."""
+    if spec.kind == 'pdf':
+        yield 'pdf_'+process, reduce_members(histogram, spec)
+        return
+    if spec.kind != 'scale':
+        raise ValueError('Unknown generator weight: '+spec.kind)
+    points = list(map(tuple, spec.members))
+    values = np.asarray(histogram['members'], float)
+    # Up/Down denote coordinate 2/0.5; do not sort bin contents by size.
+    for name, up, down in [('muR', (2., 1.), (.5, 1.)), ('muF', (1., 2.), (1., .5))]:
+        yield 'QCDscale_'+name+'_'+process, (values[points.index(up)], values[points.index(down)])
+
+
+def highdm_cr_member_endpoints(records):
+    """Reduce signed member totals on final likelihood bins, not their native-bin errors.
+
+    Return absolute contributions for each hard process, Nb category and CR.
+    """
+    from TROTASR.utils.cr_binning import FIT_GROUPS
+    from TROTASR.utils.sr_binning import NATIVE_EDGES
+    result = {}
+    for record in records.values():
+        spec = _record_prescription(record['prescription'])
+        for process, histograms in record['processes'].items():
+            for path, h in _leaves(histograms):
+                mode, region, category, sample, observable = path
+                if mode != 'highdm' or region not in ('LLCR', 'QCDCR', 'GCR') or observable != 'recoil':
+                    continue
+                if category not in ('Nb1', 'Nb2') or h['edges'] != [list(NATIVE_EDGES)]:
+                    raise ValueError('Unexpected native high-dM CR axis/category: '+str(path))
+                def pooled(values):
+                    a = np.asarray(values, float)
+                    return np.stack([np.sum(a[..., list(group)], axis=-1) for group in FIT_GROUPS], axis=-1)
+                merged = {k: pooled(h[k]) for k in ('nominal', 'members')}
+                row = result.setdefault(region, {}).setdefault(category, {}).setdefault(
+                    sample, {}).setdefault(process, {})
+                for name, (up, down) in background_weight_pairs(merged, spec, process):
+                    if name in row:
+                        raise ValueError('Overlapping generator bases for '+str((path, name)))
+                    row[name] = dict(nominal=merged['nominal'].tolist(), up=up.tolist(), down=down.tolist())
+    return result
+
+
 def finalize_histograms(records, nominal):
     """Produce weight endpoints after the full member sum, using nominal MC stat.
 
@@ -1174,24 +1226,23 @@ def finalize_histograms(records, nominal):
                 previous = pdf_sets.setdefault(process, prescription.label)
                 if previous != prescription.label:
                     raise ValueError('Multiple PDF bases within one hard process require an explicit combination: ' + process)
-            nuisance = ('pdf_' if prescription.kind == 'pdf' else 'QCDscale_') + process
             for path, member_hist in _leaves(histograms):
                 mode, region, category, sample, observable = path
                 original = nominal[mode]['nominal'][region][category][sample][observable]
-                up, down = reduce_members(member_hist, prescription)
-                for direction, varied in (('Up', up), ('Down', down)):
-                    node = result.setdefault(mode, {}).setdefault(nuisance + direction, {})
-                    for key in (region, category, sample):
-                        node = node.setdefault(key, {})
-                    leaf = node.setdefault(observable, copy.deepcopy(original))
-                    leaf['sumw'] = (np.asarray(leaf['sumw']) + varied
-                                    - np.asarray(member_hist['nominal'])).tolist()
-                    if mode == 'lowdm':
-                        if observable != 'gnn_recoil':
-                            raise ValueError('Low-dM LHE reduction requires the joint histogram')
-                        for name, axis, edges in (('gnn_score', 1, original['edges'][0]),
-                                                  ('recoil', 0, original['edges'][1])):
-                            node[name] = {'edges': edges, **{field:
-                                np.asarray(leaf[field]).sum(axis=axis).tolist()
-                                for field in ('sumw', 'sumw2', 'entries')}}
+                for nuisance, (up, down) in background_weight_pairs(member_hist, prescription, process):
+                    for direction, varied in (('Up', up), ('Down', down)):
+                        node = result.setdefault(mode, {}).setdefault(nuisance + direction, {})
+                        for key in (region, category, sample):
+                            node = node.setdefault(key, {})
+                        leaf = node.setdefault(observable, copy.deepcopy(original))
+                        leaf['sumw'] = (np.asarray(leaf['sumw']) + varied
+                                        - np.asarray(member_hist['nominal'])).tolist()
+                        if mode == 'lowdm':
+                            if observable != 'gnn_recoil':
+                                raise ValueError('Low-dM LHE reduction requires the joint histogram')
+                            for name, axis, edges in (('gnn_score', 1, original['edges'][0]),
+                                                      ('recoil', 0, original['edges'][1])):
+                                node[name] = {'edges': edges, **{field:
+                                    np.asarray(leaf[field]).sum(axis=axis).tolist()
+                                    for field in ('sumw', 'sumw2', 'entries')}}
     return result

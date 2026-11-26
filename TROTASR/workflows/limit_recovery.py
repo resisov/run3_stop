@@ -70,7 +70,7 @@ def choose_range(logs, previous_rmax):
                 evidence[-1]['search_scope'] = 'median_only_from_incomplete_sequence'
     seed = math.ceil(seed/10.)*10.
     if seed > MAX_RMAX:
-        raise ValueError('Required numerical seed exceeds finite10000 cap; inspect explicitly')
+        raise ValueError('Numerical seed exceeds the finite rMax search cap')
     return seed, evidence
 
 
@@ -90,7 +90,7 @@ def adaptive_seed(logs, ceiling=100000.):
     use the saved Asimov fit error solely as an explicitly unverified seed.
     """
     if ceiling != 100000.:
-        raise ValueError('Adaptive ceiling must be the user-approved 100000')
+        raise ValueError('Adaptive rMax search has a finite ceiling of 100000')
     target = target_nll(.975)
     candidates = []
     for name, text in logs:

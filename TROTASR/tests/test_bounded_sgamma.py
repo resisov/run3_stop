@@ -31,6 +31,15 @@ class BoundedTests(unittest.TestCase):
             with self.assertRaises(ValueError):mod.bounded_sgamma_scope(parent,records,{NAME:bounds})
 
     def test_no_other_failure_or_success_recovery(self):
+        n='CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin1'
+        b=[.01000983384342831,4.345411045340505]
+        parent=dict(status='needs_attention',failed_nuisances=[n],nuisance_count=1)
+        records={n:dict(status='failed',bounds=b)}
+        self.assertEqual(mod.bounded_sgamma_scope(parent,records,{n:b},top_pt_workspace=True),[n])
+        self.assertEqual(mod.bounded_lower_values(1,b,workspace_bounds=True)[-1],b[0])
+        with self.assertRaises(ValueError):mod.bounded_sgamma_scope(parent,records,{n:b})
+        with self.assertRaises(ValueError):mod.bounded_sgamma_scope(parent,records,{n:[.02,4.3]},top_pt_workspace=True)
+        with self.assertRaises(ValueError):mod.bounded_lower_values(1,b)
         for name,status in [('CMS_other','failed'),(NAME,'complete')]:
             with self.assertRaises(ValueError):
                 mod.bounded_sgamma_scope(dict(status='needs_attention',failed_nuisances=[name],nuisance_count=1),
@@ -78,6 +87,13 @@ class BoundedTests(unittest.TestCase):
         self.assertIn('MINIMIZER_no_analytic',c)
         self.assertNotIn('--freezeParameters',c)
         self.assertIn(NAME+'=0.01',c[c.index('--fixedPointPOIs')+1])
+
+    def test_command_transmits_workspace_edge_and_seed_unchanged(self):
+        edge,other=.01000983384342831,.011796675473123233
+        command=mod.fixed_command(dict(snapshot='same.root',asimov='same.root'),NAME,edge,'_test',seeds={'other':other})
+        sent=dict(pair.split('=') for pair in command[command.index('--fixedPointPOIs')+1].split(','))
+        self.assertEqual(float(sent[NAME]),edge)
+        self.assertEqual(float(sent['other']),other)
 
     def test_exact_crossing_math_unchanged(self):
         self.assertEqual(mod.BoundedSgamma.crossing,mod.ImpactProfileRecovery.crossing)

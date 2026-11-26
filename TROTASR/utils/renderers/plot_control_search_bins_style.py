@@ -799,7 +799,8 @@ def draw_cronly_prefit_postfit(payload, outbase, luminosity_fb):
             mode_label = r"high $\Delta m$" if mode == "highdm" else r"low $\Delta m$"
             for region in ("LLCR", "QCDCR", "GCR"):
                 row = payload["channels"][region+"_"+mode+"_c1"]
-                count = 6 if mode == "highdm" else 5
+                current = payload.get("fit_source", {}).get("manifest") == "stats/run3/top_pt/grid/manifest.json"
+                count = 5 if current or mode == "lowdm" else 6
                 if len(row["data"]) != count*2:
                     raise ValueError("Do not rebin the approved CR likelihood")
                 for nb, label in enumerate((r"$N_b=1$", r"$N_b\geq2$")):
@@ -837,7 +838,7 @@ def draw_cronly_prefit_postfit(payload, outbase, luminosity_fb):
     fig.savefig(outbase.with_suffix(".png"),dpi=180,bbox_inches=output_box,pad_inches=0)
     fig.savefig(outbase.with_suffix(".pdf"),bbox_inches=output_box,pad_inches=0)
     plt.close(fig)
-    return dict(modes=["highdm","lowdm"],bins=66,
+    return dict(modes=["highdm","lowdm"],bins=sum(len(row["data"]) for row in payload["channels"].values()),
         stages=["prefit","postfit"],uncertainty_bands=True,fit_recalculated=False,
         style="canonical draw_flat_blocks(reference_style=True, show_yields=False)",
         figure_size_inches=[float(output_box.width),canvas_height],

@@ -254,8 +254,7 @@ def card_text(channels, data, cr_only=False, luminosity_uncertainties=None):
     lines += ['------------', 'bin ' + ' '.join(selected), 'observation ' + ' '.join('-1' for c in selected), '------------',
               'bin ' + ' '.join(c for c, p in columns), 'process ' + ' '.join(p for c, p in columns),
               'process ' + ' '.join(str(ids[p]) for c, p in columns), 'rate ' + ' '.join('-1' for k in columns), '------------']
-    # ROOT may retain supplied flat endpoints for complete provenance. They
-    # remain inactive in the likelihood, as in the adopted nominal builder.
+    # Keep flat ROOT endpoints without adding them as active nuisances.
     active_shapes = {key: {n for n, pair in data[key]['variations'].items()
         if any(not np.allclose(v, data[key]['nominal'], rtol=1e-12, atol=1e-15)
                for v in pair.values())} for key in columns}

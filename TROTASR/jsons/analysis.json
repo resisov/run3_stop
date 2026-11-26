@@ -1,5 +1,17 @@
 {
   "schema": "trotasr_nominal_grid_config_v1",
+  "inclusive_ttbar_top_pt": {
+    "prescription": "inclusive_ttbar_top_pt_13p6_offset0973_unit_up_additive_mirror_down",
+    "primaries": ["TTto2L2Nu", "TTtoLNu2Q", "TTto4Q"],
+    "per_top_factor": {
+      "exp_amplitude": 0.103, "exp_slope_per_GeV": -0.0118,
+      "linear_slope_per_GeV": -0.000134, "offset": 0.973,
+      "energy_factor_offset": 0.991, "energy_factor_slope_per_GeV": 0.000075
+    },
+    "endpoints": ["top_pt_reweightUp", "top_pt_reweightDown"],
+    "nuisance": "CMS_NPS26012_top_pt_reweight",
+    "contribution_directory": "stats/run3/dataset_replay/top_pt"
+  },
   "fit_campaign": "run3_systematics_preliminary",
   "systematic_evaluation_deferred": false,
   "systematic_scope": "Six-era preliminary experimental/luminosity systematic model using the existing 2024/2025 JME plus stored non-JME absolute-endpoint convention. Preserve CR constraints, background measurements, autoMCStats and per-era GNN boundaries; CMS LUM POG revision39 luminosity model. Not a final all-source systematic result.",
@@ -55,13 +67,13 @@
     }
   },
   "statistical_revision": {
-    "id": "cr12_shapes_20260929",
+    "id": "highdm_cr_tail500",
     "user_approved": true,
     "rate_parameter_range": [
       0.01,
       5
     ],
-    "highdm_cr_bins_per_region_year": 12,
+    "highdm_cr_bins_per_region_year": 10,
     "native_recoil_groups": [
       [
         0
@@ -77,9 +89,7 @@
       ],
       [
         4,
-        5
-      ],
-      [
+        5,
         6,
         7
       ]
@@ -90,7 +100,6 @@
       350,
       400,
       500,
-      800,
       1500
     ],
     "last_bin_open_ended": true,

@@ -14,6 +14,30 @@ GROUPS = {'Nb1', 'Nb2plus'}
 RECOIL_EDGES = [250., 300., 350., 400., 500., 1500.]
 
 
+def bind_card_measurement(source, name, product):
+    """Read model scope from the card grid and coverage from its era receipt."""
+    directory = ROOT/'stats/run3/top_pt/inputs'
+    if source.parent != directory:
+        return product
+    from TROTASR.utils.top_pt import PRESCRIPTION
+    receipt = read_json(source/'receipt.json')
+    grid = read_json(directory.parent/'grid/manifest.json')
+    year = source.name
+    provenance = product['provenance']
+    if (grid['status'] != 'cards_ready' or year not in grid['years']
+            or grid.get('tt_card_input') != PRESCRIPTION
+            or grid['scope'] != 'full_combined_systematic_production'
+            or grid['sr_data_blinded'] is not True or receipt['sr_data_blinded'] is not True
+            or receipt['status'] != 'complete' or receipt['year'] != year
+            or receipt['tt_card_input']['year'] != year or receipt['tt_card_input']['prescription'] != PRESCRIPTION
+            or name not in receipt['measurements'] or provenance['campaign_year'] != year
+            or provenance['top_pt_prescription'] != PRESCRIPTION
+            or product.get('scope', grid['scope']) != grid['scope']
+            or product.get('sr_data_blinded', True) is not True):
+        raise ValueError('Inconsistent top-pT measurement, accepted era receipt or grid')
+    return dict(product, scope=grid['scope'], sr_data_blinded=receipt['sr_data_blinded'])
+
+
 def finite_number(value, nonnegative=False):
     if value is None or not np.isfinite(value) or (nonnegative and value < 0):
         raise ValueError('Unavailable or malformed measurement number')
@@ -103,7 +127,7 @@ def main():
     p.add_argument('--validate-only',action='store_true')
     a = p.parse_args()
     source,output = (internal_path(v) for v in (a.measurements,a.output))
-    products = {name:read_json(source/(name+'.json.gz')) for name in PRODUCTS}
+    products = {name:bind_card_measurement(source,name,read_json(source/(name+'.json.gz'))) for name in PRODUCTS}
     boundaries = validate_products(products)
     year = products['rz_high']['provenance']['campaign_year']
     scope = products['rz_high']['scope']

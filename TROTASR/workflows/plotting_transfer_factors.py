@@ -83,7 +83,8 @@ def main():
     p.add_argument('--validate-only', action='store_true')
     a = p.parse_args()
     source_path, output = (internal_path(v) for v in (a.input, a.output))
-    source = read_json(source_path)
+    from TROTASR.workflows.plotting_background_measurements import bind_card_measurement
+    source = bind_card_measurement(source_path.parent, 'transfer_factors', read_json(source_path))
     year = source.get('year')
     from TROTASR.utils.paths import analysis_era
     from TROTASR.gnn4lowdm.configuration import configuration

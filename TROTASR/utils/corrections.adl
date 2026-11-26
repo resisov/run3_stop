@@ -76,7 +76,7 @@ info muonIsolation
   file "scales/MUO/<year>/muon_Z.json.gz"
   looseKey "NUM_LooseMiniIso_DEN_LooseID"
   mediumKey "NUM_MediumMiniIso_DEN_MediumID"
-  looseApproximation "LooseMiniIso for LooseID retained by user approval; no MediumMiniIso_DEN_LooseID payload"
+  looseApproximation "LooseMiniIso is used for LooseID because MediumMiniIso_DEN_LooseID is unavailable"
   selection "miniPFRelIso_all < 0.20"
   application "same one-loose/two-medium collection choice as muonID"
   coordinates "Muon_eta clipped to [-2.399,2.399], max(Muon_pt,10)"
@@ -123,11 +123,11 @@ info metTrigger
   evaluator "met_trigger_triplet"
 
 info topPt
-  application "TTto datasets; first two hard-process last-copy generator top quarks"
+  application "Inclusive TTto2L2Nu, TTtoLNu2Q and TTto4Q; first two hard-process last-copy generator top quarks"
   evaluator "get_top_pt_reweight"
-  variation "none"
+  variation "Up: unit top-pT weight; Down: 2 times the nominal event top-pT weight minus one"
 
-define topPtFactor(pT) = (0.103 * exp(-0.0118 * pT) - 0.000134 * pT + 1.051) * (0.991 + 0.000075 * pT)
+define topPtFactor(pT) = (0.103 * exp(-0.0118 * pT) - 0.000134 * pT + 0.973) * (0.991 + 0.000075 * pT)
 define topPairPtWeight = sqrt(topPtFactor(pT(genTop[0])) * topPtFactor(pT(genTop[1])))
 
 info topWTagging

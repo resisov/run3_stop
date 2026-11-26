@@ -4,8 +4,9 @@ This module neither loads a fit nor infers a transfer factor. The caller supplie
 the exact card-process partition and all CR/eraScale/RZ/photon/lnN factors. No
 observations enter this API. Samples stay separate until the plotting adapter.
 
-Response contract: ``trotasr_vr_background_response_v1``; 148 VR bins, two Nb
-groups and eight native recoil bins. A flat cell is ``(vr_bin*2+nb)*8+recoil``.
+Response contract: ``trotasr_vr_background_response_v2``; 30 low-dM and 40
+high-dM VR bins, two Nb groups and eight native recoil bins. A flat cell is
+``(vr_bin*2+nb)*8+recoil``.
 Sparse endpoint values are absolute, not ratios. A missing cell in an existing
 endpoint is zero; an absent sample/nuisance has no shape response.
 
@@ -24,15 +25,33 @@ from typing import Any, Callable, Dict, Iterable, Mapping, Optional, Sequence, T
 
 import numpy as np
 
+from TROTASR.utils.sr_binning import NATIVE_EDGES
+from TROTASR.utils.vr_binning import HIGH_VR_CATEGORIES, HIGH_VR_DEFINITION, N_VR_BINS
 
-SCHEMA = "trotasr_vr_background_response_v1"
-N_VR, N_NB, N_RECOIL = 148, 2, 8
+
+SCHEMA = "trotasr_vr_background_response_v2"
+N_VR, N_NB, N_RECOIL = N_VR_BINS, 2, len(NATIVE_EDGES) - 1
 N_CELL = N_VR * N_NB * N_RECOIL
 Component = Tuple[str, str]
 Parameters = Mapping[str, float]
 FactorValue = Union[float, Sequence[float], np.ndarray]
 FactorProvider = Union[Mapping[Component, FactorValue],
                        Callable[[str, str, Parameters], FactorValue]]
+
+
+def validate_response_axes(payload):
+    """Reject old response coordinates before evaluating or opening a saved fit."""
+    axes = payload.get("axes", {})
+    edges = np.asarray(axes.get("recoil_edges", []), float)
+    if (payload.get("schema") != SCHEMA
+            or payload.get("high_definition") != HIGH_VR_DEFINITION
+            or payload.get("high_categories") != HIGH_VR_CATEGORIES
+            or payload.get("fields") != ["sumw", "sumw2", "entries"]
+            or axes.get("vr_bin") != N_VR
+            or axes.get("nb_groups") != ["Nb1", "Nb2plus"]
+            or not np.array_equal(edges, NATIVE_EDGES)
+            or axes.get("recoil_last_open") is not True):
+        raise ValueError("Unrecognized VR response schema/axes or high-dM definition")
 
 
 def smooth_step(value):
@@ -102,7 +121,7 @@ def _cell_array(value):
     elif a.shape == (N_VR, N_NB, N_RECOIL):
         a = a.reshape(N_CELL)
     if a.shape != (N_CELL,) or not np.isfinite(a).all():
-        raise ValueError("Factors require a scalar or 2368 finite cell values")
+        raise ValueError(f"Factors require a scalar or {N_CELL} finite cell values")
     return a
 
 
@@ -115,7 +134,7 @@ def _view_weights(eras, selection):
         if value.shape == ():
             value = np.full(N_VR, float(value))
         if value.shape != (N_VR,) or not np.isfinite(value).all():
-            raise ValueError("View weights require a scalar or 148 finite values per era")
+            raise ValueError(f"View weights require a scalar or {N_VR} finite values per era")
         result[era] = value
     return result
 
@@ -175,16 +194,7 @@ class VRResponse:
 
     def __init__(self, payload, block_map, *, parameter_map=None, extra_shapes=None,
                  allow_incomplete=False):
-        axes = payload.get("axes", {})
-        edges = np.asarray(axes.get("recoil_edges", []), float)
-        if (payload.get("schema") != SCHEMA
-                or payload.get("fields") != ["sumw", "sumw2", "entries"]
-                or axes.get("vr_bin") != N_VR
-                or axes.get("nb_groups") != ["Nb1", "Nb2plus"]
-                or edges.shape != (N_RECOIL + 1,) or not np.isfinite(edges).all()
-                or not np.all(np.diff(edges) > 0)
-                or axes.get("recoil_last_open") is not True):
-            raise ValueError("Unrecognized VR response schema/axes")
+        validate_response_axes(payload)
         if payload.get("status") != "complete" and not allow_incomplete:
             raise ValueError("VR response production is incomplete")
         self.status = payload.get("status")
@@ -376,7 +386,7 @@ def propagate(response: VRResponse, central: Parameters, draws: Iterable[Paramet
               factors: Optional[FactorProvider] = None, views=None):
     """Shared-draw covariance plus independent VR MC variance at central values.
 
-    ``views`` maps view names to ``{era: scalar or mask148}``; default is all
+    ``views`` maps view names to ``{era: scalar or VR-bin mask}``; default is all
     eras. Each draw is applied once to ALL components. The returned joint
     covariance retains cross-view correlations (including shared VR MC entries).
     Bands are population standard deviations about the draw mean, centered on

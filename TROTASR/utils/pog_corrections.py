@@ -15,6 +15,7 @@ import hist
 from coffea.util import load
 from coffea.lookup_tools.dense_lookup import dense_lookup
 from .paths import payload_path as resolve_payload
+from .top_pt import per_top_factor as get_top_pt_reweight
 
 
 @lru_cache(maxsize=32)
@@ -782,12 +783,6 @@ def get_ele_hlt_sf (year, eta, pt, phi):
         sf_up = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfup", "HLT_SF_Ele30_TightID", flateta, flatpt)
         sf_down = evaluator["Electron-HLT-SF"].evaluate(yr[year], "sfdown", "HLT_SF_Ele30_TightID", flateta, flatpt)
     return ak.unflatten(sf_nominal, counts=counts), ak.unflatten(sf_up, counts=counts), ak.unflatten(sf_down, counts=counts)
-
-
-def get_top_pt_reweight(pt):
-    sf = 0.103 * np.exp(-0.0118*pt) - 0.000134 * pt + 1.051
-    extra_13p6 = 0.991 + (0.000075*pt)
-    return sf * extra_13p6
 
 
 def btag_probability_ratio(eff, eff_data, istag):

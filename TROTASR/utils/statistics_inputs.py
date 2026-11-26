@@ -234,6 +234,25 @@ def build_inputs(payload, sgamma, rz_high, rz_low, double_ratio, topology, mstop
     layout = expand(definition)
     view = HistogramView(payload, year, gnn)
     rz = model.build_rz_covariance(rz_high, rz_low, year)
+    shifted_calibration = {}
+    if payload.get('tt_card_input'):
+        from .top_pt import ENDPOINTS, NUISANCE
+        for endpoint in ENDPOINTS:
+            shifted_calibration[endpoint] = (sgamma['inclusive_ttbar_endpoints'][endpoint],
+                model.build_rz_covariance(rz_high['inclusive_ttbar_endpoints'][endpoint],
+                                          rz_low['inclusive_ttbar_endpoints'][endpoint], year))
+    def attach_gamma(channel, component, record, year, kind, group, unit, scale, initial, extras=()):
+        _attach(channel, component, record, year, kind, group, unit, scale, initial, extras)
+        if not shifted_calibration or record is None:
+            return
+        built=channel['backgrounds'][component]
+        pair=built['variations'].setdefault(NUISANCE,{})
+        for endpoint,(sg,rv) in shifted_calibration.items():
+            direction='up' if endpoint.endswith('Up') else 'down'
+            mode=channel['regime']
+            q,s=_gamma(sg,mode,group,unit)
+            central=model.rz_value(rv,mode+'_'+group) if channel['region']=='SR' else q
+            pair[direction]=pair.get(direction,built['nominal'])*((central*s)/(scale*initial))
     mass_key = signal_mass_key(topology, mstop, mlsp)
     groups, mapping = OrderedDict(), []
 
@@ -257,7 +276,7 @@ def build_inputs(payload, sgamma, rz_high, rz_low, double_ratio, topology, mstop
                         _attach(channel, family, record, year, 'qcd_norm', group, i)
                     elif region == 'GCR' and family == 'PhotonJet':
                         q, s = _gamma(sgamma, 'highdm', group, min(i, 4))
-                        _attach(channel, family, record, year, 'sgamma_shape', group, min(i, 4), q, s)
+                        attach_gamma(channel, family, record, year, 'sgamma_shape', group, min(i, 4), q, s)
                     else:
                         _attach(channel, family, record, year)
                 put(channel)
@@ -287,7 +306,7 @@ def build_inputs(payload, sgamma, rz_high, rz_low, double_ratio, topology, mstop
                         component = f'{family}_{group}_u{i}'
                         if family == 'Zto2Nu':
                             _, s = _gamma(sgamma, 'highdm', group, min(i, 4))
-                            _attach(channel, component, record, year, 'sgamma_shape', group, min(i, 4),
+                            attach_gamma(channel, component, record, year, 'sgamma_shape', group, min(i, 4),
                                     model.rz_value(rz, 'highdm_' + group), s,
                                     _extras(rz, double_ratio, 'highdm', group, min(i, 4), year, NATIVE_EDGES[i:i+2]))
                         else:
@@ -322,7 +341,7 @@ def build_inputs(payload, sgamma, rz_high, rz_low, double_ratio, topology, mstop
                             q, s = _gamma(sgamma, 'lowdm', group, shape_bin)
                             scale = model.rz_value(rz, 'lowdm_' + group) if region == 'SR' else q
                             extras = _extras(rz, double_ratio, 'lowdm', group, shape_bin, year) if region == 'SR' else ()
-                            _attach(channel, component, record, year, 'sgamma_shape', group, shape_bin, scale, s, extras)
+                            attach_gamma(channel, component, record, year, 'sgamma_shape', group, shape_bin, scale, s, extras)
                         elif region in ('SR', 'LLCR') and family in ('Top', 'WtoLNu'):
                             _attach(channel, component, record, year, 'll_norm', group, 'inclusive')
                         elif region in ('SR', 'QCDCR') and family == 'QCD':

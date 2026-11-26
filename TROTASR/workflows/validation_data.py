@@ -16,18 +16,24 @@ from TROTASR.utils.ids import object_masks
 from TROTASR.utils.io import read_json, validate_root, write_json
 from TROTASR.utils.normalization import dataset_label
 from TROTASR.utils.paths import ERAS, ROOT, era_year, tagging_definition
+from TROTASR.utils.private_scales import project_entries
 from TROTASR.utils.region_kinematics import jet_kinematics
 from TROTASR.utils.shape_kinematics import jet_block, met_contribution, varied_view
 from TROTASR.utils.trota_candidates import input_fields
+from TROTASR.utils.trota_friend import _models as _tag_models
 from TROTASR.utils.trota_inference import MIXED_FLOATS, MIXED_INTS, P4_FIELDS, bounded_slices, infer_chunk, p4_view
+from TROTASR.utils.vr_binning import (
+    HIGH_VR_CATEGORIES, HIGH_VR_DEFINITION, N_HIGH_BINS, N_LOW_BINS, N_VR_BINS,
+)
 from TROTASR.workflows.validation_regions import (
     OUTPUT, _accepted_input_path, _active_controller, _headroom, _input_inventory, _input_kind,
-    _models, _select_and_bin, angular_candidates, geometry,
+    _gnn, _select_and_bin, angular_candidates, geometry,
 )
 from TROTASR.workflows.resources import process_identity
 
 
 SCHEMA = "trotasr_vr_jetmet_v1"
+LEGACY_VR_BINS = 148
 MAX_WORKERS = 12
 IDENTITY = ("dataset_id", "is_data", "is_signal")
 JETMET_SELECTION = ("pass_base_common", "pass_signal_trigger")
@@ -43,18 +49,8 @@ MIXED = ("nTopMixed1pct", *("TopMixed1pct_" + x for x in (*MIXED_INTS, *MIXED_FL
 
 
 def _project(tree, entries, fields):
-    """Project selection columns; group reads by each branch's basket."""
-    cols = {}
-    for name in fields:
-        b = tree[name]
-        offsets = np.asarray(b.entry_offsets)
-        basket = np.searchsorted(offsets[1:], entries, side="right")
-        pieces = []
-        for indices in np.split(entries, np.flatnonzero(np.diff(basket)) + 1):
-            start, stop = int(indices[0]), int(indices[-1]) + 1
-            pieces.append(b.array(entry_start=start, entry_stop=stop)[indices - start])
-        cols[name] = pieces[0] if len(pieces) == 1 else ak.concatenate(pieces)
-    return ak.zip(cols, depth_limit=1)
+    """Use the canonical ROOT projection after the observed-data gates."""
+    return project_entries(tree, fields, entries)
 
 
 def _exact_rows(tree, entries):
@@ -78,8 +74,7 @@ def _jets(a, year):
     return pt, eta, phi, btag, good
 
 
-def _angles(a, year):
-    met, met_phi = _central_met(a)
+def _angles(a, year, met, met_phi):
     pt, eta, phi, btag, good = _jets(a, year)
     j = jet_block(pt, eta, phi, good, good & (btag > tagging_definition(year)["medium"]), met_phi)
     return angular_candidates(dict(
@@ -110,31 +105,40 @@ def _boosted(a, year):
                          "fatjet_boosted_w_pass_all")
 
 
-def _bin_chunk(tree, entries, year, era, bins):
+def _bin_chunk(tree, entries, year, era, bins, *, high_only=False):
     if not len(entries):
         return
     tag = tagging_definition(year)
     jets = {*JETS, *TYPE1, tag["btag_branch"]}
-    low, high = _angles(_project(tree, entries, sorted(jets)), year)
+    jet_rows = _project(tree, entries, sorted(jets))
+    met, phi = _central_met(jet_rows)
+    low, high = _angles(jet_rows, year, met, phi)
+    if high_only:
+        low[:] = False
     support = low | high
     if not support.any():
         return
     entries, low, high = entries[support], low[support], high[support]
-    fields = (jets | set(VETO) | {n for group in input_fields(year) for n in group}
-              | set(OVERLAP_FIELDS) | set(P4_FIELDS) | {k.replace("nanoaod", "corrected") for k in P4_FIELDS}
-              | {"file_id", "entry", "fatjet_id_all", "fatjet_msoftdrop_all"})
-    fields -= {"fatjet_boosted_top_pass_all", "fatjet_boosted_w_pass_all"}
-    a = _project(tree, entries, sorted(fields))
-    met, phi = _central_met(a)
-    pt, eta, jphi, btag, good = _jets(a, year)
-    mtb = jet_kinematics(pt, eta, jphi, btag, good, met.astype(float), phi.astype(float), year)["mtb"]
-    high &= np.isfinite(mtb) & (mtb >= 175.)
-    keep = (low | high) & _veto(a, year, met, phi)
+    jet_rows, met, phi = jet_rows[support], met[support], phi[support]
+    keep = _veto(_project(tree, entries, VETO), year, met, phi)
+    high &= keep
+    if high.any():
+        pt, eta, jphi, btag, good = _jets(jet_rows[high], year)
+        mtb = jet_kinematics(pt, eta, jphi, btag, good, met[high].astype(float),
+                             phi[high].astype(float), year)["mtb"]
+        high[high] = np.isfinite(mtb) & (mtb >= 0.)
+    keep &= low | high
     if not keep.any():
         return
-    a, entries, low, high = a[keep], entries[keep], low[keep], high[keep]
+    jet_rows, entries, low, high = jet_rows[keep], entries[keep], low[keep], high[keep]
+    fields = ({n for group in input_fields(year) for n in group} | set(OVERLAP_FIELDS) | set(P4_FIELDS)
+              | {k.replace("nanoaod", "corrected") for k in P4_FIELDS}
+              | {"file_id", "entry", "fatjet_id_all", "fatjet_msoftdrop_all"})
+    fields -= {"fatjet_boosted_top_pass_all", "fatjet_boosted_w_pass_all"}
+    extra = _project(tree, entries, sorted(fields - jets))
+    a = ak.zip({k: (jet_rows[k] if k in jets else extra[k]) for k in sorted(fields)}, depth_limit=1)
     a = p4_view(_boosted(a, year), {k: a[k.replace("nanoaod", "corrected")] for k in P4_FIELDS})
-    trota, gnn = _models(era)
+    trota, gnn = _tag_models(year), _gnn(era) if np.any(low) else None
     low_bins, high_bins = geometry(era)
     for sl in bounded_slices(a, year=year):
         inferred, resolved, _, _ = infer_chunk(a[sl], trota)
@@ -143,8 +147,9 @@ def _bin_chunk(tree, entries, year, era, bins):
         accepted = (low[sl] & (ntag == 0)) | (high[sl] & (ntag >= 1))
         if not accepted.any():
             continue
-        # Before this read, topology has excluded low-dM SR candidates
-        # from the high-dM angular sideband. High-dM SR fails its angle cut.
+        # Only fully gated VR entries reach the full read: the high-angle
+        # sideband fails the high-dM SR cut, and a tag excludes low-dM SR.
+        # The low-angle sideband fails both SR angle selections.
         final = _exact_rows(tree, entries[sl][accepted])
         for k in MIXED:
             final = ak.with_field(final, inferred[k][accepted], k)
@@ -152,7 +157,7 @@ def _bin_chunk(tree, entries, year, era, bins):
         final = varied_view(final, momenta, year=year)
         flo, fhi = angular_candidates(final)
         index, _ = _select_and_bin(final, resolved, flo, fhi, gnn, era, (low_bins, high_bins))
-        if np.any(index < 0) or not np.array_equal(index < 30, low[sl][accepted]):
+        if np.any(index < 0) or not np.array_equal(index < N_LOW_BINS, low[sl][accepted]):
             raise ValueError("VR selection projection and canonical final selection disagree")
         bins += np.bincount(index, minlength=len(bins))
 
@@ -170,7 +175,10 @@ def _work(task):
                          for dataset, _, is_data, is_sig in labels.values()):
         raise ValueError("Observed shard metadata is not data-only")
     jetmet = [k for k, (_, process, _, _) in labels.items() if process == "JetMET"]
-    bins = np.zeros(148, np.int64)
+    bins = np.zeros(N_VR_BINS, np.int64)
+    legacy_low = _receipt(task, legacy_low=True)
+    if legacy_low is not None:
+        bins[:N_LOW_BINS] = legacy_low
     fields = IDENTITY + JETMET_SELECTION if jetmet else IDENTITY
     events = 0
     with uproot.open(path, object_cache=None, array_cache=None) as f:
@@ -188,10 +196,14 @@ def _work(task):
             if jetmet:
                 use = (np.isin(dataset, jetmet) & np.asarray(a["pass_base_common"], bool)
                        & np.asarray(a["pass_signal_trigger"], bool))
-                _bin_chunk(tree, np.flatnonzero(use) + start, year, era, bins)
+                _bin_chunk(tree, np.flatnonzero(use) + start, year, era, bins,
+                           high_only=legacy_low is not None)
+    if events != task["entries"] or int(bins.sum()) > events:
+        raise ValueError("Observed VR bins or event coverage exceed the accepted shard")
     write_json(_receipt_path(task), dict(schema=SCHEMA, input=task["input"], era=era,
                events=events, event_range=[0, events],
-               bins=bins.tolist(), sr_histograms_filled=False, sr_observations_used=False))
+               bins=bins.tolist(), high_definition=HIGH_VR_DEFINITION,
+               sr_overlap=0, sr_histograms_filled=False, sr_observations_used=False))
 
 
 def _inventory():
@@ -206,20 +218,28 @@ def _receipt_path(task):
     return OUTPUT / "data_shards" / str(task["year"]) / (Path(task["input"]).stem + ".json.gz")
 
 
-def _receipt(task):
+def _receipt(task, *, legacy_low=False):
     path = _receipt_path(task)
     if not path.is_file():
         return None
     d = read_json(path)
     era, expected = str(task["year"]), task["entries"]
     bins = d.get("bins", ())
+    definition = d.get("high_definition")
+    n = LEGACY_VR_BINS if definition is None else N_VR_BINS
     if (d.get("schema") != SCHEMA or d.get("era", era) != era
             or d.get("sr_observations_used") is not False or d.get("sr_histograms_filled") is not False
             or d.get("events", expected) != expected or d.get("event_range", [0, expected]) != [0, expected]
-            or len(bins) != 148 or any(type(n) is not int or n < 0 for n in bins)
+            or definition not in (None, HIGH_VR_DEFINITION)
+            or (definition == HIGH_VR_DEFINITION and d.get("sr_overlap") != 0)
+            or len(bins) != n or any(type(x) is not int or x < 0 for x in bins)
             or sum(bins) > expected):
         raise ValueError("Divergent VR observed receipt")
-    return bins
+    # Current high-dM bins require a new scan. Validated legacy low-dM bins
+    # remain current and are retained when a shard is rewritten successfully.
+    if legacy_low:
+        return bins[:N_LOW_BINS] if definition is None else None
+    return bins if definition == HIGH_VR_DEFINITION else None
 
 
 def _capacity():
@@ -255,6 +275,7 @@ def run(workers):
             write_json(OUTPUT / "data_state.json", dict(schema=SCHEMA, status=status, pid=os.getpid(),
                        start_ticks=controller["start_ticks"],
                        workers=workers, total=total, completed=done, active=active, failures=failures,
+                       high_definition=HIGH_VR_DEFINITION,
                        sr_observations_used=False, sr_histograms_filled=False, updated=time.time()))
 
         if done < total and _capacity() < 1:
@@ -294,7 +315,7 @@ def run(workers):
                                 done += 1
             counts, coverage = {}, {}
             for era, group in tasks.items():
-                per_era = np.zeros(148, np.int64)
+                per_era = np.zeros(N_VR_BINS, np.int64)
                 n = 0
                 for t in group:
                     rows = _receipt(t)
@@ -302,11 +323,14 @@ def run(workers):
                         per_era += rows
                         n += 1
                 counts[era], coverage[era] = per_era.tolist(), [n, len(group)]
-            status = "complete" if done == total and not failures else "needs_attention"
-            write_json(OUTPUT / "data_summary.json.gz", dict(schema=SCHEMA, status=status, coverage=coverage,
-                       low_bins=30, high_bins=118, observed_by_era=counts,
-                       observed_total=np.sum(list(counts.values()), axis=0).tolist(),
-                       sr_observations_used=False, sr_histograms_filled=False))
+            status = ("complete" if done == total and not failures
+                      and all(have == want for have, want in coverage.values()) else "needs_attention")
+            if status == "complete":
+                write_json(OUTPUT / "data_summary.json.gz", dict(schema=SCHEMA, status=status, coverage=coverage,
+                           low_bins=N_LOW_BINS, high_bins=N_HIGH_BINS, high_definition=HIGH_VR_DEFINITION,
+                           high_categories=HIGH_VR_CATEGORIES, observed_by_era=counts,
+                           observed_total=np.sum(list(counts.values()), axis=0).tolist(), sr_overlap=0,
+                           sr_observations_used=False, sr_histograms_filled=False))
             state(status)
         except BaseException:
             state("needs_attention")

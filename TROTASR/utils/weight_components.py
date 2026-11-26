@@ -10,6 +10,7 @@ from functools import lru_cache
 import numpy as np
 import awkward as ak
 from .corrections import load_analysis_corrections
+from . import top_pt
 from .private_scales import (DEFAULT_ANALYSIS_SF_COMPONENTS, REQUIRED_ANALYSIS_SF_COMPONENTS, loose_muon_lowpt_triplet, met_trigger_triplet, photon_trigger_triplet, veto_electron_lowpt_triplet)
 
 
@@ -172,25 +173,21 @@ def compute_weight_bundle(
         record("pileup", False, "unity_fallback_missing_Pileup_nTrueInt")
 
     top_pt_sf = one.copy()
-    if "TTto" in dataset and has_field(arrays, "GenPart_pt") and has_field(arrays, "GenPart_pdgId") and has_field(arrays, "GenPart_statusFlags"):
-        try:
-            gen_pt = arrays["GenPart_pt"]
-            gen_pdg = arrays["GenPart_pdgId"]
-            gen_flags = ak.values_astype(arrays["GenPart_statusFlags"], np.int64)
-            is_top = (abs(gen_pdg) == 6) & ((gen_flags & (1 << 8)) != 0) & ((gen_flags & (1 << 13)) != 0)
-            tops = gen_pt[is_top]
-            t1 = ak.fill_none(ak.pad_none(tops, 2, axis=1, clip=False)[:, 0], 0.0)
-            t2 = ak.fill_none(ak.pad_none(tops, 2, axis=1, clip=False)[:, 1], 0.0)
-            both = ak.num(tops, axis=1) >= 2
-            vals = np.sqrt(corrections["get_top_pt_reweight"](t1) * corrections["get_top_pt_reweight"](t2))
-            top_pt_sf = np.where(ak.to_numpy(both), np_filled(vals, n, 1.0), 1.0)
-            record("top_pt_reweight", True, "analysis.utils.corrections.get_top_pt_reweight")
-        except Exception as exc:
-            record("top_pt_reweight", False, "unity_fallback", f"{type(exc).__name__}: {exc}")
+    inclusive = top_pt.inclusive_ttbar(dataset)
+    if inclusive and all(has_field(arrays, name) for name in ("GenPart_pt", "GenPart_pdgId", "GenPart_statusFlags")):
+        gen_flags = ak.values_astype(arrays["GenPart_statusFlags"], np.int64)
+        is_top = (abs(arrays["GenPart_pdgId"]) == 6) & ((gen_flags & (1 << 8)) != 0) & ((gen_flags & (1 << 13)) != 0)
+        # Use the canonical function directly, including when an older compiled
+        # payload supplies the unrelated corrections for these accepted events.
+        top_pt_sf = top_pt.pair_weight(arrays["GenPart_pt"][is_top])
+        record("top_pt_reweight", True, top_pt.PRESCRIPTION)
     else:
-        reason = "not_TTto_dataset" if "TTto" not in dataset else "missing_GenPart_inputs"
+        reason = "missing_GenPart_inputs" if inclusive else "not_TTto_dataset"
         record("top_pt_reweight", False, f"unity_fallback_{reason}")
     components["top_pt_reweight"] = top_pt_sf
+    if include_variations and (inclusive or process in {"TT", "TTV", "TTTT"}):
+        for endpoint, absolute_sf in top_pt.variation_components(top_pt_sf).items():
+            alternates[endpoint] = ("top_pt_reweight", absolute_sf)
 
     if has_field(arrays, "Jet_hadronFlavour"):
         try:

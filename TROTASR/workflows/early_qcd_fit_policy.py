@@ -147,8 +147,18 @@ def early_qcd_fit_background(background, issues, policy_reference=None):
             raise ValueError('Approved early-QCD CR/rate-parameter binding changed')
         nominal = _guard_array(row['nominal'], target['nominal'], 118, key[1]+'/nominal')
         variance = _guard_array(row['sumw2'], target['sumw2'], 118, key[1]+'/sumw2')
-        cr_nominal = _guard_array(control['nominal'], target['control_nominal'], 12, key[1]+'/CR nominal')
-        cr_variance = _guard_array(control['sumw2'], target['control_sumw2'], 12, key[1]+'/CR sumw2')
+        # Rebin the same measured control, not its excluded SR component. The
+        # constants below are the disjoint >=800 contributions in the frozen
+        # 2022 QCDCR templates. Keep the original signed sum and MC variance.
+        from TROTASR.utils.cr_binning import N_HIGH_CR
+        second = key[1] == 'QCD_Nb2plus_u5'
+        i = 9 if second else 4
+        add_n, add_v = ((0.4311621516762263, 0.02175279294625845) if second
+                        else (0.7255062895716722, 0.03428112492886833))
+        cr_nominal = _guard_array(control['nominal'], [[i, target['control_nominal'][0][1]+add_n]],
+                                  N_HIGH_CR, key[1]+'/CR nominal')
+        cr_variance = _guard_array(control['sumw2'], [[i, target['control_sumw2'][0][1]+add_v]],
+                                   N_HIGH_CR, key[1]+'/CR sumw2')
         variations = row.get('variations')
         if not isinstance(variations, dict) or not set(target['variations']).issubset(variations):
             raise ValueError('Missing approved early-QCD JME endpoint pairs')

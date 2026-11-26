@@ -12,6 +12,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.selection_contract import require_current_llcr
 from TROTASR.utils.io import read_json, write_json, scientific_settings, without_provenance_fields
 
 
@@ -317,6 +318,8 @@ def combine_saved_payloads(jme, nonjme, policy):
     endpoints = set(NONJME_ENDPOINTS)
     for payload, scope, mode in ((jme, 'full_cms_trota_jme_production', 'cms_trota_jme'),
             (nonjme, 'full_nonjme_systematic_production', 'stored_trota_nonjme')):
+        require_current_llcr(record=payload)
+        _require_full_merge_scope(payload['contract'])
         from TROTASR.workflows.rare_top_policy import require_clean
         require_clean(payload)
         coverage = payload.get('coverage', {})
@@ -468,6 +471,13 @@ def merge_fields(path, fields):
     return result
 
 
+def _require_full_merge_scope(fields):
+    """A regional or sample-only replay is not a complete era background."""
+    if (fields.get('highdm_llcr_only') or fields.get('dataset_replay') is not None
+            or fields.get('dataset_primaries') is not None):
+        raise ValueError('Do not publish regional or dataset-only replays as full era histograms')
+
+
 def merge(inventory, year, output):
     """Merge the complete per-era task list produced by the histograms stage."""
     import fcntl
@@ -475,7 +485,9 @@ def merge(inventory, year, output):
     from TROTASR.utils.paths import analysis_era
     year = analysis_era(year)
     inventory, output = internal_path(inventory), internal_path(output)
+    require_current_llcr(inventory, output)
     document = read_json(inventory)
+    _require_full_merge_scope(document.get('histogram_options', {}))
     tasks = [t for t in document['tasks'] if analysis_era(t['year']) == year]
     if not tasks or len({t['input'] for t in tasks}) != len(tasks):
         raise ValueError('Missing or duplicate source files in the merge inventory')
@@ -488,9 +500,13 @@ def merge(inventory, year, output):
         if output.exists():
             saved = merge_fields(output, {'status', 'scope', 'contract', 'coverage',
                                           'sr_data_blinded', 'merge_provenance'})
+            require_current_llcr(record=saved)
             coverage = saved.get('coverage', {})
             contract = saved.get('contract', {})
-            saved_sources = saved.get('merge_provenance', {}).get('sources', {})
+            _require_full_merge_scope(contract)
+            # Legacy coverage stores the set of input shards in this map.
+            # Its directory prefixes can change when the same shards are moved.
+            saved_shards = {Path(name).name for name in saved.get('merge_provenance', {}).get('sources', {})}
             options = document.get('histogram_options', {})
             shape = options.get('shape_mode')
             if shape is None and options.get('use_trota_friend'):
@@ -507,7 +523,7 @@ def merge(inventory, year, output):
                            for field in ('modes', 'variations') if field in options)
                     or (options.get('object_endpoints') is not None
                         and set(contract.get('object_endpoints', ())) != set(options['object_endpoints']) - {'nominal'})
-                    or sorted(Path(p).name for p in saved_sources) != sorted(Path(p).name for p in sources)):
+                    or saved_shards != {Path(name).name for name in sources}):
                 raise ValueError('Existing merge uses different histogram inputs: ' + str(output))
             if not summary_path.is_file():
                 write_json(summary_path, dict(status='complete', output=str(output.relative_to(ROOT)),
@@ -517,6 +533,8 @@ def merge(inventory, year, output):
         merged = None
         for task in tasks:
             payload = read_json(ROOT / task['output'])
+            require_current_llcr(record=payload)
+            _require_full_merge_scope(payload['contract'])
             if merged is None:
                 settings = histogram_settings({k: v for k, v in payload['contract'].items()
                                                if k != 'signal_normalization'})
@@ -560,6 +578,7 @@ def combine(jme_path, nonjme_path, year, output):
     from TROTASR.utils.histogramming import histogram_settings
     paths = [internal_path(p) for p in (jme_path, nonjme_path)]
     output = internal_path(output)
+    require_current_llcr(*paths, output)
     sources = [str(p.relative_to(ROOT)) for p in paths]
     policy = read_json(ROOT / 'jsons/analysis.json')['systematic_combination']
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -568,7 +587,9 @@ def combine(jme_path, nonjme_path, year, output):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if output.exists():
             saved = merge_fields(output, {'status', 'scope', 'contract', 'coverage', 'sr_data_blinded'})
+            require_current_llcr(record=saved)
             contract = saved.get('contract', {})
+            _require_full_merge_scope(contract)
             coverage = saved.get('coverage', {})
             components = contract.get('component_contracts', {})
             if (saved.get('status') != 'complete' or saved.get('sr_data_blinded') is not True
@@ -602,10 +623,254 @@ def combine(jme_path, nonjme_path, year, output):
     return output
 
 
+LLCR_SECTIONS = ('histograms', 'physical_histograms')
+LLCR_MTB_CUT = 175.0
+
+
+def _llcr_source(inventory, year, expected, *, background_only):
+    """Reduce only the audited LLCR leaves from a full scoped inventory."""
+    from TROTASR.utils.histogramming import histogram_settings
+
+    document = read_json(inventory)
+    options = document.get('histogram_options', {})
+    if options.get('highdm_llcr_only') is not True or list(options.get('modes', ())) != ['highdm']:
+        raise ValueError('Expected a high-dM LLCR-only histogram inventory')
+    tasks = [task for task in document['tasks'] if str(task['year']) == year]
+    actual = {task['input']: task['entries'] for task in tasks}
+    if (not expected or actual != {key: spec['entries'] for key, spec in expected.items()}
+            or len(tasks) != len(actual) or len({task['output'] for task in tasks}) != len(tasks)):
+        raise ValueError('Scoped LLCR inventory differs from the accepted era input coverage')
+    reduced = {section: {} for section in LLCR_SECTIONS}
+    settings = None
+    for task in tasks:
+        payload = read_json(internal_path(ROOT / task['output']))
+        contract = payload['contract']
+        if (payload.get('status') != 'complete' or contract.get('regions') != ['LLCR']
+                or contract.get('modes') != ['highdm'] or contract.get('highdm_llcr_only') is not True
+                or contract.get('highdm_llcr_mtb_min_gev') != LLCR_MTB_CUT
+                or contract.get('lhe_weights') or payload.get('dy_rz') or payload.get('dy_rz_variations')):
+            raise ValueError('Wrong completed LLCR cut scope: ' + task['input'])
+        observed = expected[task['input']]['vr_kind'] == 'data'
+        metadata = payload.get('input_metadata', {})
+        if ((background_only and observed) or not metadata or any(
+                row.get('is_signal') or bool(row.get('is_data')) != observed for row in metadata.values())):
+            raise ValueError('Unexpected data or signal population in LLCR shard: ' + task['input'])
+        if settings is None:
+            settings = histogram_settings(contract)
+        validate_input(payload, task, settings)
+        for section in LLCR_SECTIONS:
+            modes = payload[section]
+            if set(modes) - {'highdm'}:
+                raise ValueError('Non-high-dM histogram in LLCR shard')
+            for variation, regions in modes.get('highdm', {}).items():
+                if set(regions) - {'LLCR'} or (observed and variation != 'nominal'):
+                    raise ValueError('Non-LLCR or varied data histogram in scoped shard')
+                bins = regions.get('LLCR', {})
+                if set(bins) - {'Nb1', 'Nb2'}:
+                    raise ValueError('Unknown high-dM LLCR category')
+                for samples in bins.values():
+                    if any((sample == 'data') != observed or sample == 'data_obs'
+                           or re.fullmatch(r'(?:T2bW_|T2tb_)?mStop\d+_mLSP\d+', sample)
+                           for sample in samples):
+                        raise ValueError('Unexpected nominal LLCR sample/stream')
+                merge_histograms(reduced[section].setdefault(variation, {}), bins)
+    coverage = dict(files=len(tasks), events=sum(actual.values()),
+                    data=sum(spec['vr_kind'] == 'data' for spec in expected.values()))
+    return reduced, settings, coverage
+
+
+def _llcr_graft(old, new, where):
+    """Replace only existing leaves; absent tightened selections are zero."""
+    import numpy as np
+
+    if 'sumw' in old:
+        zeros = {key: np.zeros_like(old[key]).tolist() for key in ('sumw', 'sumw2', 'entries')}
+        metadata = {key: value for key, value in old.items() if key not in zeros}
+        if new is None:
+            return {**metadata, **zeros}
+        if metadata != {key: value for key, value in new.items() if key not in zeros} or set(new) != set(old):
+            raise ValueError('LLCR axes/leaf representation changed: ' + where)
+        before, after = (np.asarray(row['sumw2'], float) for row in (old, new))
+        if (np.any(np.asarray(new['entries']) > np.asarray(old['entries']))
+                or np.any(after > before + 1e-10 + 1e-7 * np.abs(before))):
+            raise ValueError('LLCR cut gained entries or sumw2 relative to baseline: ' + where)
+        return new
+    new = {} if new is None else new
+    for key in set(new) - set(old):
+        # Physical histograms can fill explicit empty leaves; those are
+        # harmless, but no newly populated leaf is allowed for a tighter cut.
+        def populated(node):
+            if 'sumw' in node:
+                return any(np.any(node[field]) for field in ('sumw', 'sumw2', 'entries'))
+            return any(populated(child) for child in node.values())
+
+        if populated(new[key]):
+            raise ValueError('LLCR cut introduced a populated leaf: ' + where + '/' + key)
+    return {key: _llcr_graft(value, new.get(key), where + '/' + key) for key, value in old.items()}
+
+
+def _write_llcr_section(reader, write, replacements, section):
+    write('{')
+    delim = ''
+    highdm = False
+    for mode in reader.items():
+        write(delim + json.dumps(mode) + ':')
+        delim = ','
+        if mode != 'highdm':
+            reader.copy_value(write)
+            continue
+        highdm = True
+        write('{')
+        between = ''
+        seen = set()
+        for variation in reader.items():
+            seen.add(variation)
+            write(between + json.dumps(variation) + ':{')
+            between, sep = ',', ''
+            replaced = False
+            for region in reader.items():
+                write(sep + json.dumps(region) + ':')
+                sep = ','
+                if region != 'LLCR':
+                    reader.copy_value(write)
+                    continue
+                replaced = True
+                leaf = _llcr_graft(reader.value(), replacements.get(variation), section + '/' + variation)
+                write(json.dumps(leaf, allow_nan=False, separators=(',', ':')))
+            if not replaced:
+                _llcr_graft({}, replacements.get(variation), section + '/' + variation)
+            write('}')
+        if seen != set(replacements):
+            raise ValueError('Scoped LLCR variation names differ from the saved high-dM ' + section)
+        write('}')
+    if not highdm:
+        raise ValueError('Missing saved high-dM ' + section)
+    write('}')
+
+
+def _check_llcr_baseline(meta, year, primary, secondary):
+    contract, coverage = meta.get('contract', {}), meta.get('coverage', {})
+    if (meta.get('status') != 'complete' or meta.get('sr_data_blinded') is not True
+            or not coverage.get('full_input_inventory') or coverage.get('failed_files') != 0
+            or not coverage.get('expected_files')
+            or coverage.get('expected_files') != coverage.get('completed_files')
+            or str(contract.get('year')) != year or 'highdm' not in contract.get('modes', ())
+            or contract.get('highdm_llcr_mtb_min_gev') is not None):
+        raise ValueError('Incomplete, unblinded or already-recut LLCR baseline')
+    if contract.get('shape_mode') == 'jme_with_stored_nonjme':
+        components = contract.get('component_contracts', {})
+        if (secondary is None or set(components) != {'jme', 'nonjme'}
+                or scientific_settings(contract.get('combination_policy')) != COMBINATION_POLICY):
+            raise ValueError('Combined baseline requires matching JME and non-JME scoped LLCR inputs')
+        pairs = ((components['jme'], primary), (components['nonjme'], secondary))
+    elif secondary is None:
+        pairs = ((contract, primary),)
+    else:
+        raise ValueError('Unexpected non-JME input for a single-convention baseline')
+    for before, after in pairs:
+        for field in ('shape_mode', 'central_object_corrections', 'muon_selection', 'variations',
+                      'nominal_calibrations_only', 'object_endpoints'):
+            left, right = before.get(field), after.get(field)
+            if field == 'muon_selection' and isinstance(left, dict) and isinstance(right, dict):
+                # The adoption date documents the decision, not the selection.
+                left, right = ({k: v for k, v in m.items() if k != 'adopted'} for m in (left, right))
+            if field in ('variations', 'object_endpoints') and left is not None and right is not None:
+                left, right = sorted(left), sorted(right)
+            if left != right:
+                raise ValueError('Scoped LLCR convention differs from the saved baseline: ' + field)
+
+
+def merge_highdm_llcr(inventory, year, baseline, output, nonjme_inventory=None):
+    """Install only a fully recut LLCR into a new copy of the accepted era payload."""
+    import fcntl
+    from TROTASR.utils.paths import analysis_era
+    from TROTASR.workflows.validation_regions import _input_inventory
+
+    year = analysis_era(year)
+    inventory, baseline, output = (internal_path(path) for path in (inventory, baseline, output))
+    approved = internal_path(ROOT / read_json(ROOT/'jsons/analysis.json')['years'][year]['hists'])
+    if baseline != approved or output == baseline:
+        raise ValueError('Use exactly the accepted LLCR baseline and a separate output')
+    nonjme_inventory = internal_path(nonjme_inventory) if nonjme_inventory else None
+    if nonjme_inventory == inventory:
+        raise ValueError('The two scoped LLCR inventories must be distinct')
+    expected = {task['input']: task for task in _input_inventory()[year] if task['vr_kind'] in ('data', 'background')}
+    backgrounds = {name: task for name, task in expected.items() if task['vr_kind'] == 'background'}
+    if not backgrounds or len(backgrounds) == len(expected):
+        raise ValueError('Accepted LLCR registry is missing data or background files')
+    inventories = [str(p.relative_to(ROOT)) for p in (inventory, nonjme_inventory) if p is not None]
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.with_name(output.name + '.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if output.exists():
+            record = merge_fields(output, {'highdm_llcr_replacement', 'contract', 'sr_data_blinded', 'status'})
+            receipt = record.get('highdm_llcr_replacement', {})
+            if (record.get('status') == 'complete' and record.get('sr_data_blinded') is True
+                    and record.get('contract', {}).get('highdm_llcr_mtb_min_gev') == LLCR_MTB_CUT
+                    and str(record['contract'].get('year')) == year
+                    and receipt.get('inventories') == inventories
+                    and receipt.get('baseline') == str(baseline.relative_to(ROOT))
+                    and receipt.get('sr_observations_read') is False):
+                return output
+            raise FileExistsError('Refusing to overwrite a divergent scoped LLCR product')
+
+        replacements, primary, primary_coverage = _llcr_source(inventory, year, expected, background_only=False)
+        secondary, secondary_coverage = None, None
+        if nonjme_inventory:
+            extra, secondary, secondary_coverage = _llcr_source(nonjme_inventory, year, backgrounds, background_only=True)
+            endpoints = set(secondary.get('object_endpoints', ()))
+            if (primary.get('shape_mode') != 'cms_trota_jme' or secondary.get('shape_mode') != 'stored_trota_nonjme'
+                    or not endpoints or any(set(extra[name]) != {'nominal', *endpoints} for name in LLCR_SECTIONS)):
+                raise ValueError('Incorrect split JME / absolute non-JME LLCR endpoint set')
+            for section in LLCR_SECTIONS:
+                if endpoints & set(replacements[section]):
+                    raise ValueError('Overlapping stored LLCR endpoint conventions')
+                replacements[section].update({name: extra[section][name] for name in endpoints})
+
+        receipt = dict(baseline=str(baseline.relative_to(ROOT)), inventories=inventories,
+                       primary_coverage=primary_coverage, nonjme_coverage=secondary_coverage,
+                       region='LLCR', regime='highdm', mtb_min_gev=LLCR_MTB_CUT,
+                       variations=sorted(replacements['histograms']), sr_observations_read=False)
+        temporary = output.with_name(output.name + '.pending.' + str(os.getpid()))
+        source_open = gzip.open if baseline.suffix == '.gz' else open
+        target_open = gzip.open if output.suffix == '.gz' else open
+        meta, sections = {}, set()
+        created = False
+        try:
+            with source_open(baseline, 'rt') as source, target_open(temporary, 'xt') as sink:
+                created = True
+                reader, write = JsonStream(source), sink.write
+                write('{')
+                sep = ''
+                for key in reader.items():
+                    if key == 'highdm_llcr_replacement':
+                        raise ValueError('Baseline already contains a scoped LLCR graft')
+                    write(sep + json.dumps(key) + ':')
+                    sep = ','
+                    if key in LLCR_SECTIONS:
+                        sections.add(key)
+                        _write_llcr_section(reader, write, replacements[key], key)
+                    elif key in {'contract', 'coverage', 'status', 'sr_data_blinded'}:
+                        meta[key] = reader.value()
+                        value = dict(meta[key], highdm_llcr_mtb_min_gev=LLCR_MTB_CUT) if key == 'contract' else meta[key]
+                        write(json.dumps(value, allow_nan=False, separators=(',', ':')))
+                    else:
+                        reader.copy_value(write)
+                write(',"highdm_llcr_replacement":' + json.dumps(receipt, allow_nan=False) + '}\n')
+            if sections != set(LLCR_SECTIONS):
+                raise ValueError('Incomplete saved physics histogram sections')
+            _check_llcr_baseline(meta, year, primary, secondary)
+            os.link(temporary, output)
+        finally:
+            if created:
+                temporary.unlink(missing_ok=True)
+    return output
+
+
 def merge_generator_weights(inventory, year, output):
     """Publish member sums, not nuisance endpoints, from a registered theory inventory."""
     import fcntl
-    from TROTASR.utils.lhe_weights import merge_lhe_member_payloads
+    from TROTASR.utils.lhe_weights import merge_lhe_member_payloads, highdm_cr_member_endpoints
     from TROTASR.utils.paths import analysis_era
 
     year = analysis_era(year)
@@ -636,8 +901,13 @@ def merge_generator_weights(inventory, year, output):
             if output.exists():
                 previous = read_json(output)
                 if previous.get('status') == 'complete_member_sums':
+                    if 'highdm_cr_tail500' not in previous:
+                        previous['highdm_cr_tail500'] = highdm_cr_member_endpoints(previous['members_by_era'][year])
+                        write_json(output, previous)
                     return 0
             result = merge_lhe_member_payloads(tasks, load)
+            if result.get('status') == 'complete_member_sums':
+                result['highdm_cr_tail500'] = highdm_cr_member_endpoints(result['members_by_era'][year])
             result.update(inventory=str(inventory.relative_to(ROOT)), population=population, era=year,
                           sr_observations_used=False, endpoints_installed=False)
             write_json(output, result)
@@ -653,7 +923,15 @@ def main():
     parser.add_argument('--jme', type=Path, help='Complete JME year histogram')
     parser.add_argument('--nonjme', type=Path, help='Complete stored non-JME year histogram')
     parser.add_argument('--lhe', action='store_true', help='Merge raw generator members without nuisance reduction')
+    parser.add_argument('--tt-slot', action='store_true', help='Collect only the replayed TT sample and its detector/weight responses')
     args = parser.parse_args()
+    require_current_llcr(args.inventory, args.jme, args.nonjme, args.output)
+    if args.tt_slot:
+        if args.inventory or args.jme or args.nonjme or args.lhe:
+            parser.error('--tt-slot uses its two completed canonical inventories')
+        from TROTASR.workflows.tt_slot_inputs import collect
+        print(collect(args.year, args.output), flush=True)
+        return
     if args.lhe:
         if args.jme or args.nonjme or not args.inventory:
             parser.error('--lhe requires its own generator histogram inventory')

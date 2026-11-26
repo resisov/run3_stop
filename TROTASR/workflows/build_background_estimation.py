@@ -5,6 +5,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.selection_contract import require_current_llcr
 from TROTASR.utils.io import read_json, write_json, scientific_settings
 from TROTASR.utils.background_estimation import measure
 from TROTASR.utils.transfer_factors import build_transfer_factors
@@ -99,7 +100,9 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
     source, output = internal_path(a.hists), internal_path(a.output)
+    require_current_llcr(source, output)
     payload = read_json(source)
+    require_current_llcr(record=payload)
     from TROTASR.workflows.rare_top_policy import require_clean
     require_clean(payload)
     year = str(payload['contract']['year'])

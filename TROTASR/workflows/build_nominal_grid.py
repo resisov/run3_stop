@@ -21,17 +21,20 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.selection_contract import require_current_llcr, RETIRED_LLCR_MESSAGE
 from TROTASR.utils.io import read_json, write_json, without_provenance_fields
 from TROTASR.utils.statistical_templates import (assemble, aggregate, card_text as native_card_text, template_name,
     write_templates, json_ready, load_theory, profiled_theory, add_signal_xsec_lnN)
 from TROTASR.workflows.signal_grid_inputs import (MODELS, FIELDS, requested_grid,
     mass_pair, extract_year, signal_data, require_fit_support_issues)
 from TROTASR.utils.sr_merge import load_merge, bin_groups, project
+from TROTASR.utils.cr_binning import FIT_GROUPS, DIAGNOSTIC_GROUPS, N_HIGH_CR, N_RATES, fit_group
 
 CODE = ('workflows/build_nominal_grid.py', 'workflows/signal_grid_inputs.py',
     'utils/statistics_inputs.py', 'utils/statistics_model.py', 'utils/statistical_templates.py',
     'utils/sr_binning.py', 'utils/sr_merge.py', 'utils/renderers/signal_theory.py')
 INFERENCE_RUNTIME = ROOT / 'workflows/run_inference.sh'
+LLCR_MTB_PRODUCTS = ROOT / 'stats/run3/new_signal/llcr_mtb'
 
 
 def card_scientific_metadata(metadata):
@@ -42,9 +45,9 @@ def card_scientific_metadata(metadata):
     })
 
 
-CR12_POLICY = dict(rate_parameter_range=[0.01, 5], highdm_cr_bins_per_region_year=12,
-    native_recoil_groups=[[0], [1], [2], [3], [4, 5], [6, 7]],
-    recoil_edges=[250, 300, 350, 400, 500, 800, 1500], last_bin_open_ended=True,
+CR12_POLICY = dict(rate_parameter_range=[0.01, 5], highdm_cr_bins_per_region_year=N_HIGH_CR,
+    native_recoil_groups=list(map(list, FIT_GROUPS)),
+    recoil_edges=[250, 300, 350, 400, 500, 1500], last_bin_open_ended=True,
     signal_contamination=False, auto_mc_stats=[10, 1, 1],
     preserve_sr_bins=[118, 30], preserve_existing_uncertainty_correlations=True)
 
@@ -66,12 +69,13 @@ def approved_zjet_fit_background(background, issues, policy=None):
         raise ValueError('Unapproved additional fit exclusion')
     key = ('GCR_highdm_c1_2023BPix', 'ZJet')
     row = background[key]
-    variance = [0.] * 12
-    variance[8] = 0.010207432109671547
+    variance = [0.] * N_HIGH_CR
+    variance_bin = len(FIT_GROUPS) + 2  # Nb>=2, 350–400: unchanged physical cell
+    variance[variance_bin] = 0.010207432109671547
     expected_issue = dict(channel=key[0], process=key[1], parameter='',
-        problem='zero_integral_nonempty_component', sumw2=variance[8], variations=[])
+        problem='zero_integral_nonempty_component', sumw2=variance[variance_bin], variations=[])
     target_issues = [i for i in issues if (i.get('channel'), i.get('process')) == key]
-    if (row['family'] != 'ZJet' or list(row['nominal']) != [0.] * 12 or list(row['sumw2']) != variance
+    if (row['family'] != 'ZJet' or list(row['nominal']) != [0.] * N_HIGH_CR or list(row['sumw2']) != variance
             or row['parameter'] or row['initial'] != 1.
             or row.get('extra_lnN') or target_issues != [expected_issue]):
         raise ValueError('Approved GCR ZJet support changed')
@@ -88,13 +92,13 @@ def approved_zjet_fit_background(background, issues, policy=None):
         endpoints = {}
         for direction in ('up', 'down'):
             values = np.asarray(pair[direction])
-            if (values.shape != (12,) or values.dtype.kind not in 'fiu'
+            if (values.shape != (N_HIGH_CR,) or values.dtype.kind not in 'fiu'
                     or not np.isfinite(values).all() or np.any(values != 0.)):
                 raise ValueError('Approved GCR ZJet endpoint support changed')
             endpoints[direction] = values.tolist()
         omitted_variations[name] = endpoints
     audit = dict(channel=key[0], process=key[1], parameter='', nominal=0.,
-        sumw2=variance[8], omitted_sumw2_by_bin=variance, omitted_variations=omitted_variations,
+        sumw2=variance[variance_bin], omitted_sumw2_by_bin=variance, omitted_variations=omitted_variations,
         omitted_variation_names=sorted(omitted_variations),
         omitted_variation_count=len(omitted_variations), omitted_endpoint_count=2*len(omitted_variations),
         decision='user_approved_fit_only_exclusion', preliminary=True,
@@ -163,11 +167,20 @@ def require_statistical_revision(policy):
 
 def cr12_parameter(name):
     match = re.fullmatch(r'(CMS_NPS26012_(?:ll|qcd)_norm_highdm_Nb(?:1|2plus)_bin)([0-7])(_(?:2022(?:EE)?|2023(?:BPix)?|202[45]))', name)
-    return match[1]+str((0, 1, 2, 3, 4, 4, 5, 5)[int(match[2])])+match[3] if match else name
+    return match[1]+str(fit_group(int(match[2])))+match[3] if match else name
 
 
 def cr12_payload(payload):
     """Sum signed native CR yields before clipping; leave SR yields unchanged."""
+    return _control_projection(payload, FIT_GROUPS)
+
+
+def diagnostic_cr_payload(payload):
+    """Two measured tail bins for closure plots only; both use the same fit parameter."""
+    return _control_projection(payload, DIAGNOSTIC_GROUPS)
+
+
+def _control_projection(payload, recoil_groups):
     result = dict(year=payload['year'], groups={})
     fixed = {(r['channel'], r['process']): r for r in payload.get('cr_only_unity_audit', [])}
     for region in ('LLCR', 'QCDCR', 'GCR'):
@@ -179,7 +192,7 @@ def cr12_payload(payload):
             by_index = {int(b['name'].rsplit('bin', 1)[1]): b for b in old if b['nb_group'] == nb}
             if set(by_index) != set(range(8)):
                 raise ValueError('Incomplete native CR cell coverage')
-            for index, group in enumerate(CR12_POLICY['native_recoil_groups']):
+            for index, group in enumerate(recoil_groups):
                 members = [by_index[i] for i in group]
                 row = copy.deepcopy(members[0])
                 row.update(name=f'{region}_highdm_{nb}_bin{index}',
@@ -441,14 +454,14 @@ def cr12_fit_background(background, issues, original_audit):
     audit = copy.deepcopy(original_audit)
     for row in audit:
         record = background[row['channel'], row['process']]
-        cr = background['QCDCR_highdm_c1_'+row['channel'][-4:], 'QCD_Nb1_u5']
+        cr = background['QCDCR_highdm_c1_'+row['channel'][-4:], f'QCD_Nb1_u{fit_group(6)}']
         parameter = cr12_parameter(row['parameter'])
         if (record['family'] != 'QCD' or record['parameter'] != parameter
                 or cr['family'] != 'QCD' or cr['parameter'] != parameter
                 or any(record['nominal']) or any(record['sumw2']) or sum(cr['nominal']) <= 0):
             raise ValueError('CR12 mapped exception no longer has zero SR/positive CR support')
         row.update(original_parameter=row['parameter'], parameter=parameter,
-            cr_nominal_preserved=float(sum(cr['nominal'])), cr_native_bins=[6, 7])
+            cr_nominal_preserved=float(sum(cr['nominal'])), cr_native_bins=list(FIT_GROUPS[fit_group(6)]))
     return ({k: r for k, r in background.items() if k not in keys},
         [i for i in issues if (i.get('channel'), i.get('process')) not in keys], audit)
 
@@ -555,11 +568,11 @@ def combine_cached(caches, sr_merge=None, fit_issues=None, statistical_revision=
         clipping = [i for i in clipping if not any(i['channel'].startswith(r+'_highdm_')
                     for r in ('LLCR', 'QCDCR', 'GCR'))] + cr_clipping
         expected = {f'{reg}_{mode}_c1_{year}': (118 if mode == 'highdm' else 30)
-            if reg == 'SR' else (12 if mode == 'highdm' else 10)
+            if reg == 'SR' else (N_HIGH_CR if mode == 'highdm' else 10)
             for reg in ('SR', 'LLCR', 'QCDCR', 'GCR')
             for mode in ('highdm', 'lowdm') for year in caches}
         if {c: len(b) for c, b in channels.items()} != expected:
-            raise ValueError('CR12 revision requires 214 bins/eight channels per era with SR118/30')
+            raise ValueError('Control-tail layout requires 208 bins/eight channels per era with SR118/30')
     if issues and fit_issues is None:
         raise ValueError('Shared background model contains unsupported components')
     if fit_issues is not None:
@@ -567,9 +580,18 @@ def combine_cached(caches, sr_merge=None, fit_issues=None, statistical_revision=
     return channels, data, clipping, sources
 
 
-def point_signals(channels, sources, caches, model, mass, keep_empty=False):
+def point_signals(channels, sources, caches, model, mass, keep_empty=False,
+                  retain_nominal_aliases=False):
     grids = {y: dict(signals=cache['signals'][model]) for y, cache in caches.items()}
-    return signal_data(channels, sources, grids, mass, keep_empty=keep_empty)
+    records, issues, clipped = signal_data(channels, sources, grids, mass,
+        keep_empty=keep_empty or retain_nominal_aliases)
+    if retain_nominal_aliases:
+        if len(records) != 2 * len(caches) or any(row['variations'] for row in records.values()):
+            raise ValueError('Replacement signals require two nominal SR aliases per era')
+        # An empty era/channel is valid; a point with no SR support anywhere is not.
+        issues = [] if any(row['nominal'].sum() > 0 for row in records.values()) else [
+            dict(problem='zero_signal_acceptance')]
+    return records, issues, clipped
 
 
 def point_card(channels, data, model, mass, theory, card_dir, templates, statistical_revision=None,
@@ -735,7 +757,8 @@ def resume_card_inputs(output, prior):
             or manifest.get('sr_data_blinded') is not True
             or manifest.get('fit_compatibility', {}).get('status') != 'ready'
             or manifest.get('template_directory')
-            or len(manifest.get('points', [])) != 955):
+            or len(manifest.get('points', [])) != (
+                895 if prior.get('signal_templates_nominal_only') or prior.get('highdm_llcr_mtb_min_gev') == 175.0 else 955)):
         raise ValueError('Card resume requires unchanged complete six-era templates and inputs')
     expected = {template_name('SR_'+mode+'_c1_'+year) for year in prior['inputs']
                 for mode in ('highdm', 'lowdm')}
@@ -761,7 +784,8 @@ def render_point_card(context, point):
     """The original serial card calculation, shared unchanged by fork workers."""
     model, mass = point['model'], point['mass']
     signals, issues, _ = point_signals(context['channels'], context['sources'], context['caches'],
-        model, mass, keep_empty=context['preserve_unsupported'])
+        model, mass, keep_empty=context['preserve_unsupported'],
+        retain_nominal_aliases=context['model_metadata'].get('signal_templates_nominal_only',False))
     require_fit_support_issues(issues)
     if issues != context['point_issues'].get(model+'/'+mass, []):
         raise ValueError('Signal support changed while writing card')
@@ -853,6 +877,16 @@ def write_point_cards(context, points, workers=1, execution=None):
     write_json(path, record)
     _CARD_CONTEXT = context
     pool_children = {}
+    worker_exit_codes = {}
+    def release_batch():
+        # Joined multiprocessing.Process objects still own their pipe FDs.
+        # Keep the exit-code receipt, not the live handles, across batches.
+        for pid, process in pool_children.items():
+            code = process.exitcode
+            worker_exit_codes[str(pid)] = code
+            if code is not None:
+                process.close()
+        pool_children.clear()
     try:
         from shutil import disk_usage
 
@@ -902,8 +936,9 @@ def write_point_cards(context, points, workers=1, execution=None):
                         for future in done:
                             result = future.result()
                             results[result['model']+'/'+result['mass']] = result
-            if any(process.exitcode != 0 for process in pool_children.values()):
-                raise RuntimeError('Card fork worker did not exit successfully')
+                release_batch()
+                if any(code != 0 for code in worker_exit_codes.values()):
+                    raise RuntimeError('Card fork worker did not exit successfully')
         for key, saved in reused_pairs.items():
             card = ROOT/saved['card']
             require_template_files(card.parent, (card.name, card.with_suffix('.manifest.json').name))
@@ -913,8 +948,8 @@ def write_point_cards(context, points, workers=1, execution=None):
         record.update(status='needs_attention', error=repr(error)); raise
     finally:
         _CARD_CONTEXT = None
-        record.update(pid=None, finished=time.time(),
-            worker_exit_codes={str(pid):process.exitcode for pid,process in pool_children.items()})
+        release_batch()
+        record.update(pid=None, finished=time.time(), worker_exit_codes=worker_exit_codes)
         write_json(path, record)
     return [results[p['model']+'/'+p['mass']] for p in points]
 
@@ -946,7 +981,8 @@ def same_year_extraction(old, current, year):
     return bindings(old.get('inputs', {}).get(year, {})) == bindings(current['inputs'][year])
 
 
-def year_extraction(path, year, inputs, contract, grid, *, protected_contract=None):
+def year_extraction(path, year, inputs, contract, grid, *, protected_contract=None,
+                    replacement=None):
     """Resume a complete extraction or refresh it from the selected physics inputs."""
     current = contract['inputs'][year]
     validate_only = contract['validate_only']
@@ -964,6 +1000,11 @@ def year_extraction(path, year, inputs, contract, grid, *, protected_contract=No
     def complete(record):
         return (record.get('status') == 'complete' and record.get('year') == year
                 and record.get('sr_data_blinded') is True
+                and (record.get('highdm_llcr_mtb_min_gev') is None if replacement is None else (
+                    (record.get('tt_card_input') if replacement.get('tt_card') else
+                     record.get('highdm_llcr_mtb_min_gev') == 175.0) and
+                    record.get('replacement_signal_source', {}).get('path') ==
+                    replacement['receipt']['output']))
                 and set(record.get('inputs', {})) == set(current)
                 and {model: set(points) for model, points in record.get('signals', {}).items()}
                 == {model: set(points) for model, points in grid['models'].items()})
@@ -977,7 +1018,7 @@ def year_extraction(path, year, inputs, contract, grid, *, protected_contract=No
             return cache
 
     fresh = json_ready(extract_year(inputs, grid, allow_validation=validate_only,
-                                   preserve_unsupported=preserve_unsupported))
+                       preserve_unsupported=preserve_unsupported, replacement=replacement))
     if not complete(fresh):
         raise ValueError('Year input coverage or blinding does not match: '+year)
     if protected_contract is not None:
@@ -998,15 +1039,170 @@ def year_extraction(path, year, inputs, contract, grid, *, protected_contract=No
 
 
 
-def build(config_path, output, validate_only=False, preserve_unsupported=False,
-          card_workers=1):
+def _grid_background(caches, config, preserve_unsupported):
+    """The shared card-model background, including the exact adopted fit exclusions."""
+    revision = config.get('statistical_revision')
+    background_issues, original_exclusions = [], []
+    channels, background, clipping, sources = combine_cached(caches, config.get('sr_merge'),
+        fit_issues=background_issues if preserve_unsupported else None,
+        statistical_revision=revision, exclusion_policy=config.get('preliminary_fit_exclusions'),
+        systematic_combination=config.get('systematic_combination'), exclusion_audit=original_exclusions)
+    original_background_issues = list(background_issues)
+    background, shape_audit = background_error_shapes(background, config.get('background_estimation_uncertainties'))
+    if require_statistical_revision(revision):
+        if original_exclusions:
+            fit_data, background_issues, exclusions = cr12_fit_background(background, background_issues, original_exclusions)
+        else:
+            fit_data, exclusions = background, []
+        if set(caches) == {'2024', '2025'} and len({r['parameter'] for r in fit_data.values() if r['parameter']}) != 2*N_RATES:
+            raise ValueError('Late-era CR12 normalization inventory changed')
+    else:
+        fit_data, background_issues, exclusions = fit_background(
+            background, background_issues, config.get('preliminary_fit_exclusions'))
+    fit_data, background_issues, additional = approved_zjet_fit_background(
+        fit_data, background_issues, config.get('additional_fit_exclusions'))
+    exclusions.extend(additional)
+    if config.get('early_qcd_fit_exclusions') is not None:
+        from TROTASR.workflows.early_qcd_fit_policy import early_qcd_fit_background
+        fit_data, background_issues, additional = early_qcd_fit_background(
+            fit_data, background_issues, config['early_qcd_fit_exclusions'])
+        exclusions.extend(additional)
+    return (channels, background, clipping, sources, fit_data, background_issues,
+            exclusions, original_background_issues, shape_audit)
+
+
+def prepare_llcr_prefit_cards(output):
+    """Prepare an unfitted observed-CR card for the cut comparison, without any mass grid."""
+    from tempfile import TemporaryDirectory
+    from TROTASR.utils.paths import ERAS
+    from TROTASR.utils.era_merge import (merged_card_plan, cr_only_card,
+                                        sum_template_observations, write_observation_sum)
+    from TROTASR.utils.statistics_inputs import build_inputs
+    from TROTASR.workflows.diagnostic_common import grid_card, cr_channels
+    from TROTASR.workflows.rare_top_policy import require_clean
+
     output = internal_path(output)
+    if output != LLCR_MTB_PRODUCTS/'plots/llcr_prefit/model':
+        raise ValueError('Use the canonical LLCR prefit model directory')
+    if sys.platform != 'linux':
+        raise RuntimeError('Native prefit templates must remain on hep2')
+    grid = ROOT/'stats/run3/grid'
+    before, _ = grid_card(grid/'manifest.json', 'cronly')
+    delivered = LLCR_MTB_PRODUCTS/'grid/manifest.json'
+    if delivered.is_file():
+        meta = read_json(delivered)
+        if meta.get('highdm_llcr_mtb_min_gev') != 175.0:
+            raise ValueError('Delivered CR model uses a different LLCR selection')
+        return before, grid_card(delivered, 'cronly')[0]
+    config = read_json(ROOT/'jsons/analysis.json')
+    if tuple(config['years']) != ERAS or not require_run3_systematics_policy(config):
+        raise ValueError('Expected the accepted six-era systematic configuration')
+    sources = {y: LLCR_MTB_PRODUCTS/'histograms/merged'/f'systematics_{y}.json.gz' for y in ERAS}
+    if not all(p.is_file() for p in sources.values()):
+        raise FileNotFoundError('All six complete high-dM LLCR merged inputs are required')
+    receipt = dict(status='prefit_card_ready', fit_performed=False, highdm_llcr_mtb_min_gev=175.,
+        sr_observations_used=False, years=list(ERAS), before=str(before.relative_to(ROOT)),
+        after='datacard_cronly_after.txt', sources={y:str(p.relative_to(ROOT)) for y,p in sources.items()})
+    after = output/receipt['after']
+    if (output/'model.json').is_file():
+        if (read_json(output/'model.json') != receipt or not after.is_file()
+                or not (output/'era_merged_data_obs.root').is_file()
+                or any(not (output/'templates'/template_name(f'LLCR_highdm_c1_{y}')).is_file() for y in ERAS)):
+            raise ValueError('Incomplete or differently bound saved LLCR prefit model')
+        cr_channels(after.read_text(), ERAS)
+        return before, after
+    if output.exists() and any(output.iterdir()):
+        raise FileExistsError('Preserve unrecognized files in '+str(output))
+    caches = {}
+    for year, path in sources.items():
+        opts = config['years'][year]
+        payload = read_json(path)
+        cut = payload.get('highdm_llcr_replacement', {})
+        if (payload.get('status') != 'complete' or payload.get('sr_data_blinded') is not True
+                or payload.get('scope') != 'full_combined_systematic_production'
+                or payload.get('contract', {}).get('highdm_llcr_mtb_min_gev') != 175.0
+                or str(payload['contract'].get('year')) != year or cut.get('sr_observations_read') is not False
+                or cut.get('baseline') != str(internal_path(ROOT/opts['hists']).relative_to(ROOT))):
+            raise ValueError('Incorrect LLCR graft for '+year)
+        require_clean(payload)
+        # Same statistical model as extract_year; no signal projections, ROOT inputs, or fits.
+        model = build_inputs(payload, *(read_json(internal_path(ROOT/opts[k])) for k in FIELDS[1:]),
+                             'T2tt', 1200, 500)
+        del payload
+        if model['issues'] or not model['sr_data_blinded'] or model['year'] != year:
+            raise ValueError('Invalid LLCR model inputs: '+year)
+        for rows in model['groups'].values():
+            for b in rows:
+                b['physical'].pop('signal', None)
+        bins = {b['name']:[(mode, i)] for mode in ('highdm', 'lowdm')
+                for i,b in enumerate(model['groups']['SR_'+mode])}
+        caches[year] = dict(background=model, source_bins=bins)
+        print('LLCR_PREFIT_BACKGROUND', year, flush=True)
+    channels, background, _, _, data, issues, *_ = _grid_background(caches, config, True)
+    if any(not issue['channel'].startswith('SR_') for issue in issues):
+        raise ValueError('A CR background has an unresolved fit-support issue')
+    before_rows = [line.split() for line in before.read_text().splitlines()]
+    old_obs = {r[2]:internal_path(before.parent/r[3]) for r in before_rows
+               if len(r) == 5 and r[:2] == ['shapes', 'data_obs']}
+    if len(old_obs) != 6:
+        raise ValueError('Unrecognized six-channel CR observation layout')
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with TemporaryDirectory(prefix='.prefit-model-', dir=output.parent) as temp:
+        stage = Path(temp)
+        templates = stage/'templates'
+        templates.mkdir()
+        target = 'LLCR_highdm_c1'
+        updated = {c:v for c,v in channels.items() if c in {target+'_'+y for y in ERAS}}
+        if len(updated) != 6 or any(len(b) != 12 for b in updated.values()):
+            raise ValueError('Expected twelve high-dM LLCR bins per era')
+        write_templates(templates, updated, {k:r for k,r in background.items() if k[0] in updated})
+        lines = []
+        for line in card_text(channels, data, statistical_revision=config['statistical_revision'],
+                luminosity_uncertainties=config.get('luminosity_uncertainties'),
+                luminosity_model=config['luminosity_model']).splitlines():
+            row = line.split()
+            if row[:1] == ['shapes']:
+                folder = templates if row[2] in updated else grid/'templates'
+                row[3] = os.path.relpath(folder/template_name(row[2]), stage)
+            lines.append(' '.join(row))
+        dest = stage/after.name
+        plan = merged_card_plan(dest, '\n'.join(lines), dest)
+        sums, labels = sum_template_observations(plan, channels, background)
+        write_observation_sum(plan['data_root'], {target:sums[target]}, {target:labels[target]})
+        rows = []
+        for line in cr_only_card(plan).splitlines():
+            row = line.split()
+            if row[:2] == ['shapes', 'data_obs'] and row[2] != target:
+                row[3] = os.path.relpath(old_obs[row[2]], stage)
+            rows.append(' '.join(row))
+        text = '\n'.join(rows)+'\n'
+        cr_channels(text, ERAS)
+        dest.write_text(text)
+        write_json(stage/'model.json', receipt)
+        stage.rename(output)
+    return before, after
+
+
+def build(config_path, output, validate_only=False, preserve_unsupported=False,
+          card_workers=1, llcr_mtb=False):
+    output = internal_path(output)
+    if llcr_mtb:
+        raise ValueError(RETIRED_LLCR_MESSAGE)
+    tt_card = output == ROOT/'stats/run3/top_pt/grid'
+    require_current_llcr(output)
     # A delivered card stage is the downstream input. Do not reconstruct or
     # revalidate its upstream production just to adopt the canonical likelihood.
     accepted = output/'manifest.json'
     if accepted.is_file() and not validate_only:
         delivered = read_json(accepted)
+        require_current_llcr(record=delivered)
         if delivered.get('status') == 'cards_ready' and delivered.get('run3_systematics'):
+            if tt_card and (not delivered.get('tt_card_input') or delivered.get('bins') != 208
+                            or delivered.get('floating_normalization_parameters') != 44):
+                raise ValueError('Different model in the updated TT card directory')
+            if llcr_mtb and (delivered.get('highdm_llcr_mtb_min_gev') != 175.0
+                            or delivered.get('signal_templates_nominal_only') is not True):
+                raise ValueError('Existing combined grid has incompatible science')
             from TROTASR.utils.era_merge import merge_accepted_grid
             merge_accepted_grid(accepted)
             return 0
@@ -1018,6 +1214,46 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
     if not validate_only and sys.platform != 'linux':
         raise RuntimeError('Native ROOT templates must stay on hep2, not the local laptop')
     config = read_json(config_path)
+    replacements = {}
+    signal_revision = None
+    if tt_card or llcr_mtb:
+        from TROTASR.workflows.signal_grid_inputs import (replacement_points,
+            replacement_production_receipts)
+        from TROTASR.utils.paths import ERAS
+        if (config_path != ROOT/'jsons/analysis.json' or (not tt_card and output != LLCR_MTB_PRODUCTS/'grid')
+                or set(config['years']) != set(ERAS)):
+            raise ValueError('LLCR update requires the canonical six-era configuration')
+        signal_state = ROOT/'stats/run3/new_signal/signal_histograms/state.json'
+        receipts = replacement_production_receipts(read_json(signal_state))
+        signal_grid = read_json(ROOT/'stats/run3/new_signal/grid/manifest.json')
+        replacement_points(signal_grid)
+        signal_revision = signal_grid.get('signal_input_revision')
+        if (signal_grid.get('signal_templates_nominal_only') is not True
+                or signal_grid.get('sr_data_blinded') is not True
+                or tuple(signal_grid.get('years', ())) != ERAS):
+            raise ValueError('Expected the blinded six-era nominal signal grid')
+        accepted_contract = read_json(ROOT/'stats/run3/grid/contract.json')
+        for era in ERAS:
+            if tt_card:
+                from TROTASR.workflows.tt_card_model import build_year
+                from TROTASR.utils.top_pt import PRESCRIPTION
+                d=output.parent/'inputs'/era
+                if not (d/'receipt.json').is_file():
+                    build_year(era)
+                receipt=read_json(d/'receipt.json')
+                if (receipt.get('status')!='complete' or receipt.get('year')!=era or
+                        receipt.get('tt_card_input',{}).get('prescription')!=PRESCRIPTION):
+                    raise ValueError('Incomplete TT measurements: '+era)
+                for name in ('hists','sgamma','rz_high','rz_low','double_ratio'):
+                    stem='histograms' if name=='hists' else name
+                    config['years'][era][name]=str((d/(stem+'.json.gz')).relative_to(ROOT))
+                replacements[era]=dict(receipt=receipts[era],accepted_contract=accepted_contract,tt_card=True)
+                continue
+            updated = LLCR_MTB_PRODUCTS/'histograms/merged'/f'systematics_{era}.json.gz'
+            if not updated.is_file():
+                raise FileNotFoundError(updated)
+            config['years'][era]['hists'] = str(updated.relative_to(ROOT))
+            replacements[era] = dict(receipt=receipts[era], accepted_contract=accepted_contract)
     if not validate_only and not require_run3_systematics_policy(config):
         raise ValueError('Only the canonical six-era merged production grid may write cards')
     revision = config.get('statistical_revision')
@@ -1027,13 +1263,29 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
         raise ValueError('CR12 requires the exact adopted measured-background shape policy')
     inventory = internal_path(ROOT / config['grid'])
     grid = requested_grid(inventory)
+    ledger = [dict(model=model, mass=mass) for model in MODELS for mass in grid['models'][model]]
+    production_grid = grid
+    if tt_card or llcr_mtb:
+        from TROTASR.utils.era_merge import displayed_points
+        authorized = displayed_points(ledger)
+        production_grid = dict(models={
+            model: [p['mass'] for p in authorized if p['model'] == model] for model in MODELS})
     output.mkdir(parents=True, exist_ok=True)
     with (output / 'builder.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         contract_path = output / 'contract.json'
         prior_contract = read_json(contract_path) if contract_path.exists() else None
+        require_current_llcr(record=prior_contract)
         execution_contract = grid_contract(config_path, config, inventory, validate_only, preserve_unsupported,
                                            prior=prior_contract)
+        if llcr_mtb:
+            execution_contract.update(highdm_llcr_mtb_min_gev=175.0,
+                signal_input_revision=signal_revision,
+                replacement_signal_histograms={era: row['receipt']['output']
+                                               for era, row in replacements.items()})
+        if tt_card:
+            execution_contract.update(tt_card_input=PRESCRIPTION,signal_templates_nominal_only=True,
+                                      signal_input_revision=signal_revision)
         if prior_contract is not None and not same_extraction_contract(prior_contract, execution_contract):
             raise ValueError('Existing grid has different physics inputs; preserve its products')
         contract = execution_contract
@@ -1057,35 +1309,11 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
             if not path.is_file():
                 write_json(output / 'state.json', dict(status='extracting', year=year,
                     pid=os.getpid(), updated=time.time(), full_workflow_complete=False))
-            caches[year] = year_extraction(path, year, config['years'][year], contract, grid,
-                                         protected_contract=protected_contract)
-        background_issues, original_exclusions = [], []
-        channels, background, clipping, sources = combine_cached(caches, config.get('sr_merge'),
-            fit_issues=background_issues if preserve_unsupported else None,
-            statistical_revision=revision, exclusion_policy=config.get('preliminary_fit_exclusions'),
-            systematic_combination=config.get('systematic_combination'), exclusion_audit=original_exclusions)
-        original_background_issues = list(background_issues)
-        background, shape_audit = background_error_shapes(background, config.get('background_estimation_uncertainties'))
-        if revised:
-            if original_exclusions:
-                fit_data, background_issues, exclusions = cr12_fit_background(background, background_issues, original_exclusions)
-            else:
-                # The historical late-era QCD exception is not an early-era
-                # physics choice. Keep all supported current components.
-                fit_data, exclusions = background, []
-            if set(caches) == {'2024', '2025'} and len({r['parameter'] for r in fit_data.values() if r['parameter']}) != 96:
-                raise ValueError('Late-era CR12 normalization inventory changed')
-        else:
-            fit_data, background_issues, exclusions = fit_background(
-                background, background_issues, config.get('preliminary_fit_exclusions'))
-        fit_data, background_issues, additional_exclusions = approved_zjet_fit_background(
-            fit_data, background_issues, config.get('additional_fit_exclusions'))
-        exclusions.extend(additional_exclusions)
-        if config.get('early_qcd_fit_exclusions') is not None:
-            from TROTASR.workflows.early_qcd_fit_policy import early_qcd_fit_background
-            fit_data, background_issues, early_exclusions = early_qcd_fit_background(
-                fit_data, background_issues, config['early_qcd_fit_exclusions'])
-            exclusions.extend(early_exclusions)
+            caches[year] = year_extraction(path, year, config['years'][year], contract, production_grid,
+                                         protected_contract=protected_contract,
+                                         replacement=replacements.get(year))
+        (channels, background, clipping, sources, fit_data, background_issues, exclusions,
+         original_background_issues, shape_audit) = _grid_background(caches, config, preserve_unsupported)
         total_bins = sum(map(len, channels.values()))
         scope = combined_input_scope(caches, config)
         combined = scope == 'full_combined_systematic_production'
@@ -1095,6 +1323,14 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
             raise ValueError('Combined model requires the exact 955-point CR12 grid')
         model_metadata = dict(years=list(caches), requested_grid=dict(
             path=str(inventory.relative_to(ROOT))))
+        if tt_card:
+            model_metadata.update(tt_card_input=PRESCRIPTION,signal_templates_nominal_only=True,
+                     signal_input_revision=signal_revision,
+                     replacement_signal_sources={era:c['replacement_signal_source'] for era,c in caches.items()})
+        if llcr_mtb:
+            model_metadata.update(highdm_llcr_mtb_min_gev=175.0, signal_templates_nominal_only=True,
+                official_result=False, signal_input_revision=signal_revision,
+                replacement_signal_sources={era: c['replacement_signal_source'] for era, c in caches.items()})
         if require_run3_systematics_policy(config):
             model_metadata.update(run3_systematics=config['run3_systematics'],
                 systematic_evaluation_deferred=False, systematic_scope=config['systematic_scope'],
@@ -1111,7 +1347,8 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
                 preliminary=True, central_conventions_consistent=False)
         points, blocked, signal_clipping = [], [], []
         if card_resume:
-            points = [dict(model=model, mass=mass) for model in MODELS for mass in grid['models'][model]]
+            points = [dict(model=model, mass=mass) for model in MODELS
+                      for mass in production_grid['models'][model]]
             saved_points = card_resume['points']
             if (len(saved_points) != len(points) or {(p['model'], p['mass']) for p in saved_points}
                     != {(p['model'], p['mass']) for p in points}):
@@ -1119,9 +1356,10 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
             blocked = copy.deepcopy(card_resume['fit_compatibility']['blocked_signal_points'])
         else:
             for model in MODELS:
-                for mass in grid['models'][model]:
+                for mass in production_grid['models'][model]:
                     signals, issues, audit = point_signals(channels, sources, caches, model, mass,
-                                                         keep_empty=preserve_unsupported)
+                                                         keep_empty=preserve_unsupported,
+                                                         retain_nominal_aliases=tt_card or llcr_mtb)
                     require_fit_support_issues(issues)
                     if revised and any(not c.startswith('SR_') for c, p in signals):
                         raise ValueError('The adopted CR12 model requires SR-only signal')
@@ -1188,7 +1426,8 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
                         files[name] = f
                     for point in points:
                         signals, issues, _ = point_signals(channels, sources, caches, point['model'], point['mass'],
-                                                         keep_empty=preserve_unsupported)
+                                                         keep_empty=preserve_unsupported,
+                                                         retain_nominal_aliases=tt_card or llcr_mtb)
                         require_fit_support_issues(issues)
                         if issues and not preserve_unsupported:
                             raise ValueError('Signal validation changed while writing')
@@ -1239,7 +1478,7 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
             preserved_template_contract=contract)
         from TROTASR.utils.era_merge import (REFERENCE_POINT, cr_only_card, displayed_points,
             merged_card_metadata, prepare_merged_cards, publication_metadata)
-        selected = displayed_points(points)
+        selected = points if tt_card or llcr_mtb else displayed_points(points)
         reference = next(point for point in selected if (point['model'], point['mass']) == REFERENCE_POINT)
         reference_path, reference_text, reference_meta = render_point_card(card_context, reference)
         merge = prepare_merged_cards(reference_path, reference_text, reference_meta, channels, background)
@@ -1247,7 +1486,8 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
         converted = write_point_cards(card_context, selected, card_workers, execution)
         written = {(point['model'], point['mass']):point for point in converted}
         all_points = [written.get((point['model'], point['mass']),
-                          dict(point, fit_ready=False, excluded_out_of_plot_range=True)) for point in points]
+                          dict(point, fit_ready=False, excluded_out_of_plot_range=True))
+                      for point in (ledger if tt_card or llcr_mtb else points)]
         # Derive CR-only from the same model without SR shapes or observations.
         cr_path = output / 'datacards' / 'datacard_cronly.txt'
         cr_meta = dict(
@@ -1262,6 +1502,8 @@ def build(config_path, output, validate_only=False, preserve_unsupported=False,
                      cr_only_card=dict(card=str(cr_path.relative_to(ROOT))),
                      finished=time.time())
         final.update(publication_metadata(merge))
+        if llcr_mtb:
+            final['official_result'] = False
         final['card_execution'] = dict(path=str((output/'card_execution.json').relative_to(ROOT)))
         write_json(output / 'manifest.json', final)
         write_json(output / 'state.json', {k: v for k, v in final.items() if k != 'points'})
@@ -1407,6 +1649,7 @@ def build_signal_replacement():
         return 0
     baseline_manifest = baseline/'manifest.json'
     accepted = read_json(baseline_manifest)
+    require_current_llcr(record=accepted)
     points = replacement_points(accepted)
     config = read_json(ROOT/'jsons/analysis.json')
     require_run3_systematics_policy(config)
@@ -1546,6 +1789,7 @@ if __name__ == '__main__':
     p.add_argument('--card-workers', type=int, choices=range(1,33), default=1,
         help='Canonical-runtime fork workers for unfinished cards (default: 1)')
     a = p.parse_args()
+    require_current_llcr(a.output)
     if a.replace_signals:
         allowed_outputs = (ROOT/'stats/run3/grid', ROOT/'stats/run3/new_signal/grid')
         if (a.validate_only or a.preserve_unsupported_templates
@@ -1573,4 +1817,4 @@ if __name__ == '__main__':
             '--native-runtime'] + (['--preserve-unsupported-templates'] if a.preserve_unsupported_templates else [])
             + ['--card-workers', str(a.card_workers)], env)
     raise SystemExit(build(a.config, a.output, a.validate_only, a.preserve_unsupported_templates,
-                           card_workers=a.card_workers))
+        card_workers=a.card_workers))

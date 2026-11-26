@@ -115,36 +115,49 @@ def sample_masks(a, metadata, signal):
 
 
 def count_file(task, signal):
+    from types import SimpleNamespace
+    from .reader import gated_event_chunks
+    from .private_scales import project_entries
+
     path = internal_path(ROOT / task['input'])
-    if path.stat().st_size != task['fingerprint']['size']:
-        raise ValueError('Unexpected input size: ' + task['key'])
+    initial_size = path.stat().st_size
     metadata = validate_root(path, task['year'])
     totals = {mode: {p: np.zeros(len(STEPS) + int(mode == 'highdm'), dtype=np.int64)
                       for p in ORDER} for mode in ('highdm', 'lowdm')}
-    entries = 0
+    io_audit = {"events_read": 0}
     with uproot.open(path, object_cache=None, array_cache=None,
                      decompression_executor=uproot.TrivialExecutor(),
                      interpretation_executor=uproot.TrivialExecutor()) as f:
         tree = f['Events']
         branches = [name for name in tree.keys() if name in prefix_columns()]
-        for a in tree.iterate(branches, step_size=25000, library='ak'):
-            entries += len(a)
-            groups = list(sample_masks(a, metadata, signal))
-            if not groups:
-                continue
-            keep = np.logical_or.reduce([mask for _, mask in groups])
-            a = a[keep]
+        light = ('dataset_id', 'mStop', 'mLSP', 'is_data', 'is_signal', 'pass_base_common', 'pass_signal_trigger')
+        reader = SimpleNamespace(events=tree, num_entries=tree.num_entries,
+                                 project=lambda cols, rows: project_entries(tree, cols, rows))
+
+        def count_light(a):
+            base = np.asarray(a['pass_base_common'], bool)
+            after_trigger = base & np.asarray(a['pass_signal_trigger'], bool)
+            keep = np.zeros(len(a), dtype=bool)
+            for family, chosen in sample_masks(a, metadata, signal):
+                prefix = (chosen.sum(), np.sum(chosen & base), np.sum(chosen & after_trigger))
+                for rows in totals.values():
+                    rows[family][:3] += prefix
+                keep |= chosen & after_trigger
+            return keep
+
+        for a, *_ in gated_event_chunks(reader, branches, 25000, light, count_light, io_audit):
             masks = prefix_masks(a)
             for family, chosen in sample_masks(a, metadata, signal):
                 for mode, rows in masks.items():
-                    totals[mode][family] += np.sum(rows[:, chosen], axis=1)
+                    totals[mode][family][3:] += np.sum(rows[3:, chosen], axis=1)
+        entries = io_audit["events_read"]
         if entries != tree.num_entries or entries != task['entries']:
             raise ValueError('Incomplete event accounting')
-    if path.stat().st_size != task['fingerprint']['size']:
+    if path.stat().st_size != initial_size:
         raise ValueError('Input size changed during read')
     return dict(key=task['key'], year=task['year'], status='complete', entries=entries,
                 counts={m: {p: v.tolist() for p, v in rows.items()} for m, rows in totals.items()},
-                input_fingerprint=task['fingerprint'], branches=branches)
+                input_fingerprint=task['fingerprint'], branches=branches, input_preselection=io_audit["input_preselection"])
 
 
 def audit_migrations(path):
@@ -321,8 +334,7 @@ def collect(contract, output):
                           for p in ORDER} for m in ('highdm', 'lowdm')} for y in (2024, 2025)}
     for task in contract['tasks']:
         r = read_json(output / 'files' / (task['key'] + '.json'))
-        if (r['status'] != 'complete' or r['entries'] != task['entries']
-                or r['input_fingerprint']['size'] != task['fingerprint']['size']):
+        if r['status'] != 'complete' or r['entries'] != task['entries']:
             raise ValueError('Missing/failed/incomplete input: ' + task['key'])
         for mode in totals[str(task['year'])]:
             for p in ORDER:

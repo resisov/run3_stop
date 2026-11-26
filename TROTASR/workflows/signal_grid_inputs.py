@@ -11,6 +11,7 @@ import re
 import numpy as np
 from TROTASR.utils.io import read_json
 from TROTASR.utils.paths import ERAS, ROOT, internal_path
+from TROTASR.utils.selection_contract import require_current_llcr
 from TROTASR.utils.signal_models import signal_mass_from_genmodel, signal_mass_key
 from TROTASR.utils.sr_binning import AXES, NATIVE_EDGES, expand, matches
 from TROTASR.utils.statistics_inputs import build_inputs, HistogramView
@@ -397,7 +398,8 @@ def extract_replacement_year(path, year, points, model_input, gnn, *, production
                 or not math.isfinite(float(spec['normalization_factor']))):
             raise ValueError('Replacement/normalization Runs mismatch: '+year+'/'+model+'/'+mass)
     signals, sources, audit = project_signals(payload, model_input, dict(models=models), gnn, nominal_only=True)
-    return dict(year=year, signals=signals, source_bins=sources, projection_audit=audit, source=source)
+    return dict(year=year, signals=signals, source_bins=sources, projection_audit=audit,
+                source=source, signal_input_coverage=represented)
 
 
 def replacement_signal_object(channel, point):
@@ -505,11 +507,14 @@ def check_reference(expected, actual):
                     expected[key]['variations'].get(n, {}).get(d, expected[key]['nominal']), rtol=1e-12, atol=1e-14)
 
 
-def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False):
+def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False,
+                 replacement=None):
     """Load each large histogram input once; no repeated ROOT or JSON passes."""
     paths = {key: internal_path(ROOT / paths[key]) for key in FIELDS}
     inputs = {key: read_json(path) for key, path in paths.items()}
     payload = inputs['hists']
+    if replacement is None:
+        require_current_llcr(paths['hists'], record=payload)
     from TROTASR.workflows.rare_top_policy import require_clean
     require_clean(payload)
     coverage = payload.get('coverage', {})
@@ -525,23 +530,42 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
     if payload.get('scope') == 'full_combined_systematic_production':
         from TROTASR.utils.statistics_inputs import combined_shape_endpoints
         combined_shape_endpoints(payload)
-    represented = represented_signals(payload)
-    missing = [model + '/' + mass for model in MODELS for mass in grid['models'][model]
-               if model + '/' + mass not in represented]
-    if missing:
-        raise ValueError('Requested signal inputs absent from nonzero Runs bookkeeping: ' + ', '.join(missing))
+    if replacement is None:
+        represented = represented_signals(payload)
+        missing = [model + '/' + mass for model in MODELS for mass in grid['models'][model]
+                   if model + '/' + mass not in represented]
+        if missing:
+            raise ValueError('Requested signal inputs absent from nonzero Runs bookkeeping: ' + ', '.join(missing))
+    else:
+        if ((not payload.get('tt_card_input') if replacement.get('tt_card') else
+             payload['contract'].get('highdm_llcr_mtb_min_gev') != 175.0)
+                or payload.get('scope') != 'full_combined_systematic_production'
+                or not production_coverage):
+            raise ValueError('Missing complete high-dM LLCR cut systematic inputs')
     model_input = build_inputs(*(inputs[k] for k in FIELDS), 'T2tt', 1200, 500)
     from TROTASR.gnn4lowdm.configuration import configuration_path
     gnn = read_json(configuration_path(payload['contract']['year']))
-    signals, source_bins, audit = project_signals(payload, model_input, grid, gnn)
     year = model_input['year']
+    if replacement is None:
+        signals, source_bins, audit = project_signals(payload, model_input, grid, gnn)
+    else:
+        points = [dict(model=model, mass=mass) for model in MODELS for mass in grid['models'][model]]
+        projected = extract_replacement_year(ROOT/replacement['receipt']['output'], year, points,
+            model_input, gnn, production_receipt=replacement['receipt'],
+            accepted_contract=replacement['accepted_contract'])
+        signals, source_bins, audit = (projected[k] for k in
+            ('signals', 'source_bins', 'projection_audit'))
+        represented = projected['signal_input_coverage']
+        for rows in model_input['groups'].values():
+            for row in rows:
+                row['physical'].pop('signal', None)
     channels, data, clipping, issues = assemble([model_input])
     if model_input['issues']:
         raise ValueError('Invalid statistical input model: ' + str(model_input['issues']))
     require_fit_support_issues(issues)
     if issues and not preserve_unsupported:
         raise ValueError('Unsupported statistical background/benchmark model: ' + str(issues))
-    if 'mStop1200_mLSP500' in grid['models']['T2tt']:
+    if replacement is None and 'mStop1200_mLSP500' in grid['models']['T2tt']:
         packed, problems, _ = signal_data(channels, {(year, k): v for k, v in source_bins.items()},
             {year: dict(signals=signals['T2tt'])}, 'mStop1200_mLSP500')
         check_reference({k: v for k, v in data.items() if k[1] == 'signal'}, packed)
@@ -556,4 +580,7 @@ def extract_year(paths, grid, allow_validation=False, preserve_unsupported=False
         signal_input_coverage={k: represented[k] for k in sorted(represented)},
         projection_audit=audit, negative_background_audit=[a for a in clipping if a['process'] != 'signal'],
         full_workflow_complete=False, sr_data_blinded=True,
-        fit_support_issues=issues, preserved_unsupported_templates=preserve_unsupported)
+        fit_support_issues=issues, preserved_unsupported_templates=preserve_unsupported,
+        **({'replacement_signal_source': projected['source'],
+            **({'tt_card_input':payload['tt_card_input']} if replacement.get('tt_card') else
+               {'highdm_llcr_mtb_min_gev':175.0})} if replacement is not None else {}))

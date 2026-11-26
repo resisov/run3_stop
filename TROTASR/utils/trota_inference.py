@@ -114,7 +114,7 @@ def probabilities(model, inputs, batch_size=8192):
     return scores, scores[:, 1] / denom
 
 
-def infer_chunk(a, models):
+def infer_chunk(a, models, *, materialize_resolved=True):
     """Infer one budgeted slice; return new Events view, Resolved map and audit.
 
     Fourth return value holds candidate states for validation/migration counts
@@ -137,11 +137,12 @@ def infer_chunk(a, models):
     if not np.isfinite(rkin).all():
         raise ValueError('Nonfinite Resolved candidate p4')
     resolved = {}
-    file_id, entry = np.asarray(a['file_id']), np.asarray(a['entry'])
-    for i in np.flatnonzero(rselected):
-        key = (int(file_id[rev[i]]), int(entry[rev[i]]))
-        resolved.setdefault(key, []).append(dict(index=int(rind[i]), jets=rsrc[i].tolist(),
-            score=float(rd[i]), eta=float(reta[i]), mass=float(rmass[i])))
+    if materialize_resolved:
+        file_id, entry = np.asarray(a['file_id']), np.asarray(a['entry'])
+        for i in np.flatnonzero(rselected):
+            key = (int(file_id[rev[i]]), int(entry[rev[i]]))
+            resolved.setdefault(key, []).append(dict(index=int(rind[i]), jets=rsrc[i].tolist(),
+                score=float(rd[i]), eta=float(reta[i]), mass=float(rmass[i])))
     del features, rp
     # The frozen early evaluator does not inspect features in zero-candidate
     # events. Preserve that scope rather than inventing missing tagger inputs.

@@ -4,6 +4,7 @@ info analysis
   objects "ids.adl"
   corrections "corrections.adl"
   energyunit GeV
+  execution "Run 3 selection is implemented in utils/analysis_regions.py and utils/region_kinematics.py"
 
 info derivedInputs
   validMET "finite MET pT >= 0"
@@ -12,8 +13,8 @@ info derivedInputs
   highdm_mtb "minimum mT(b,MET) of the two highest-UParT medium b jets; the single b jet if Nb=1"
   gnn_score "region-specific gnn4lowdm.inference.Rank005Numpy score"
   inputP4 "the calibrated event view; SR/LLCR/QCDCR use MET, GCR/DY use recoil"
-  sourceBinning "jsons/highdm_sr_binning.json: 162 high-dM SR bins"
-  finalBinning "jsons/sr_category_merge.json: 21 classes, 118 high-dM SR bins per year"
+  sourceBinning "utils/sr_binning.py: native high-dM SR axes"
+  finalBinning "utils/sr_merge.py and jsons/analysis.json: 21 classes, 118 high-dM SR bins per era"
   lowBinning "gnn4lowdm/config.json: six classes, 30 low-dM SR bins per year"
 
 triggerset HLTMETMHT

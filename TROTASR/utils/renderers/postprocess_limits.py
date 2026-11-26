@@ -298,12 +298,8 @@ def plot_contour(
     xmin, xmax = float(x_min), float(x_max)
     ymin, ymax = float(y_min), float(y_max)
     top_mass = TOP_MASS_GEV
-    w_plus_b_mass = W_MASS_GEV + B_MASS_GEV
     final_offshell_boundary = (
         B_MASS_GEV if topology == "T2tt" else 2.0 * B_MASS_GEV
-    )
-    primary_offshell_boundary = (
-        2.0 * W_MASS_GEV if topology == "T2bW" else TOP_MASS_GEV
     )
     xi = np.linspace(xmin, xmax, 260)
     yi = np.linspace(ymin, ymax, 260)
@@ -972,22 +968,6 @@ def plot_contour(
     )
     colorbar.outline.set_linewidth(1.8)
 
-    diagonal_x = np.linspace(xmin, xmax, 400)
-    for mass_gap, linestyle in (
-        (primary_offshell_boundary, ":"),
-        (w_plus_b_mass, "--"),
-        (final_offshell_boundary, "-."),
-    ):
-        diagonal_y = diagonal_x - mass_gap
-        keep = (diagonal_y >= ymin) & (diagonal_y <= ymax)
-        axes.plot(
-            diagonal_x[keep],
-            diagonal_y[keep],
-            color="0.45",
-            linestyle=linestyle,
-            linewidth=1.1,
-            zorder=4,
-        )
     thermal_relic_handle = None
     if thermal_relic is not None:
         relic_points = np.asarray(thermal_relic["points"], dtype=float)
@@ -1019,22 +999,6 @@ def plot_contour(
                 r"(\mu<0,\ \tan\beta=1.6)=0.12$"
             ),
         )
-    forbidden_fraction = 0.08
-    forbidden_x = xmin + forbidden_fraction * (xmax - xmin)
-    forbidden_y = forbidden_x - final_offshell_boundary + 18.0
-    axes.text(
-        forbidden_x,
-        forbidden_y,
-        "Decay forbidden",
-        color="0.35",
-        fontsize=15,
-        ha="left",
-        va="bottom",
-        rotation=45.0,
-        rotation_mode="anchor",
-        transform_rotates_text=True,
-        zorder=4.5,
-    )
     def suppress_tiny_contour_paths(
         contour_set: Any,
         max_span_GeV: float = 35.0,

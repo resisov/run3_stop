@@ -9,6 +9,7 @@ import numpy as np
 from TROTASR.utils.paths import ERAS, ROOT
 from TROTASR.utils.io import read_json
 from TROTASR.utils import era_merge
+from TROTASR.utils.cr_binning import FIT_GROUPS, N_BINS, N_HIGH_CR, N_RATES
 from TROTASR.workflows import build_nominal_grid as builder
 from TROTASR.workflows.diagnostic_common import record_years
 
@@ -192,7 +193,7 @@ class Run3SystematicsTests(unittest.TestCase):
                     group_variances={'ST':np.ones(10)}, nuisance_deltas={}, rateparam_initials={},
                     signals={}, data=np.ones(10), data_variance=np.ones(10))
         payload = dict(config(),scope='full_combined_systematic_production', status='complete',
-            bins=1284, rate_parameters=288, signal_contamination=False, auto_mc_stats=[10,1,1],
+            bins=6 * N_BINS, rate_parameters=6 * N_RATES, signal_contamination=False, auto_mc_stats=[10,1,1],
             sr_data_blinded=True, central_conventions_consistent=False, preliminary=True,
             prediction_stage='prefit', statistical_revision=builder.CR12_POLICY,
             systematic_combination=current['systematic_combination'],
@@ -213,7 +214,7 @@ class Run3SystematicsTests(unittest.TestCase):
             background_estimation_uncertainties=dict(id='jme_background_shapes_20260929',
                 mode='shape', auto_mc_stats=[10, 1, 1], user_approved=True),
             systematic_combination=copy.deepcopy(COMBINATION_POLICY), preliminary=True,
-            central_conventions_consistent=False, bins=214 * len(ERAS), th1_channels=8 * len(ERAS),
+            central_conventions_consistent=False, bins=N_BINS * len(ERAS), th1_channels=8 * len(ERAS),
             sr_data_blinded=True, luminosity_policy_sha256='a'*64)
         before = copy.deepcopy(source)
         derived = _prediction_metadata(source)
@@ -288,12 +289,12 @@ class Run3SystematicsTests(unittest.TestCase):
 class ZJetFitExclusionTests(unittest.TestCase):
     def test_exact_approved_zjet_fit_exclusion_preserves_original_arrays(self):
         key = ('GCR_highdm_c1_2023BPix','ZJet')
-        variance = [0.]*12; variance[8] = .010207432109671547
+        variance = [0.] * N_HIGH_CR; variance[len(FIT_GROUPS)+2] = .010207432109671547
         row = dict(family='ZJet', parameter='', initial=1., variations={}, extra_lnN=(),
-                   nominal=np.zeros(12), sumw2=np.array(variance))
+                   nominal=np.zeros(N_HIGH_CR), sumw2=np.array(variance))
         issue = dict(channel=key[0],process=key[1],parameter='',
-            problem='zero_integral_nonempty_component',sumw2=variance[8],variations=[])
-        data = {key:row, ('GCR_highdm_c1_2024','ZJet'):dict(row,nominal=np.ones(12))}
+            problem='zero_integral_nonempty_component',sumw2=variance[len(FIT_GROUPS)+2],variations=[])
+        data = {key:row, ('GCR_highdm_c1_2024','ZJet'):dict(row,nominal=np.ones(N_HIGH_CR))}
         retained, remaining, audit = builder.approved_zjet_fit_background(data,[issue],builder.ZJET_FIT_EXCLUSION)
         self.assertEqual(set(retained), {('GCR_highdm_c1_2024','ZJet')})
         self.assertIs(retained['GCR_highdm_c1_2024','ZJet'],data['GCR_highdm_c1_2024','ZJet'])
@@ -301,7 +302,7 @@ class ZJetFitExclusionTests(unittest.TestCase):
         np.testing.assert_array_equal(data[key]['sumw2'],variance)
         self.assertEqual(audit[0]['omitted_sumw2_by_bin'],variance)
         self.assertEqual(audit[0]['auto_mc_stats'],[10,1,1])
-        for field, value in [('nominal',np.ones(12)),('sumw2',np.zeros(12)),('parameter','new'),
+        for field, value in [('nominal',np.ones(N_HIGH_CR)),('sumw2',np.zeros(N_HIGH_CR)),('parameter','new'),
                              ('initial',2.),('variations',{'new':{}}),('extra_lnN',[('new',1.1,1.1)]),
                              ('family','Top')]:
             bad = copy.deepcopy(data);bad[key][field] = value
@@ -314,16 +315,16 @@ class ZJetFitExclusionTests(unittest.TestCase):
     def test_approved_zjet_accepts_only_complete_exactly_zero_flat_endpoints(self):
         from TROTASR.utils.statistical_templates import json_ready
         key = ('GCR_highdm_c1_2023BPix', 'ZJet')
-        variance = np.zeros(12); variance[8] = .010207432109671547
-        variations = {name: dict(up=np.zeros(12), down=[0.] * 12) for name in (
+        variance = np.zeros(N_HIGH_CR); variance[len(FIT_GROUPS)+2] = .010207432109671547
+        variations = {name: dict(up=np.zeros(N_HIGH_CR), down=[0.] * N_HIGH_CR) for name in (
             'CMS_scale_j_Total_2023BPix', 'CMS_btag_fixedWP_bc_correlated',
             'CMS_NPS26012_scale_met_unclustered_energy_13p6TeV')}
         row = dict(family='ZJet', parameter='', initial=1., variations=variations,
-            extra_lnN=(), nominal=np.zeros(12), sumw2=variance)
+            extra_lnN=(), nominal=np.zeros(N_HIGH_CR), sumw2=variance)
         other = ('GCR_highdm_c1_2024', 'ZJet')
-        data = {key: row, other: dict(row, nominal=np.ones(12))}
+        data = {key: row, other: dict(row, nominal=np.ones(N_HIGH_CR))}
         issue = dict(channel=key[0], process=key[1], parameter='',
-            problem='zero_integral_nonempty_component', sumw2=float(variance[8]), variations=[])
+            problem='zero_integral_nonempty_component', sumw2=float(variance[len(FIT_GROUPS)+2]), variations=[])
         other_issue = dict(issue, channel=other[0])
         before = json_ready(copy.deepcopy(data))
         issues = [issue, other_issue]; issues_before = copy.deepcopy(issues)
@@ -343,26 +344,26 @@ class ZJetFitExclusionTests(unittest.TestCase):
         # The exclusion is fit-only: even the omitted source endpoints remain intact.
         self.assertIs(data[key]['variations'], variations)
         audit[0]['omitted_variations']['CMS_scale_j_Total_2023BPix']['up'][0] = 1.
-        np.testing.assert_array_equal(variations['CMS_scale_j_Total_2023BPix']['up'], np.zeros(12))
+        np.testing.assert_array_equal(variations['CMS_scale_j_Total_2023BPix']['up'], np.zeros(N_HIGH_CR))
         invalid_pairs = [
-            {}, {'up': np.zeros(12)}, {'down': np.zeros(12)},
-            {'up': np.zeros(12), 'down': np.zeros(12), 'extra': np.zeros(12)},
-            {'up': np.zeros(11), 'down': np.zeros(12)},
-            {'up': np.zeros((12, 1)), 'down': np.zeros(12)},
-            {'up': np.zeros(12), 'down': None},
-            {'up': ['0'] * 12, 'down': np.zeros(12)},
-            {'up': np.array([0.] * 12, dtype=object), 'down': np.zeros(12)},
+            {}, {'up': np.zeros(N_HIGH_CR)}, {'down': np.zeros(N_HIGH_CR)},
+            {'up': np.zeros(N_HIGH_CR), 'down': np.zeros(N_HIGH_CR), 'extra': np.zeros(N_HIGH_CR)},
+            {'up': np.zeros(N_HIGH_CR - 1), 'down': np.zeros(N_HIGH_CR)},
+            {'up': np.zeros((N_HIGH_CR, 1)), 'down': np.zeros(N_HIGH_CR)},
+            {'up': np.zeros(N_HIGH_CR), 'down': None},
+            {'up': ['0'] * N_HIGH_CR, 'down': np.zeros(N_HIGH_CR)},
+            {'up': np.array([0.] * N_HIGH_CR, dtype=object), 'down': np.zeros(N_HIGH_CR)},
         ]
         for value in (1e-300, -1e-300, float('nan'), float('inf'), -float('inf')):
             for direction in ('up', 'down'):
-                pair = dict(up=np.zeros(12), down=np.zeros(12))
-                pair[direction][8] = value
+                pair = dict(up=np.zeros(N_HIGH_CR), down=np.zeros(N_HIGH_CR))
+                pair[direction][len(FIT_GROUPS)+2] = value
                 invalid_pairs.append(pair)
         for index, pair in enumerate(invalid_pairs):
             bad = copy.deepcopy(data); bad[key]['variations'] = {'changed': pair}
             with self.subTest(pair=index), self.assertRaises(ValueError):
                 builder.approved_zjet_fit_background(bad, issues, builder.ZJET_FIT_EXCLUSION)
-        for invalid in (None, [], {'': dict(up=np.zeros(12), down=np.zeros(12))}):
+        for invalid in (None, [], {'': dict(up=np.zeros(N_HIGH_CR), down=np.zeros(N_HIGH_CR))}):
             bad = copy.deepcopy(data); bad[key]['variations'] = invalid
             with self.subTest(variations=repr(invalid)), self.assertRaises(ValueError):
                 builder.approved_zjet_fit_background(bad, issues, builder.ZJET_FIT_EXCLUSION)
@@ -405,11 +406,22 @@ class EraMergeTests(unittest.TestCase):
                 background[channel,'Top'] = dict(family='Top', nominal=[2.] * n, initial=1.5)
                 if sr:
                     background[channel,'signal'] = dict(family='signal', nominal=[999.] * n, initial=1.)
-                for i in range(6):
+                n_rates = {'LLCR_highdm_c1': 4, 'QCDCR_highdm_c1': 4, 'GCR_highdm_c1': 8}.get(name, 6)
+                for i in range(n_rates):
                     process = f'background{i}'
+                    parameter = f'CMS_NPS26012_ll_norm_{name}_{i}'
+                    if name == 'SR_highdm_c1' and i in (4, 5):
+                        nb = 'Nb1' if i == 4 else 'Nb2plus'
+                        process = f'ZJet_{nb}_u0'
+                        parameter = f'CMS_NPS26012_sgamma_shape_highdm_{nb}_bin1'
+                        background[channel, process] = dict(family='ZJet', nominal=[.5] * n, initial=1.)
+                    if name == 'GCR_highdm_c1' and i in (6, 7):
+                        nb = 'Nb1' if i == 6 else 'Nb2plus'
+                        process = f'PhotonJet_{nb}_u0'
+                        parameter = f'CMS_NPS26012_sgamma_shape_highdm_{nb}_bin1'
                     columns.append(channel)
                     processes.append(process)
-                    rates.append(f'CMS_NPS26012_ll_norm_{name}_{i}_{era} rateParam {channel} {process}'
+                    rates.append(f'{parameter}_{era} rateParam {channel} {process}'
                                  + (' 2' if era=='2022EE' else ' 1')+' [0.01,5]')
         text = '\n'.join([
             'shapes * * ../templates/template.root $CHANNEL/$PROCESS $CHANNEL/$PROCESS_$SYSTEMATIC',
@@ -424,9 +436,9 @@ class EraMergeTests(unittest.TestCase):
         point = dict(model='T2tt', mass='mStop1200_mLSP500')
         writes = []
         def write_observation(path,sums,labels):
-            self.assertEqual(sums['SR_highdm_c1']['values'],[18.] * 118)
-            self.assertEqual(sums['LLCR_highdm_c1']['values'],[24.] * 12)
-            self.assertAlmostEqual(sums['SR_highdm_c1']['variances'][0],18.)
+            self.assertEqual(sums['SR_highdm_c1']['values'],[24.] * 118)
+            self.assertEqual(sums['LLCR_highdm_c1']['values'],[24.] * N_HIGH_CR)
+            self.assertAlmostEqual(sums['SR_highdm_c1']['variances'][0],24.)
             self.assertEqual(sums['LLCR_highdm_c1']['variances'][0],24.)
             self.assertEqual(labels['SR_lowdm_c1'][0],'SR_lowdm_c1_bin0')
             writes.append(path)
@@ -456,8 +468,8 @@ class EraMergeTests(unittest.TestCase):
             self.assertIn('rateParam SR_highdm_c1 background0_2022EE (@0*2) CMS_NPS26012_ll_norm_SR_highdm_c1_0',card)
             self.assertIn('rateParam SR_highdm_c1 background0_2022 1 [0.01,2.5]',card)
             side = read_json(path.with_suffix('.manifest.json'))
-            self.assertEqual(side['dependent_rateparam_formulas'],48)
-            self.assertEqual(side['rate_parameters'],48)
+            self.assertEqual(side['dependent_rateparam_formulas'], N_RATES + 2 * len(ERAS))
+            self.assertEqual(side['rate_parameters'],N_RATES)
             self.assertNotIn('source_card',side)
             self.assertFalse((grid/'history').exists())
             with patch.object(builder,'point_card_metadata',return_value=meta), \

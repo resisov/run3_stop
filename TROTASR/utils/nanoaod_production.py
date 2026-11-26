@@ -13,6 +13,7 @@ from .io import write_json
 from . import nanoaod_events as events
 from . import nanoaod_features as features
 from .nanoaod_calibration import calibrate, jet_id
+from .reader import project_candidate_entries
 
 
 def open_source(lfn):
@@ -59,6 +60,18 @@ def schema_record():
                 vector_float32=events.VECTOR_FLOAT_FIELDS, vector_int32=events.VECTOR_INT_FIELDS)
 
 
+def _skim_candidates(light, *, trigger_bypass):
+    """Necessary conditions for every branch of feature_flat_preselection in SMS."""
+    possible, _ = features.all_filters(light, len(light))
+    if 'nJet' in light.fields:
+        # Corrections/cleaning cannot create extra AK4 objects.
+        possible &= np.asarray(light['nJet']) >= 2
+    if not trigger_bypass:
+        possible &= features.bool_branch(light, features.SIGNAL_HLT + features.PHOTON_HLT
+                                         + features.ELECTRON_HLT + features.MUON_HLT, len(light))
+    return np.flatnonzero(possible)
+
+
 def build_events(source, era, output, *, chunk_size=2000):
     """Read one original file completely; preserve signed weights and Runs sums."""
     era = analysis_era(era)
@@ -91,36 +104,55 @@ def build_events(source, era, output, *, chunk_size=2000):
             bypass = not early or not any(k in fields for k in features.SIGNAL_HLT)
             report['fastsim_trigger_bypass'] = bypass
             report['required_filters'] = list(features.FILTERS)
+            models = [k for k in fields if events.signal_genmodel_branch(k)]
+            light_fields = [k for k in dict.fromkeys(['genWeight', 'nJet', *models, *features.FILTERS,
+                *features.SIGNAL_HLT, *features.PHOTON_HLT, *features.ELECTRON_HLT, *features.MUON_HLT])
+                if k in fields]
+            light_set = set(light_fields)
+            heavy_fields = [k for k in fields if k not in light_set]
+            report['object_correction_input_rows'] = 0
             for start in range(0, tree.num_entries, chunk_size):
                 stop = min(start + chunk_size, tree.num_entries)
-                raw = tree.arrays(entry_start=start, entry_stop=stop, library='ak')
+                light = tree.arrays(light_fields, entry_start=start, entry_stop=stop, library='ak')
+                if len(light) != stop - start:
+                    raise ValueError('Incomplete source scan for the signal normalization')
+                # Book the full source population, even when no event in this slice is retained.
+                weights = np.asarray(light['genWeight'], dtype=np.float64)
+                dataset['sumw2'] += float(np.sum(weights * weights))
+                for branch in models:
+                    value = float(weights[np.asarray(light[branch], dtype=bool)].sum())
+                    events.add_float_map(dataset['signal_event_genweight_sum_by_genmodel'], {branch: value})
+                report['events_read'] += stop - start
+                report['processed_entry_ranges'].append(dict(entry_start=start, entry_stop=stop))
+                candidates = _skim_candidates(light, trigger_bypass=bypass)
+                if not len(candidates):
+                    continue
+                absolute = candidates + start
+                heavy = project_candidate_entries(tree, heavy_fields, absolute)
+                raw = ak.zip({**{k: light[k][candidates] for k in light_fields},
+                              **{k: heavy[k] for k in heavy_fields}}, depth_limit=1)
+                report['object_correction_input_rows'] += len(raw)
                 if early:
                     for prefix in ('Jet', 'FatJet'):
                         raw = ak.with_field(raw, ak.values_astype(jet_id(raw, prefix), np.int32) * 6,
                                             prefix + '_jetId')
                 corrected, calibration = calibrate(raw, era)
                 rows, summary = features.extract_chunk(
-                    corrected, source['dataset'], 'SMS', None, era, source['name'], start, stop,
+                    corrected, source['dataset'], 'SMS', None, era, source['name'], 0, len(raw),
                     fastsim_trigger_bypass=bypass, shift_name='nominal', compute_weights=False,
                     materialize_skim_flag='feature_flat_preselection')
-                rows = events.decorate(rows, raw, corrected, start, era, record, file_id)
+                rows = events.decorate(rows, raw, corrected, 0, era, record, file_id)
+                indices = np.asarray([row['entry'] for row in rows], dtype=np.int64)
+                # Decoration indexes the compact arrays; publish original absolute NanoAOD entries.
+                for row, entry in zip(rows, absolute[indices]):
+                    row['entry'] = int(entry)
                 writer.extend(rows)
                 if rows:
                     stored = ak.Array(events.rows_to_arrays(rows))
-                    indices = np.asarray(stored['entry'], dtype=np.int64) - start
                     truth = events.topw_truth_payload(stored, raw[indices], events.decay_flavor)
                     writer.root_file['TopWTruth'].extend(truth)
-                weights = np.asarray(raw['genWeight'], dtype=np.float64)
-                dataset['sumw2'] += float(np.sum(weights * weights))
-                for branch in raw.fields:
-                    if events.signal_genmodel_branch(branch):
-                        value = float(weights[np.asarray(raw[branch], dtype=bool)].sum())
-                        events.add_float_map(dataset['signal_event_genweight_sum_by_genmodel'], {branch: value})
-                report['events_read'] += stop - start
                 report['events_written'] += len(rows)
-                report['processed_entry_ranges'].append(dict(entry_start=start, entry_stop=stop))
-                if start == 0:
-                    report['object_corrections'] = calibration
+                report.setdefault('object_corrections', calibration)
                 print(json.dumps(dict(era=era, source=Path(source['name']).name,
                                       events=stop, total=tree.num_entries, retained=report['events_written'])), flush=True)
             report.update(processing_status='processed', number_of_entries=tree.num_entries)
@@ -233,6 +265,7 @@ def complete_metadata(output, era):
 def complete_trota(output, era):
     """Add resolved and mixed candidates to a new ROOT in bounded chunks."""
     from .trota_inference import load_models, bounded_slices, infer_chunk, MIXED_INTS, MIXED_FLOATS
+    from .trota_friend import MIXED, _candidate_support, _friend_rows, _identity
     output = Path(output)
     temporary = output.with_name(output.stem + '.candidates.root')
     events.configure_era(era)
@@ -255,20 +288,28 @@ def complete_trota(output, era):
         for chunk in original['Events'].iterate(step_size=2000, library='ak'):
             for sl in bounded_slices(chunk, year=era):
                 selected = chunk[sl]
-                updated, resolved, audit, _ = infer_chunk(selected, models)
-                columns = {name: updated[name] for name in event_types}
+                positions = np.flatnonzero(_candidate_support(selected, era))
+                mixed = {}
+                if len(positions):
+                    compact = selected if len(positions) == len(selected) else selected[positions]
+                    updated, _, audit, state = infer_chunk(compact, models, materialize_resolved=False)
+                    mixed = {k: updated[k] for k in MIXED}
+                    for k in ('mixed_passing', 'resolved_passing'):
+                        counts[k] += audit[k]
+                    rec = state['resolved']
+                    keep = rec['passing']
+                    if np.any(keep):
+                        rows = rec['event'][keep]
+                        source = rec['sources'][keep]
+                        values = (np.asarray(compact['file_id'])[rows], np.asarray(compact['entry'])[rows],
+                                  rec['index'][keep], *source.T, rec['discriminant'][keep],
+                                  rec['p4'][keep, 1], rec['p4'][keep, 3])
+                        target['TROTA'].extend({name: value.astype(trota_types[name], copy=False)
+                                               for name, value in zip((*integers, *floats), values)})
+                columns = {name: selected[name] for name in event_types if name not in MIXED}
+                columns.update(_friend_rows(_identity(selected), positions, mixed, layouts=(MIXED,)))
                 target['Events'].extend(columns)
-                rows = []
-                for (file_id, entry), candidates in resolved.items():
-                    for candidate in candidates:
-                        rows.append((file_id, entry, candidate['index'], *candidate['jets'],
-                                     candidate['score'], candidate['eta'], candidate['mass']))
-                if rows:
-                    values = np.asarray(rows)
-                    target['TROTA'].extend({name: values[:, i].astype(trota_types[name])
-                                            for i, name in enumerate((*integers, *floats))})
-                for key in counts:
-                    counts[key] += audit[key]
+                counts['events'] += len(selected)
         truth = original['TopWTruth']
         target.mktree('TopWTruth', {**{k: np.int64 for k in events.TOPW_ID_FIELDS},
                                    'fatjet_source_index_all': 'var * int32',

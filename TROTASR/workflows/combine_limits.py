@@ -27,8 +27,10 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.selection_contract import require_current_llcr
 from TROTASR.utils.io import read_json, write_json
-from TROTASR.workflows.limit_validation import validate, REL_ACC, ABS_ACC
+from TROTASR.workflows.limit_validation import REL_ACC, ABS_ACC
+from TROTASR.workflows.limit_serialization import validate_saved_limit
 from TROTASR.workflows import resources
 
 FIELDS = {.025:'expected_m2', .16:'expected_m1', .5:'expected', .84:'expected_p1', .975:'expected_p2'}
@@ -36,6 +38,44 @@ ATTEMPTS = (('bisection_s0', .1, 1.), ('bisection_s0_refined', .01, 2.))
 GIB = 1024**3
 POINT_RESERVATION = 3*GIB
 NEW_SIGNAL_PRODUCTS = 'new_signal'
+LLCR_MTB_PRODUCTS = Path(NEW_SIGNAL_PRODUCTS)/'llcr_mtb'
+LLCR_MTB_FIELD = 'highdm_llcr_mtb_min_gev'
+POINT_IDENTITY = ('model', 'mass', 'model_revision', LLCR_MTB_FIELD)
+
+
+def run3_product_roots(run_root):
+    return run_root, run_root/NEW_SIGNAL_PRODUCTS, run_root/'top_pt'
+
+
+def run3_grid_products(manifest, run_root):
+    """Resolve only the published canonical grid roots, not arbitrary siblings."""
+    return next((root for root in run3_product_roots(run_root)
+                 if manifest == root/'grid/manifest.json'), None)
+
+
+def require_llcr_mtb_grid(record):
+    from TROTASR.utils.paths import ERAS
+    if (record.get(LLCR_MTB_FIELD) != 175.0
+            or record.get('signal_templates_nominal_only') is not True
+            or record.get('official_result') is not False
+            or record.get('sr_data_blinded') is not True
+            or not isinstance(record.get('signal_input_revision'), str)
+            or not record['signal_input_revision']
+            or set(record.get('replacement_signal_sources', {})) != set(ERAS)):
+        raise ValueError('The scoped 175 GeV LLCR grid requires all six blinded nominal-signal inputs')
+
+
+def require_llcr_mtb_model(record, signal_revision=None):
+    from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION
+    if (record.get('canonical_model') != 'era_merged'
+            or record.get('model_revision') != MODEL_REVISION
+            or record.get(LLCR_MTB_FIELD) != 175.0
+            or record.get('signal_uncertainties') is not False
+            or not isinstance(record.get('signal_input_revision'), str)
+            or not record['signal_input_revision']
+            or (signal_revision is not None and record['signal_input_revision'] != signal_revision)
+            or record.get('observed_sr_used') is not False):
+        raise ValueError('The scoped 175 GeV LLCR fit requires the adopted blinded Photon CR model')
 
 
 def verify_combined_grid(record):
@@ -51,7 +91,8 @@ def verify_combined_grid(record):
     policy = record.get('statistical_revision', record.get('contract', {}).get('statistical_revision'))
     points = record.get('points', [])
     counts = {m: sum(p['model'] == m for p in points) for m in ('T2tt', 'T2bW', 'T2tb')}
-    expected_bins = 214 if record.get('era_merged') else 214 * len(record_years(record))
+    from TROTASR.utils.cr_binning import N_BINS
+    expected_bins = N_BINS if record.get('era_merged') else N_BINS * len(record_years(record))
     if (not require_statistical_revision(policy) or record.get('bins') != expected_bins
             or counts != {'T2tt': 225, 'T2bW': 365, 'T2tb': 365}
             or len({(p['model'], p['mass']) for p in points}) != 955
@@ -103,7 +144,7 @@ def fit_command(workspace, mass, rmax, tolerance):
 
 
 def convert_workspace(card, workspace, record, state_path, env, stream, lock_fd):
-    from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION
+    from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION, TOP_PT_MODEL_REVISION
 
     def execute(command, cwd):
         proc = subprocess.Popen(command, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
@@ -116,7 +157,7 @@ def convert_workspace(card, workspace, record, state_path, env, stream, lock_fd)
     revision = record.get('model_revision')
     if revision is None:
         return execute(convert, card.parent)
-    if revision != MODEL_REVISION:
+    if revision not in (MODEL_REVISION, TOP_PT_MODEL_REVISION):
         raise ValueError('Unknown Run 3 likelihood revision')
 
     with tempfile.TemporaryDirectory(prefix='.workspace-', dir=workspace.parent) as directory:
@@ -257,22 +298,57 @@ def reconcile_interrupted_attempts(record, state_path):
         write_json(state_path, record)
 
 
+def prior_range_plan(points, run_root):
+    """Use the same point's last accepted upper expected quantile as a numerical hint."""
+    sources=(run_root/'limits/workflow_state.json',run_root.parent/'references/era_merged_recoil/limits/workflow_state.json')
+    target={p['model']+'/'+p['mass'] for p in points}; plan={}
+    for path in sources:
+        state=read_json(path)
+        if state.get('observed_sr_used') is not False:
+            raise ValueError('Prior is not a blinded expected-limit workflow')
+        for key,row in state['results'].items():
+            if key not in target or key in plan or row.get('status')!='complete':continue
+            q={float(k):float(v) for k,v in row['validation']['quantiles'].items()}
+            if set(q)!=set(FIELDS):continue
+            vals=[q[k] for k in sorted(q)]
+            if not all(math.isfinite(v) and v>0 for v in vals) or not all(a<b for a,b in zip(vals,vals[1:])):continue
+            # A historical limit can widen the starting interval. Only real
+            # same-model conditional NLL rows can justify lowering its upper bound.
+            proposal=1.5*q[.975]
+            seed=max(20.,proposal)
+            if seed*2>100000:raise ValueError('Prior exceeds the finite range ceiling: '+key)
+            plan[key]=dict(rmin=0.,rmax=seed,prior_proposal=proposal,prior_p975=q[.975],
+                           source=str(path.relative_to(ROOT)))
+    if set(plan)!=target:raise ValueError('Incomplete same-point prior range coverage')
+    return plan
+
+
 def run_primary_point(point, output, env, lock_fd):
     """Run the two primary configurations under the caller's point lock."""
-    from TROTASR.workflows.limit_recovery import optimize_saved_command
+    from TROTASR.workflows.limit_recovery import optimize_saved_command, validate_attempt
 
     card = ready_card(point)
     work = output/point['model']/point['mass']
     work.mkdir(parents=True,exist_ok=True)
     state_path=work/'state.json'
     record=read_json(state_path) if state_path.exists() else dict(point,status='running',started=time.time(),attempts=[])
-    if any(record.get(key) != point.get(key) for key in ('model','mass','model_revision')):
+    if any(record.get(key) != point.get(key) for key in POINT_IDENTITY):
         raise ValueError('Preserve old fit for a different point or statistical model')
     attempts = record['attempts']
     reconcile_interrupted_attempts(record, state_path)
     for accepted in reversed(attempts):
+        # Older primary receipts used the printed r literally. Check the saved
+        # ROOT/log pair before paying for another fit, under the same point lock.
+        if (accepted.get('exit_code') == 0 and not accepted.get('passed')
+                and not accepted.get('primary_serialization_checked')
+                and accepted.get('command') and accepted.get('log') and accepted.get('output')
+                and accepted.get('validation', {}).get('crossings')):
+            passed, evidence = validate_attempt(point, accepted)
+            accepted.update(passed=passed, validation=evidence, primary_serialization_checked=True)
+            write_json(state_path, record)
         if accepted.get('exit_code') == 0 and accepted.get('passed'):
-            record.update(status='complete', pid=None, output=accepted['output'],
+            record.update(status='complete', finished=record.get('finished') or time.time(),
+                          pid=None, output=accepted['output'],
                           validation=accepted['validation'], accepted_attempt=accepted)
             write_json(state_path, record)
             return record
@@ -298,6 +374,9 @@ def run_primary_point(point, output, env, lock_fd):
         raise ValueError('Previously verified workspace missing')
     completed_attempts={a['name'] for a in attempts}
     for label, tolerance, scale in ATTEMPTS:
+        if point.get('prior_range'):
+            label='prior_range_'+label
+            record['prior_range']=point['prior_range']
         if label in completed_attempts:continue
         here=work/label
         rmax = float(point.get('rmax_seed',20.))*scale
@@ -320,9 +399,9 @@ def run_primary_point(point, output, env, lock_fd):
                 write_json(state_path, record)
                 return record
             continue
-        known = [a['command'] for a in attempts if a.get('command')]
-        if command in known:
-            continue
+        known = [a['command'] for a in attempts if a.get('command') and not (
+            point.get('prior_range') and a.get('interruption') and a['name'] in {name for name,_,_ in ATTEMPTS}
+            and a.get('exit_code') is None)]
         saved_logs = [(a['log'], failed_log_text(ROOT/a['log']))
                       for a in attempts if a.get('log')
                       and internal_path(ROOT/a['log']).is_file()]
@@ -347,9 +426,9 @@ def run_primary_point(point, output, env, lock_fd):
         attempt['exit_code'] = rc
         record['pid'] = None
         write_json(state_path, record)
-        passed,evidence=validate(result,log,tolerance) if rc==0 else (False,dict(exit_code=rc))
+        passed,evidence=validate_saved_limit(result,log,tolerance) if rc==0 else (False,dict(exit_code=rc))
         ready_card(point)
-        attempt.update(passed=passed, exit_code=rc, validation=evidence)
+        attempt.update(passed=passed, exit_code=rc, validation=evidence, primary_serialization_checked=rc==0)
         write_json(here/'validation.json',attempt)
         record.update(pid=None)
         if passed:
@@ -382,6 +461,7 @@ INPUT_CHECK_SCOPE = 'accepted_cards_templates_or_workspace; no_upstream_revalida
 
 def ready_fit_points(source):
     """Consume the completed card-stage receipt, not its production ancestry."""
+    require_current_llcr(record=source)
     if (source.get('status') != 'cards_ready'
             or source.get('scope') != 'full_combined_systematic_production'
             or source.get('era_merged') is not True
@@ -413,7 +493,7 @@ def ready_card(point):
     return card
 
 
-def replacement_card(point, product_root, signal_revision):
+def replacement_card(point, product_root, signal_revision, *, llcr_mtb=False):
     """Accept a small replacement-card receipt without reopening inherited ROOT templates."""
     card = ready_card(point)
     if card.parent != product_root/'grid/datacards' or point.get('fit_ready') is not True:
@@ -421,6 +501,11 @@ def replacement_card(point, product_root, signal_revision):
     receipt = read_json(card.with_suffix('.manifest.json'))
     if receipt.get('sr_data_blinded') is not True:
         raise ValueError('The replacement signal card must preserve SR blinding')
+    if llcr_mtb and (receipt.get(LLCR_MTB_FIELD) != 175.0
+                     or receipt.get('signal_templates_nominal_only') is not True
+                     or receipt.get('signal_input_revision') != signal_revision
+                     or receipt.get('fit_ready') is not True):
+        raise ValueError('The card is not bound to the scoped LLCR fit model: '+str(card))
     return card
 
 
@@ -429,7 +514,7 @@ def accepted_fit_record(point, record, origin):
     if record.get('status') not in ('complete', 'verified_not_promoted', 'existing_verified'):
         return None
     identity = record.get('point', record)
-    for name in ('model', 'mass', 'model_revision'):
+    for name in POINT_IDENTITY:
         if identity.get(name) != point.get(name):
             raise ValueError('Saved point/card identity differs: '+origin)
     attempt = record.get('accepted_attempt')
@@ -478,7 +563,7 @@ def point_receipts(point, output):
         if path.is_file():
             record = read_json(path)
             identity = record.get('point', record)
-            for name in ('model', 'mass', 'model_revision'):
+            for name in POINT_IDENTITY:
                 if identity.get(name) != point.get(name):
                     raise ValueError('Different point/card receipt retained: '+str(path))
             records.append((stage, path, record))
@@ -487,9 +572,13 @@ def point_receipts(point, output):
 
 def saved_point_result(point, output):
     if 'model_revision' not in point and (output/'model.json').is_file():
-        revision = read_json(output/'model.json').get('model_revision')
+        model = read_json(output/'model.json')
+        revision = model.get('model_revision')
         if revision:
             point = dict(point, model_revision=revision)
+        if LLCR_MTB_FIELD in model:
+            require_llcr_mtb_model(model)
+            point = dict(point, **{LLCR_MTB_FIELD: model[LLCR_MTB_FIELD]})
     for stage, path, record in point_receipts(point, output):
         accepted = accepted_fit_record(point, record, str(path.relative_to(ROOT)))
         if accepted is not None:
@@ -663,9 +752,18 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
             prescription = dict(diagnosis, plans=specs)
             state['historical_success_prescription'] = prescription
             write_json(state_path, state)
+        if (output == ROOT/'stats/run3/top_pt/limits' and
+                (state.get('error') == 'all_applicable_finite_methods_exhausted' or
+                 any(a.get('interruption') for a in history)) and
+                state.get('terminal_reference_accuracy') != 'canonical_grid_default'):
+            from TROTASR.workflows.limit_recipe_hints import terminal_reference_plans
+            state['terminal_reference_plans'] = terminal_reference_plans(output, point, history)
+            state['terminal_reference_accuracy'] = 'canonical_grid_default'
+            write_json(state_path, state)
         branch_attempts = [a for a in state['attempts'] if a.get('stage') == 'branches']
         known = {tuple(a['command']) for a in history if a.get('command')}
-        specs = [s for s in prescription['plans'] if tuple(s['command']) not in known]
+        specs = [s for s in prescription['plans'] + state.get('terminal_reference_plans', [])
+                 if tuple(s['command']) not in known]
         for spec in specs[:max(0, STAGE_LIMITS['branches']-len(branch_attempts))]:
             ledger = state['stages'].setdefault('branches',dict(status='pending',applicability=[],plans=[]))
             ledger.setdefault('plans',[]).append([spec])
@@ -675,6 +773,7 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
                                          spec, env, state, state_path, progress, lock.fileno())
             history.append(attempt)
             if attempt['passed']:
+                state.pop('error', None)
                 state.update(status='complete',finished=time.time(),accepted_attempt=attempt,
                     output=attempt['output'],
                     validation=attempt['validation'],pid=None)
@@ -810,6 +909,23 @@ def assert_previous_child_exited(record, work):
         raise RuntimeError('Previous point process is still alive; preserve it')
 
 
+def independent_benchmark_impact(output, args, cwd, parent):
+    """A live impact child reads the shared workspace, but never owns its limit."""
+    impacts = output.parent/'impacts'
+    if (len(args) < 4 or Path(args[0]).name != 'combine' or args[1:3] != ['-M', 'MultiDimFit']
+            or impacts not in cwd.parents or '-d' not in args
+            or args[args.index('-d')+1:args.index('-d')+2] != [str(output/'T2tt/mStop1200_mLSP500/workspace.root')]):
+        return False
+    receipt = impacts/'impact_status.json'
+    if not receipt.is_file():
+        return False
+    record = read_json(receipt)
+    owner = resources.process_identity(parent)
+    return bool(owner and parent == record.get('controller_pid')
+                and owner['start_ticks'] == record.get('controller_pid_start_ticks')
+                and any(Path(a).name == 'combine_impacts.py' for a in owner['arguments']))
+
+
 def native_fit_workers(output):
     """Identify live native processes by their exact canonical point paths."""
     for proc in Path('/proc').iterdir():
@@ -827,6 +943,9 @@ def native_fit_workers(output):
                 continue
             fields = (proc/'stat').read_text().rsplit(')', 1)[1].split()
             if fields[0] == 'Z' or int(fields[19]) != actual['start_ticks']:
+                continue
+            if args[1:3] == ['-M', 'MultiDimFit'] and independent_benchmark_impact(
+                    output, args, (proc/'cwd').resolve(strict=True), int(fields[1])):
                 continue
             yield actual, keys, int(fields[21])*os.sysconf('SC_PAGE_SIZE')
         except (FileNotFoundError, ProcessLookupError, PermissionError):
@@ -959,22 +1078,29 @@ def adopt_cr_linked_model(manifest, output):
                 raise
 
 
-def run_integrated_grid(manifest, output, workers):
+def run_integrated_grid(manifest, output, workers, prior_ranges=False):
     if not 1 <= workers <= 70:
         raise ValueError('Use 1..70 point futures within aggregate120/downstream116')
     if sys.platform != 'linux':
         raise RuntimeError('Expected fits run only in the existing hep2 runtime')
     manifest, output = internal_path(manifest), internal_path(output)
     run_root = ROOT/'stats/run3'
-    generation = manifest == run_root/NEW_SIGNAL_PRODUCTS/'grid/manifest.json'
-    product_root = run_root/NEW_SIGNAL_PRODUCTS if generation else run_root
-    if manifest != product_root/'grid/manifest.json' or output != product_root/'limits':
+    product_root = run3_grid_products(manifest, run_root)
+    if product_root is None or output != product_root/'limits':
         raise ValueError('Expected fitting uses only the canonical Run 3 grid and limits paths')
+    generation = product_root != run_root
+    llcr_mtb = product_root == run_root/LLCR_MTB_PRODUCTS
     source = read_json(manifest)
     points, selection = ready_fit_points(source)
     signal_input_revision = source.get('signal_input_revision') if generation else None
-    if generation and source.get('official_result') is not False:
+    current_tt=product_root==run_root/'top_pt'
+    if current_tt and (not source.get('tt_card_input') or source.get('signal_templates_nominal_only') is not True
+                       or source.get('bins')!=208 or source.get('floating_normalization_parameters')!=44):
+        raise ValueError('The new likelihood requires updated TT, nominal signals and the pooled CR tail')
+    if generation and not current_tt and source.get('official_result') is not False:
         raise ValueError('The replacement grid must describe new signal cards only')
+    if llcr_mtb:
+        require_llcr_mtb_grid(source)
     with ExitStack() as locks:
         # Share only the current model-transition lock. Acquire it before
         # opening controller.lock so adoption cannot relocate the locked inode.
@@ -982,7 +1108,7 @@ def run_integrated_grid(manifest, output, workers):
         fcntl.flock(model_lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
         if generation:
             for point in points:
-                replacement_card(point, product_root, signal_input_revision)
+                replacement_card(point, product_root, signal_input_revision, llcr_mtb=llcr_mtb)
         output.mkdir(parents=True, exist_ok=True)
         locks.enter_context(canonical_controller_ownership(output))
         model_marker = output/'model.json'
@@ -1009,15 +1135,33 @@ def run_integrated_grid(manifest, output, workers):
             else:
                 model_record = dict(canonical_model='era_merged', observed_sr_used=False,
                                     input_check_scope=INPUT_CHECK_SCOPE)
+            if llcr_mtb:
+                model_record[LLCR_MTB_FIELD] = 175.0
+                require_llcr_mtb_model(model_record, signal_input_revision)
+            if current_tt:
+                from TROTASR.workflows.cr_linked_workspace import TOP_PT_MODEL_REVISION
+                model_record.update(tt_card_input=source['tt_card_input'],bins=208,floating_normalization_parameters=44,
+                                    model_revision=TOP_PT_MODEL_REVISION, photon_gnn_weights='current_native_prefit')
             write_json(model_marker, model_record)
+        if llcr_mtb:
+            require_llcr_mtb_model(model_record, signal_input_revision)
         revision = model_record.get('model_revision')
         if revision:
-            from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION, donor_workspace
-            if revision != MODEL_REVISION:
+            from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION, TOP_PT_MODEL_REVISION, donor_workspace
+            if revision not in ((MODEL_REVISION, TOP_PT_MODEL_REVISION) if current_tt else (MODEL_REVISION,)):
                 raise ValueError('Unknown canonical CR-linked model revision')
             if donor_workspace(run_root).stat().st_size <= 0:
                 raise ValueError('The adopted CR-only workspace is empty')
             points = [dict(p, model_revision=revision) for p in points]
+        if llcr_mtb:
+            points = [dict(p, **{LLCR_MTB_FIELD: 175.0}) for p in points]
+        if prior_ranges:
+            if not current_tt:raise ValueError('Prior-range restart is scoped to the new TT grid')
+            plan=prior_range_plan(points,run_root)
+            write_json(output/'range_plan.json',dict(points=plan,prior_fit_values_reused=False,
+                upper_margin=1.5,physical_lower=0.,smaller_bounds_require_current_measured_crossings=True))
+            points=[dict(p,prior_range=plan[p['model']+'/'+p['mass']],
+                         rmax_seed=plan[p['model']+'/'+p['mass']]['rmax']) for p in points]
         results = {}
         pending = []
         state_path = output/'workflow_state.json'
@@ -1056,6 +1200,7 @@ def run_integrated_grid(manifest, output, workers):
                 canonical_model='era_merged',
                 model_revision=revision,
                 **({'signal_input_revision': signal_input_revision} if generation else {}),
+                **({LLCR_MTB_FIELD: 175.0} if llcr_mtb else {}),
                 official_result=official,
                 analysis_root=str(ROOT),
                 status=phase, pid=None if final else controller['pid'],
@@ -1088,6 +1233,8 @@ def run_integrated_grid(manifest, output, workers):
                 summary.update(selection, canonical_limits_pipeline=True,
                     canonical_model='era_merged',
                     official_result=official, model_revision=revision)
+                if llcr_mtb:
+                    summary[LLCR_MTB_FIELD] = 175.0
                 write_json(output/model/'expected_limits.json', summary)
 
         try:
@@ -1135,27 +1282,46 @@ if __name__=='__main__':
     p.add_argument('--manifest',type=Path,default=ROOT/'stats/run3/grid/manifest.json')
     p.add_argument('--output',type=Path,default=ROOT/'stats/run3/limits')
     p.add_argument('--workers',type=int,default=70)
+    p.add_argument('--prior-ranges',action='store_true',help='Start the current grid using blinded same-point prior range hints')
     p.add_argument('--resume', action='store_true',
         help='Reuse accepted point receipts and continue unstarted finite commands (also the default)')
     p.add_argument('--plot-range-only',action='store_true',
         help='Fit only the approved 895 displayed points (also the default)')
     modes=p.add_mutually_exclusive_group()
+    modes.add_argument('--seed-recovery-hints', action='store_true',
+                       help='Publish same-point historical numerical settings only; launch no fits')
     modes.add_argument('--workspace-step', choices=('prepare', 'link'), help=argparse.SUPPRESS)
     modes.add_argument('--adopt-cr-link', action='store_true',
                        help='Start the approved Run 3 Photon CR model with nominal signal')
     p.add_argument('--workspace-input', type=Path, help=argparse.SUPPRESS)
     a=p.parse_args()
+    require_current_llcr(a.manifest, a.output, a.workspace_input)
+    if a.seed_recovery_hints:
+        from TROTASR.workflows.limit_recipe_hints import seed_top_pt_recovery_hints
+        if internal_path(a.output) != ROOT/'stats/run3/top_pt/limits':
+            p.error('Command-only hints belong to the active top-pT grid')
+        print(json.dumps(seed_top_pt_recovery_hints(publish=True)))
+        raise SystemExit(0)
     if a.workspace_step:
         from TROTASR.workflows.cr_linked_workspace import workspace_step
         run_root = ROOT/'stats/run3'
         directory = internal_path(a.output)
         point_dir = directory.parent
         limits = point_dir.parent.parent
-        if (sys.platform != 'linux' or limits not in (run_root/'limits', run_root/NEW_SIGNAL_PRODUCTS/'limits')
+        if (sys.platform != 'linux' or limits not in {root/'limits' for root in run3_product_roots(run_root)}
                 or not directory.is_dir() or not directory.name.startswith('.workspace-')
                 or a.workspace_input is None):
             p.error('Use a temporary directory owned by the canonical Run 3 limit point')
         source = internal_path(a.workspace_input)
+        if limits.parent == run_root/LLCR_MTB_PRODUCTS:
+            model_record = read_json(limits/'model.json')
+            require_llcr_mtb_model(model_record)
+            if a.workspace_step == 'prepare':
+                model, mass = point_dir.parent.name, point_dir.name
+                if source.name != f'datacard_{model}_{mass}.txt':
+                    p.error('Workspace input must match the scoped LLCR fit point')
+                replacement_card(dict(card=str(source.relative_to(ROOT)), fit_ready=True),
+                    limits.parent, model_record['signal_input_revision'], llcr_mtb=True)
         if a.workspace_step == 'link' and source != directory/'native.root':
             p.error('The native workspace must belong to the same point conversion')
         workspace_step(a.workspace_step, source, directory, run_root, products=limits.parent)
@@ -1164,4 +1330,4 @@ if __name__=='__main__':
         if sys.platform != 'linux' or not 1 <= a.workers <= 70:
             p.error('Start the canonical hep2 pool with 1–70 point futures')
         adopt_cr_linked_model(internal_path(a.manifest), internal_path(a.output))
-    raise SystemExit(run_integrated_grid(a.manifest,a.output,a.workers))
+    raise SystemExit(run_integrated_grid(a.manifest,a.output,a.workers,prior_ranges=a.prior_ranges))

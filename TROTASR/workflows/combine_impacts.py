@@ -8,7 +8,6 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from contextlib import ExitStack
 import fcntl
-import hashlib
 import math
 import os
 from pathlib import Path
@@ -21,6 +20,7 @@ if __package__ in (None, ''):
     from _bootstrap import bootstrap
     bootstrap()
 from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.selection_contract import require_current_llcr
 from TROTASR.utils.io import read_json, write_json
 from TROTASR.workflows.diagnostic_common import (native_runtime, grid_card,
     freeze_contract, CommandRunner, require_success, workspace, published_diagnostic,
@@ -47,6 +47,7 @@ def benchmark_labels(model, mass):
 
 def saved_workspace(state_path, card, model, mass, revision=None):
     """Reuse this exact point's validated workspace; do not rebuild templates."""
+    from TROTASR.workflows.combine_limits import LLCR_MTB_FIELD, LLCR_MTB_PRODUCTS
     state_path = internal_path(state_path)
     state = read_json(state_path)
     target = internal_path(state_path.parent / 'workspace.root')
@@ -63,6 +64,10 @@ def saved_workspace(state_path, card, model, mass, revision=None):
         # the already accepted workspace. Bind to that artifact, not the
         # changing limit attempts.
         binding['model_revision'] = revision
+    if ROOT/'stats/run3'/LLCR_MTB_PRODUCTS in state_path.parents:
+        if state.get(LLCR_MTB_FIELD) != 175.0 or state.get('card') != str(card.relative_to(ROOT)):
+            raise ValueError('The benchmark workspace is not bound to the scoped LLCR card')
+        binding[LLCR_MTB_FIELD] = 175.0
     return target, binding
 
 
@@ -114,7 +119,7 @@ def fit_one(output, workspace_path, name, bounds, runner):
             write_json(path, state)
             return validation
     # Expose only the final failed attempt for the existing bounded recovery
-    # reader. Its FAILED state prevents treating this file as a valid impact.
+    # The reader uses the failed status to exclude this impact.
     if result.exists():
         publish_output(result, output / result.name)
     state.update(status='failed', validation=old['validation'])
@@ -188,28 +193,39 @@ def plot(runner, output, state, stem_name='impacts_mStop1200_mLSP500'):
 
 
 def run(manifest, output, workers=40, plot_only=False, model='T2tt', mass='mStop1200_mLSP500', workspace_state=None):
-    from TROTASR.workflows.combine_limits import NEW_SIGNAL_PRODUCTS
+    from TROTASR.workflows.combine_limits import (NEW_SIGNAL_PRODUCTS, LLCR_MTB_PRODUCTS,
+        require_llcr_mtb_grid, require_llcr_mtb_model, replacement_card, run3_grid_products)
     output=internal_path(output)
     manifest=internal_path(manifest)
     run_root=ROOT/'stats/run3'
     new_root=run_root/NEW_SIGNAL_PRODUCTS
-    generation=manifest==new_root/'grid/manifest.json'
-    product_root=new_root if generation else run_root
+    product_root=run3_grid_products(manifest, run_root) or run_root
+    generation=product_root!=run_root
+    llcr_mtb=product_root==run_root/LLCR_MTB_PRODUCTS
     if ROOT/'stats/references' in output.parents:
         raise ValueError('Reference fit products are not an execution path')
     if (generation or new_root in output.parents or output == new_root) and (
-            not generation or output!=new_root/'impacts' or (model, mass)!=('T2tt', 'mStop1200_mLSP500')):
+            not generation or output!=product_root/'impacts' or (model, mass)!=('T2tt', 'mStop1200_mLSP500')):
         raise ValueError('Use only the replacement grid and its canonical benchmark impact output')
     marker=product_root/'limits/model.json'
     model_record=(read_json(marker) if marker.is_file() and manifest==product_root/'grid/manifest.json' else {})
     revision=model_record.get('model_revision')
+    if llcr_mtb:
+        source=read_json(manifest)
+        require_llcr_mtb_grid(source)
+        require_llcr_mtb_model(model_record, source['signal_input_revision'])
+        point=next((p for p in source['points'] if (p['model'], p['mass']) == (model, mass)), None)
+        if point is None:
+            raise ValueError('The scoped LLCR grid has no approved impact benchmark')
+        replacement_card(point, product_root, source.get('signal_input_revision'), llcr_mtb=True)
     if generation:
         if not revision:
             raise ValueError('The new signal limit generation is not ready for impacts')
     if revision:
-        from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION
+        from TROTASR.workflows.cr_linked_workspace import MODEL_REVISION, TOP_PT_MODEL_REVISION
         canonical_state=product_root/'limits'/model/mass/'state.json'
-        if (revision != MODEL_REVISION or output != product_root/'impacts' or workers > 40
+        allowed = (MODEL_REVISION, TOP_PT_MODEL_REVISION) if product_root == ROOT/'stats/run3/top_pt' else (MODEL_REVISION,)
+        if (revision not in allowed or output != product_root/'impacts' or workers > 40
                 or (workspace_state is not None and internal_path(workspace_state) != canonical_state)):
             raise ValueError('Use the updated canonical Run 3 benchmark workspace')
         if (not canonical_state.is_file() or read_json(canonical_state).get('model_revision') != revision
@@ -523,6 +539,21 @@ def prepare_profile_inputs(work, out, source, runner):
     return provenance
 
 
+def profile_state(directory, key, name, value, *, legacy=False):
+    state = directory / key / 'state.json'
+    if state.is_file() or not legacy:
+        return state
+    prefix = key.partition('theta_')[0]
+    previous_name = re.compile(re.escape(prefix) + r'[a-f0-9]{14,16}')
+    for previous in sorted(directory.glob('*/state.json')):
+        if not previous_name.fullmatch(previous.parent.name):
+            continue
+        saved = read_json(previous)
+        if saved.get('name') == name and saved.get('value') == value:
+            return previous
+    return state
+
+
 class ImpactProfileRecovery:
     def __init__(self, work, out, inputs, workers, runner, refined=()):
         self.runner = runner
@@ -534,17 +565,18 @@ class ImpactProfileRecovery:
 
     def submit(self, name, value):
         value = float(value)
-        key = (name, format(value, '.12g'))
+        key = (name, value)
         with self.cache_lock:
             if key not in self.cache:
                 self.cache[key] = self.pool.submit(self.fixed, name, value)
             return self.cache[key]
 
     def fixed(self, name, value):
-        key = hashlib.sha256((name + ':' + format(value, '.12g')).encode()).hexdigest()[:14]
-        folder = self.out / ('points_refined' if name in self.refined else 'points') / name / key
+        directory = self.out / ('points_refined' if name in self.refined else 'points') / name
+        state = profile_state(directory, 'theta_' + repr(value), name, value, legacy=True)
+        folder = state.parent
+        key = folder.name
         folder.mkdir(parents=True, exist_ok=True)
-        state = folder / 'state.json'
         if state.exists() and read_json(state).get('status') == 'complete':
             old = read_json(state)
             root = internal_path(old['root'])
@@ -578,7 +610,7 @@ class ImpactProfileRecovery:
             cmd = ['combine', '-M', 'MultiDimFit', '-d', self.inputs['snapshot'],
                    '-m', '120', '-n', tag, '--algo', 'fixed', '--redefineSignalPOIs', 'r',
                    '-P', name, '--floatOtherPOIs', '1', '--saveInactivePOI', '1',
-                   '--fixedPointPOIs', name + '=' + format(value, '.12g'),
+                   '--fixedPointPOIs', name + '=' + repr(value),
                    '--snapshotName', 'impact_initial', '--skipInitialFit',
                    '-t', '-1', '--expectSignal', '1', '--toysFile', self.inputs['asimov'],
                    '--setParameterRanges', 'r=0,20', '--cminDefaultMinimizerStrategy', str(strategy),
@@ -788,7 +820,8 @@ def collect_profile_endpoints(work, out, recovered, source, accepted_original_st
 def fixed_command(inputs, name, value, tag, extra=(), seeds=None):
     start = {name: float(value)}
     start.update({k: float(v) for k,v in (seeds or {}).items() if k != name})
-    assignments = ','.join(k+'='+format(v,'.15g') for k,v in start.items())
+    # Round-trip the workspace doubles, including physical endpoints.
+    assignments = ','.join(k+'='+repr(v).removesuffix('.0') for k,v in start.items())
     command = ['combine','-M','MultiDimFit','-d',inputs['snapshot'],'-m','120','-n',tag,
         '--algo','fixed','--redefineSignalPOIs','r','-P',name,'--floatOtherPOIs','1',
         '--saveInactivePOI','1','--fixedPointPOIs',assignments,
@@ -820,6 +853,62 @@ def tracked_start(point, allowed):
         return result
     finally:
         src.Close()
+
+
+
+def run_released_profile(work, name):
+    """Run one failed nuisance under its own lock, using the saved Asimov workspace."""
+    import ROOT as root
+
+    work = internal_path(work)
+    if (work != ROOT / 'stats/run3/top_pt/impacts'
+            or not re.fullmatch(r'CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin[1-4]', name)):
+        raise ValueError('The released profile must be a low-dM Nb>=2 Sgamma nuisance in the current grid')
+    phase = 'bounded_sgamma_complete'
+    parent = work / phase
+    shard = work.parent / 'impact_workers' / name
+    out = shard / phase
+    out.mkdir(parents=True, exist_ok=True)
+    with (shard / 'impact.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        state_path = out / 'status.json'
+        if state_path.is_file() and read_json(state_path).get('status') == 'profiles_complete':
+            return
+        stage = read_json(parent / 'status.json')
+        if name not in stage.get('failed', {}) or (parent / 'parameters' / (name + '.json')).is_file():
+            raise ValueError('Nuisance is not unresolved in the main impact recovery')
+        inputs = read_json(parent / 'inputs.json')
+        if inputs.get('observed_sr_used') is not False:
+            raise ValueError('Impact recovery requires the blinded Asimov workspace')
+        root.gROOT.SetBatch(True)
+        root.EnableThreadSafety()
+        source = root.TFile.Open(inputs['snapshot'])
+        try:
+            workspace = source.Get('w')
+            bounds = {n: [float(workspace.var(n).getMin()), float(workspace.var(n).getMax())]
+                      for n in inputs['bestfit']}
+        finally:
+            source.Close()
+        options = read_json(parent / 'contract.json')['options']
+        inputs.update(complete_recovery=True, top_pt_workspace=True, parameter_bounds={name: bounds[name]},
+                      all_parameter_bounds=bounds, endpoint_seeds=options['endpoint_seeds'])
+        state = dict(status='running', parameters=[name], controller_pid=os.getpid(),
+                     controller_pid_start_ticks=process_identity(os.getpid()), observed_sr_used=False,
+                     started=time.time(), failed={}, parameter_products={})
+        write_json(state_path, state)
+        worker = BoundedSgamma(work, out, inputs, 1, CommandRunner(out), earlier=parent)
+        try:
+            worker.recover(name)
+            product = out / 'parameters' / (name + '.json')
+            state.update(status='profiles_complete',
+                         parameter_products={name: dict(path=str(product.relative_to(ROOT)))})
+        except Exception as error:
+            state.update(status='needs_attention', failed={name: repr(error)})
+            raise
+        finally:
+            worker.pool.shutdown()
+            state.update(controller_pid=None, finished=time.time())
+            write_json(state_path, state)
 
 
 def publish_completed_profiles(work, output, shard_statuses, cached_collection=None):
@@ -882,7 +971,7 @@ def publish_completed_profiles(work, output, shard_statuses, cached_collection=N
             for name, product in status['parameter_products'].items():
                 if name in recovered or name in original:
                     raise ValueError('Duplicate accepted nuisance: '+name)
-                receipt = internal_path(analysis/product['path'])
+                receipt = internal_path(analysis / (product if isinstance(product, str) else product['path']))
                 if path.parent.parent not in receipt.parents:
                     raise ValueError('Parameter receipt outside its completed shard')
                 item = read_json(receipt)
@@ -927,17 +1016,24 @@ def publish_completed_profiles(work, output, shard_statuses, cached_collection=N
         return target
 
 
-def bounded_sgamma_scope(parent, records, bounds):
+def bounded_sgamma_scope(parent, records, bounds, *, top_pt_workspace=False):
     names = recovery_scope(parent, records, (), (), {})
+    if top_pt_workspace and all(
+            re.fullmatch(r'CMS_NPS26012_sgamma_shape_lowdm_Nb2plus_bin[1-4]', n)
+            and records[n].get('bounds') == bounds.get(n)
+            and isinstance(bounds.get(n), list) and len(bounds[n]) == 2
+            and .01 <= bounds[n][0] < 1 < bounds[n][1] <= 5
+            for n in names):
+        return names
     if any(not re.fullmatch(r'CMS_NPS26012_(?:sgamma_shape_lowdm|qcd_norm_highdm)_Nb(?:1|2plus)_bin\d+(?:_202[2345](?:EE|BPix)?)?', n)
            or bounds.get(n) != [.01, 5.] for n in names):
         raise ValueError('Requires failed Sgamma/QCD rate parameters with adopted [0.01,5] bounds')
     return names
 
 
-def bounded_lower_values(center, bounds):
+def bounded_lower_values(center, bounds, *, workspace_bounds=False):
     lo, hi = bounds
-    if bounds != [.01, 5.] or not lo < center < hi:
+    if (bounds != [.01, 5.] and not (workspace_bounds and .01 <= lo < 1 < hi <= 5)) or not lo < center < hi:
         raise ValueError('Invalid adopted Sgamma center/bounds')
     return [lo + f*(center-lo) for f in (.75, .5, .25, 0.)]
 
@@ -1012,7 +1108,7 @@ class BoundedSgamma(ImpactProfileRecovery):
                 theta = self.inputs['bestfit'][name]
                 seed = self.fixed(name, lo+.5*(theta-lo))
                 label = 'lower_independent_neighbour'
-        key = label or hashlib.sha256(format(value, '.15g').encode()).hexdigest()[:16]
+        key = label or 'theta_' + repr(value)
         polish = name in self.inputs.get('polish_parameters', [])
         hybrid = name in self.inputs.get('hybrid_parameters', [])
         likelihood = name in self.inputs.get('likelihood_parameters', [])
@@ -1020,15 +1116,16 @@ class BoundedSgamma(ImpactProfileRecovery):
             key = 'precision_' + key
         if hybrid and (value in (lo,hi) or label and label.startswith(('lower_independent','upper_independent','return_'))):
             key = 'hybrid_' + key
-        folder = self.out/'points'/name/key
-        state_path = folder/'state.json'
+        state_path = profile_state(self.out/'points'/name, key, name, value, legacy=label is None)
+        folder = state_path.parent
+        key = folder.name
         if state_path.exists() and read_json(state_path)['status'] == 'complete':
             result = read_json(state_path)
             self.validate_point(result)
             self.points.setdefault(name, []).append(result)
             return result
         for previous in self.prior_roots:
-            old = previous/'points'/name/key/'state.json'
+            old = profile_state(previous/'points'/name, key, name, value, legacy=label is None)
             if old.exists() and read_json(old)['status'] == 'complete':
                 result = read_json(old)
                 self.validate_point(result)
@@ -1087,7 +1184,7 @@ class BoundedSgamma(ImpactProfileRecovery):
                 write_json(state_path, dict(status='failed', name=name, value=value, attempts=attempts))
         raise RuntimeError(name+' conditional fit failed at '+str(value))
 
-    def validate_point(self, point):
+    def validate_point(self, point, *, released_root=None):
         if point['status'] != 'complete':
             raise ValueError('Conditional result is incomplete')
         rows = tree_rows(point['root'], point['name'])
@@ -1098,14 +1195,37 @@ class BoundedSgamma(ImpactProfileRecovery):
             raise ValueError('Conditional ROOT/receipt disagreement')
         cwd = internal_path(ROOT/point['root']).parent
         receipt_out = cwd.parents[2]
-        if receipt_out not in [self.out, *self.prior_roots]:
+        if receipt_out not in [self.out, *self.prior_roots, released_root]:
             raise ValueError('Conditional result outside the frozen recovery namespaces')
         if point.get('exit_code') != 0:
             raise ValueError('Conditional result lacks successful execution')
 
+    def released_profile(self, name):
+        shard = self.work.parent / 'impact_workers' / name
+        root = shard / 'bounded_sgamma_complete'
+        lock_path = shard / 'impact.lock'
+        if not lock_path.is_file() or root == self.out:
+            return None
+        with lock_path.open('r') as lock:
+            fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+            status = read_json(root / 'status.json')
+            if status.get('status') != 'profiles_complete':
+                return None
+            result = read_json(root / 'parameters' / (name + '.json'))
+            if (status.get('observed_sr_used') is not False or result.get('status') != 'complete'
+                    or result.get('name') != name
+                    or result.get('bounds') != self.inputs['parameter_bounds'][name]):
+                raise ValueError('Released impact profile does not match the blinded nuisance and its range')
+            for point in result['points']:
+                self.validate_point(point, released_root=root)
+            return result
+
     def recover(self, name):
         target = self.out/'parameters'/(name+'.json')
         if not target.exists():
+            released = self.released_profile(name)
+            if released is not None:
+                return released
             for previous in self.prior_roots:
                 if (previous/'parameters'/(name+'.json')).exists():
                     result = read_json(previous/'parameters'/(name+'.json'))
@@ -1126,7 +1246,7 @@ class BoundedSgamma(ImpactProfileRecovery):
         if not common_matches(central):
             raise ValueError('Common minimum not reproduced')
         lower = None; lower_boundary = False; inner = central
-        for value in bounded_lower_values(theta, bounds):
+        for value in bounded_lower_values(theta, bounds, workspace_bounds=self.inputs.get('top_pt_workspace', False)):
             outer = self.fixed(name, value, seed=inner)
             if abs(outer['deltaNLL']-PROFILE_TARGET) <= PROFILE_NLL_TOL:
                 lower = outer; break
@@ -1229,7 +1349,12 @@ def bounded_preflight(manifest, work, model, mass):
         ws = source.Get('w')
         bounds = {n:[float(ws.var(n).getMin()),float(ws.var(n).getMax())] for n in parent['failed_nuisances']}
     finally: source.Close()
-    names = bounded_sgamma_scope(parent,records,bounds)
+    top = ROOT/'stats/run3/top_pt'
+    top_pt_workspace = (manifest == top/'grid/manifest.json' and work == top/'impacts'
+        and grid.get('bins') == 208 and grid.get('floating_normalization_parameters') == 44
+        and parent.get('workspace') == str(top/'limits/T2tt/mStop1200_mLSP500/workspace.root')
+        and parent.get('sr_data_used') is False and parent.get('asimov_expect_signal') == 1)
+    names = bounded_sgamma_scope(parent,records,bounds,top_pt_workspace=top_pt_workspace)
     seeds = {}
     for n in names:
         attempts = [a for a in records[n]['attempts'] if a.get('exit_code') == 0]
@@ -1237,7 +1362,7 @@ def bounded_preflight(manifest, work, model, mass):
                 for a in attempts]
         seeds[n] = saved_sgamma_seeds(rows, bounds[n])
     return dict(origins=origins,names=names,bounds=bounds,protected=protected,
-        endpoint_seeds=seeds,
+        endpoint_seeds=seeds,top_pt_workspace=top_pt_workspace,
         parent=parent,
         original_valid=len(records)-len(names),nuisance_count=len(records))
 
@@ -1300,7 +1425,8 @@ def run_bounded(manifest, work, workers, model, mass, *,
         try:
             inputs = prepare_profile_inputs(work,earlier or previous or out,Path(audit['parent']['workspace']),runner)
             inputs['parameter_bounds'] = audit['bounds']
-            inputs.update(complete_recovery=True,endpoint_seeds=audit['endpoint_seeds'])
+            inputs.update(complete_recovery=True,endpoint_seeds=audit['endpoint_seeds'],
+                          top_pt_workspace=audit['top_pt_workspace'])
             if polish:inputs['polish_parameters']=prior['failed_parameters']
             if hybrid:inputs['hybrid_parameters']=prior['failed_parameters']
             if likelihood:inputs['likelihood_parameters']=prior['failed_parameters']
@@ -1480,7 +1606,14 @@ def run_direct_profile(manifest, work, workers, missing=(), refined=()):
 def run_with_recovery(manifest, output, workers, plot_only=False, model='T2tt',
                       mass='mStop1200_mLSP500', workspace_state=None, revision=None):
     """The impacts stage owns primary fits and their finite bounded profiles."""
-    result = _run(manifest, output, workers, plot_only, model, mass, workspace_state, revision)
+    existing = internal_path(output)/'impact_status.json'
+    old = read_json(existing) if existing.is_file() else {}
+    terminal = (not plot_only and internal_path(output) == ROOT/'stats/run3/top_pt/impacts'
+        and old.get('status') == 'needs_attention' and old.get('phase') == 'finite_fits_exhausted'
+        and old.get('controller_pid') is None and old.get('nuisance_count') == 833
+        and old.get('valid_nuisances') + len(old.get('failed_nuisances', [])) == 833
+        and old.get('initial_fit', {}).get('valid') is True)
+    result = 2 if terminal else _run(manifest, output, workers, plot_only, model, mass, workspace_state, revision)
     if result != 2 or plot_only:
         return result
     path = internal_path(output) / 'impact_status.json'
@@ -1547,7 +1680,15 @@ if __name__ == '__main__':
     p.add_argument('--mass', default='mStop1200_mLSP500')
     p.add_argument('--workspace-state', type=Path, help='Reuse the exact verified limit-point workspace')
     p.add_argument('--plot-only', action='store_true')
+    p.add_argument('--released-parameter', help='Recover one unresolved Sgamma nuisance')
     p.add_argument('--native-runtime', action='store_true', help=argparse.SUPPRESS)
     a = p.parse_args()
+    require_current_llcr(a.manifest, a.output, a.workspace_state)
+    if a.released_parameter:
+        if a.plot_only:
+            p.error('--released-parameter runs a profile')
+        native_runtime(a.output)
+        run_released_profile(a.output, a.released_parameter)
+        raise SystemExit(0)
     native_runtime(a.output)
     raise SystemExit(run(a.manifest, a.output, a.workers, a.plot_only, a.model, a.mass, a.workspace_state))

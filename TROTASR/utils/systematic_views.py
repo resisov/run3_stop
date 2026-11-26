@@ -91,31 +91,130 @@ def _same_jet_momenta(left, right):
     return True
 
 
-def _friend_selection(view, candidates, support_only, year):
-    """Apply only the existing pre-topology execution mask to aligned tags."""
-    support = analysis_support(view, year=year) if support_only else np.ones(len(view), dtype=bool)
+def _inference_support(view, support_only, year, support_mask):
+    if support_mask is None:
+        return analysis_support(view, year=year) if support_only else np.ones(len(view), dtype=bool)
+    support = np.asarray(support_mask(view))
+    if support.shape != (len(view),) or support.dtype.kind != 'b':
+        raise ValueError('TROTA support_mask must return one Boolean per rebuilt event')
+    return support
+
+
+def _replace_mixed(view, inferred):
+    for field in ('nTopMixed1pct', *('TopMixed1pct_' + k for k in (*MIXED_INTS, *MIXED_FLOATS))):
+        view = ak.with_field(view, inferred[field], field)
+    return view
+
+
+def _support_migrations(counts, nominal, varied):
+    common = nominal & varied
+    counts.update(support_migrations_common_events=int(common.sum()),
+                  support_migrations_gained_events=int((varied & ~nominal).sum()),
+                  support_migrations_lost_events=int((nominal & ~varied).sum()))
+    return common
+
+
+def _restrict_candidates(state, support):
+    selected = support[state['event']]
+    return {name: state[name][selected] for name in ('event', 'sources', 'passing')}
+
+
+def _friend_selection(view, candidates, support):
+    """Apply the selected execution mask to aligned precomputed tags."""
     if not np.all(support):
         counts = np.where(support, np.asarray(view['nTopMixed1pct']), 0).astype(np.int32)
         view = ak.with_field(view, counts, 'nTopMixed1pct')
         for name in (*MIXED_INTS, *MIXED_FLOATS):
             field = 'TopMixed1pct_' + name
             view = ak.with_field(view, ak.unflatten(ak.flatten(view[field][support]), counts), field)
-    keys = zip(np.asarray(view['file_id'])[support], np.asarray(view['entry'])[support])
-    resolved = {key: candidates[key] for f, e in keys if (key := (int(f), int(e))) in candidates}
+    if hasattr(candidates, 'mask_rows'):
+        # The friend is aligned to Events, so filter by row without building
+        # another event-key dictionary or converting all candidates to objects.
+        resolved = candidates.mask_rows(support)
+        resolved_passing = resolved.candidate_count
+    else:
+        keys = zip(np.asarray(view['file_id'])[support], np.asarray(view['entry'])[support])
+        resolved = {key: candidates[key] for f, e in keys if (key := (int(f), int(e))) in candidates}
+        resolved_passing = sum(map(len, resolved.values()))
     counts = dict(events=len(view), inference_events=0, nominal_friend_events=len(view),
                   candidate_inventory_unavailable_events=len(view),
                   outside_analysis_support=len(view) - int(support.sum()),
                   mixed_passing=int(ak.sum(view['nTopMixed1pct'])),
-                  resolved_passing=sum(map(len, resolved.values())))
+                  resolved_passing=resolved_passing)
     return view, resolved, counts
 
 
-def _friend_event_views(chunks, year, models, audit, candidate_budget, support_only, nominal_only):
+def weight_only_friend_views(chunks, year, audit, support_mask=None):
+    """Fixed Events coordinates + row-aligned nominal tag friend; no JME or inference."""
+    for view, candidates in chunks:
+        if not len(view):
+            continue
+        if np.any(np.asarray(view['is_data'])) or np.any(np.asarray(view['is_signal'])):
+            raise ValueError('Expected only background MC in the LHE weight pass')
+        if hasattr(candidates, 'matches_rows') and not candidates.matches_rows(
+                np.asarray(view['file_id']), np.asarray(view['entry'])):
+            raise ValueError('Fixed nominal friend is not aligned to LHE selection')
+        support = _inference_support(view, True, year, support_mask)
+        view, resolved, counts = _friend_selection(view, candidates, support)
+        record = audit.setdefault('nominal', {})
+        for k, v in counts.items():
+            record[k] = record.get(k, 0) + v
+        yield view, resolved, 'nominal'
+
+
+def nominal_pass_friend_chunks(chunks, year, audit):
+    """Feed shifted views only original rows accepted by the corrected nominal analysis.
+
+    Read the aligned nominal tags, never infer them. The union spans both dM
+    regimes, SR/CR and the existing DY mass measurement. It is a population
+    restriction, not a frozen region, tag or bin assignment.
+    """
+    from .analysis_regions import select
+    for field in ('input_rows', 'pretopology_rows', 'accepted_rows'):
+        audit.setdefault(field, 0)
+    for raw, friend in chunks:
+        if not friend.matches_rows(raw['file_id'], raw['entry']):
+            raise ValueError('Unaligned nominal-pass TROTA friend')
+        if np.any(np.asarray(raw['is_data'], bool)) or np.any(np.asarray(raw['is_signal'], bool)):
+            raise ValueError('Nominal-pass TT replay requires background MC')
+        # Keep the fixed ROOT chunk; bound the transient central reconstruction.
+        for start in range(0, len(raw), 8192):
+            block = slice(start, start + 8192)
+            source = raw[block]
+            audit['input_rows'] += len(source)
+            central = anchored_endpoints(source, year, nominal_only=True)['nominal']
+            view = varied_view(source, central, year=year)
+            eligible = np.flatnonzero(analysis_support(view[:], year=year))
+            audit['pretopology_rows'] += len(eligible)
+            if not len(eligible):
+                continue
+            cand = friend.select_rows(block).select_rows(eligible)
+            view = view[eligible]
+            selections, _ = select(view, cand, dy_mass_window=None, year=year)
+            keep = np.zeros(len(view), dtype=bool)
+            for region, sel in selections.items():
+                passes = sel['high_search'] | sel['low']
+                if region in ('DY2E', 'DY2M'):
+                    # Includes the existing mll>50 control measurement, not
+                    # just the on-Z plot; regular histogram masks remain intact.
+                    passes = passes & (np.asarray(view['mee' if region == 'DY2E' else 'mmm']) > 50.)
+                keep |= passes
+            audit['accepted_rows'] += int(keep.sum())
+            if keep.any():
+                # Use the original corrected input, not the rebuilt nominal
+                # view, so shifted MET and jet corrections are applied once.
+                yield source[eligible[keep]], cand.select_rows(keep)
+
+
+def _friend_event_views(chunks, year, models, audit, candidate_budget, support_only, nominal_only, support_mask):
     for original, friend_resolved in chunks:
         if np.any(np.asarray(original['is_data'], dtype=bool)):
             raise ValueError('Corrected nominal TROTA friends are MC-only')
         if not len(original):
             continue
+        if hasattr(friend_resolved, 'matches_rows') and not friend_resolved.matches_rows(
+                np.asarray(original['file_id']), np.asarray(original['entry'])):
+            raise ValueError('Resolved friend rows are not aligned to JME Events')
         floor_audit = {}
         values = anchored_endpoints(original, year, floor_audit, nominal_only=nominal_only)
         endpoints = ('nominal',) if nominal_only else ENDPOINTS
@@ -134,19 +233,21 @@ def _friend_event_views(chunks, year, models, audit, candidate_budget, support_o
         bounds = sorted(bounds)
         for start, stop in zip(bounds[:-1], bounds[1:]):
             source = original[start:stop]
+            candidates = (friend_resolved.select_rows(slice(start, stop))
+                          if hasattr(friend_resolved, 'select_rows') else friend_resolved)
             nominal = {k: v[start:stop] for k, v in values['nominal'].items()}
+            nominal_support = None
             for shift in endpoints:
                 momenta = nominal if shift == 'nominal' else {k: v[start:stop] for k, v in values[shift].items()}
+                view = varied_view(source, momenta, year=year)
+                support = _inference_support(view, support_only, year, support_mask)
                 if shift == 'nominal' or _same_jet_momenta(nominal, momenta):
-                    view, resolved, counts = _friend_selection(
-                        varied_view(source, momenta, year=year), friend_resolved, support_only, year)
+                    view, resolved, counts = _friend_selection(view, candidates, support)
                 else:
                     if models is None:
                         raise ValueError('TROTA models are required for changed JME inputs')
                     model_input = inference_inputs[shift][start:stop]
-                    view = varied_view(source, momenta, year=year)
-                    if support_only:
-                        support = analysis_support(view, year=year)
+                    if support_only or support_mask is not None:
                         inferred, resolved, counts, _ = supported_inference(model_input, models, support)
                     else:
                         inferred, resolved, counts, _ = infer_chunk(model_input, models)
@@ -154,9 +255,13 @@ def _friend_event_views(chunks, year, models, audit, candidate_budget, support_o
                     # The rebuild used original aliases for type-1 MET. The
                     # inference returns only a replacement Mixed collection;
                     # transfer that collection without another kinematic pass.
-                    for field in ('nTopMixed1pct', *('TopMixed1pct_' + k for k in (*MIXED_INTS, *MIXED_FLOATS))):
-                        view = ak.with_field(view, inferred[field], field)
+                    view = _replace_mixed(view, inferred)
                 record = audit.setdefault(shift, {})
+                if support_mask is not None:
+                    if shift == 'nominal':
+                        nominal_support = support
+                    else:
+                        _support_migrations(counts, nominal_support, support)
                 if shift != 'nominal':
                     # The friend contains WP-passing candidates only, so all
                     # candidate migrations against nominal cannot be audited.
@@ -170,14 +275,17 @@ def _friend_event_views(chunks, year, models, audit, candidate_budget, support_o
 
 
 def event_views(chunks, year, models, audit, candidate_budget=150000, support_only=False,
-                nominal_only=False, *, friend_chunks=False):
+                nominal_only=False, *, friend_chunks=False, support_mask=None):
     """Yield canonical views, optionally using validated, aligned nominal tags.
 
     Friend chunks are (Events with attached Mixed fields, Resolved-by-key).
     The friend does not replace the adopted central JME kinematic anchoring.
+    An optional support_mask overrides support_only with a necessary selection
+    evaluated separately on each fully rebuilt view, before any model inference.
     """
     if friend_chunks:
-        yield from _friend_event_views(chunks, year, models, audit, candidate_budget, support_only, nominal_only)
+        yield from _friend_event_views(chunks, year, models, audit, candidate_budget,
+                                      support_only, nominal_only, support_mask)
         return
     for original in chunks:
         floor_audit = {}
@@ -200,19 +308,31 @@ def event_views(chunks, year, models, audit, candidate_budget=150000, support_on
         for start, stop in zip(bounds[:-1], bounds[1:]):
             source = original[start:stop]
             nominal_states = None
+            nominal_support = None
             for shift in endpoints:
                 momenta = {k: v[start:stop] for k,v in values[shift].items()}
-                if support_only:
-                    support = analysis_support(varied_view(source, momenta, year=year), year=year)
-                    inferred, resolved, counts, states = supported_inference(
-                        inference_inputs[shift][start:stop], models, support)
+                model_input = inference_inputs[shift][start:stop]
+                if support_only or support_mask is not None:
+                    view = varied_view(source, momenta, year=year)
+                    support = _inference_support(view, support_only, year, support_mask)
+                    inferred, resolved, counts, states = supported_inference(model_input, models, support)
+                    # The first view already has the correct Type-1 reference
+                    # and every varied kinematic field. Inference changes only
+                    # the tag payload; reuse that view for any region mask.
+                    view = _replace_mixed(view, inferred)
                 else:
-                    inferred, resolved, counts, states = infer_chunk(inference_inputs[shift][start:stop], models)
-                # Inference input aliases must never leak into the type-1 MET
-                # reference or into later correction calculations.
-                for name in P4_FIELDS:
-                    inferred = ak.with_field(inferred, source[name], name)
-                view = varied_view(inferred, momenta, year=year)
+                    inferred, resolved, counts, states = infer_chunk(model_input, models)
+                    # Inference aliases must never leak into the type-1 MET
+                    # reference or into later correction calculations.
+                    for name in P4_FIELDS:
+                        inferred = ak.with_field(inferred, source[name], name)
+                    view = varied_view(inferred, momenta, year=year)
+                common = None
+                if support_mask is not None:
+                    if shift == 'nominal':
+                        nominal_support = support
+                    else:
+                        common = _support_migrations(counts, nominal_support, support)
                 record = audit.setdefault(shift, dict(events=0, resolved_candidates=0, resolved_passing=0,
                     mixed_candidates=0, mixed_passing=0, candidate_migrations={}))
                 for name, count in counts.items():
@@ -224,7 +344,12 @@ def event_views(chunks, year, models, audit, candidate_budget=150000, support_on
                     nominal_states = states
                 elif not np.all(data):
                     for kind in states:
+                        before, after = nominal_states[kind], states[kind]
+                        if common is not None:
+                            # Candidate eligibility is measured only when both
+                            # views were inferred; report support crossings separately.
+                            before, after = (_restrict_candidates(s, common) for s in (before, after))
                         target = record['candidate_migrations'].setdefault(kind, {})
-                        for name, count in migration_counts(nominal_states[kind], states[kind]).items():
+                        for name, count in migration_counts(before, after).items():
                             target[name] = target.get(name,0)+count
                 yield view, resolved, shift

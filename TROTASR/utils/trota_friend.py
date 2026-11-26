@@ -1,6 +1,8 @@
 """Immutable, row-aligned nominal corrected TROTA tags for accepted MC ROOTs."""
+from collections.abc import Mapping, Sequence
 from contextlib import contextmanager
-from functools import lru_cache
+from functools import cached_property, lru_cache
+from operator import index
 from pathlib import Path
 import errno
 import json
@@ -151,7 +153,7 @@ def _validate_product(path, expected, source=None):
                         interval = dict(entry_start=index, entry_stop=index + 1)
                         keys = events.arrays(list(ID_FIELDS), **interval)
                         cached = friend.arrays(list(ID_FIELDS), **interval)
-                        if not all(np.array_equal(a, b) for a, b in zip(_identity(keys), _identity(cached))):
+                        if not _same_identity(_identity(keys), _identity(cached)):
                             raise ValueError('Nominal friend boundary event keys differ from Events')
         return found
 
@@ -194,6 +196,45 @@ def _identity(a):
     return values
 
 
+def _same_identity(left, right):
+    for a, b in zip(left, right):
+        if a.dtype.kind not in 'iu' or b.dtype.kind not in 'iu' or a.shape != b.shape:
+            return False
+        if a.dtype.kind != b.dtype.kind:
+            signed = a if a.dtype.kind == 'i' else b
+            if np.any(signed < 0):
+                return False
+            # Comparing uint64 to int64 directly can promote both to float64.
+            a, b = a.astype(np.uint64, copy=False), b.astype(np.uint64, copy=False)
+        if not np.array_equal(a, b):
+            return False
+    return True
+
+
+def _candidate_support(a, year):
+    """TROTA needs three AK4s, or two AK4s plus an AK8. Do not cut on raw pT."""
+    resolved, jets, fatjets = input_fields(year)
+    def count(group, id_index):
+        return np.asarray(ak.sum((a[group[id_index]] != 0) & (abs(a[group[1]]) < 2.5), axis=1))
+    return (count(resolved, 6) >= 3) | ((count(jets, 6) >= 2) & (count(fatjets, 9) >= 1))
+
+
+def _friend_rows(keys, positions, columns, layouts=(MIXED, RESOLVED)):
+    """Scatter accepted tag lists among explicit empty rows, keeping every source identity."""
+    result = dict(zip(ID_FIELDS, keys))
+    for layout in layouts:
+        count, *fields = layout
+        totals = np.zeros(len(keys[0]), dtype=np.int32)
+        if len(positions):
+            totals[positions] = np.asarray(columns[count])
+        result[count] = totals
+        for field in fields:
+            flat = (ak.flatten(columns[field]) if len(positions)
+                    else np.empty(0, dtype=layout[field].split()[-1]))
+            result[field] = ak.unflatten(flat, totals)
+    return result
+
+
 def write_friend(task, source, output):
     """Calculate all rows once; atomically publish a different ROOT without overwriting."""
     expected = _source_record(task, source)
@@ -216,30 +257,47 @@ def write_friend(task, source, output):
             if any(t.kind not in 'iu' for t in key_types.values()):
                 raise ValueError('Source event keys must be integers: ' + str(source))
             target.mktree(FRIEND_TREE, {**key_types, **MIXED, **RESOLVED}, title='Nominal corrected MC TROTA tags')
-            for a in tree.iterate(_branches(year), step_size=READ_CHUNK):
+            from .reader import project_candidate_entries
+            r, j, f = input_fields(year)
+            gates = tuple(dict.fromkeys((*ID_FIELDS, 'is_data', r[1], r[6], j[1], j[6], f[1], f[9])))
+            rest = tuple(k for k in _branches(year) if k not in gates)
+            for first in tree.iterate(gates, step_size=READ_CHUNK):
                 _disk_headroom(output.parent)
-                if ak.any(a['is_data']):
+                if ak.any(first['is_data']):
                     raise ValueError('Observed rows are forbidden in corrected nominal MC friends')
-                keys = _identity(a)
+                keys = _identity(first)
+                positions = np.flatnonzero(_candidate_support(first, year))
+                if not len(positions):
+                    target[FRIEND_TREE].extend(_friend_rows(keys, positions, {}))
+                    events_seen += len(first)
+                    continue
+                heavy = project_candidate_entries(tree, rest, events_seen + positions)
+                a = ak.zip({**{k: first[k][positions] for k in gates},
+                            **{k: heavy[k] for k in rest}}, depth_limit=1)
                 momenta = anchored_endpoints(a, year, nominal_only=True)['nominal']
                 view = p4_view(a, {k: momenta[k.replace('nanoaod', 'corrected')] for k in P4_FIELDS})
                 rows_seen = 0
+                row_start = 0
                 for sl in bounded_slices(view, year=year):
-                    out, _, audit, state = infer_chunk(view[sl], _models(year))
-                    if not all(np.array_equal(x, y[sl]) for x, y in zip(_identity(out), keys)):
+                    out, _, audit, state = infer_chunk(view[sl], _models(year), materialize_resolved=False)
+                    take = positions[sl]
+                    if not _same_identity(_identity(out), tuple(k[take] for k in keys)):
                         raise ValueError('Inference changed the ordering of event keys')
                     columns = {k: out[k] for k in (*ID_FIELDS, *MIXED)}
                     columns.update(_resolved_columns(state, len(out)))
                     if (int(ak.sum(columns['nTopMixed1pct'])) != audit['mixed_passing']
                             or int(np.sum(columns['nTopResolved1pct'])) != audit['resolved_passing']):
                         raise ValueError('Corrected candidate counts disagree with inference')
-                    target[FRIEND_TREE].extend(columns)
+                    row_stop = len(first) if sl.stop == len(a) else int(take[-1]) + 1
+                    target[FRIEND_TREE].extend(_friend_rows(tuple(k[row_start:row_stop] for k in keys),
+                                                            take - row_start, columns))
+                    row_start = row_stop
                     rows_seen += len(out)
                     mixed += audit['mixed_passing']
                     resolved += audit['resolved_passing']
-                if rows_seen != len(a):
+                if rows_seen != len(a) or row_start != len(first):
                     raise ValueError('Corrected nominal TROTA did not cover the whole event slice')
-                events_seen += rows_seen
+                events_seen += len(first)
             if events_seen != expected['events']:
                 raise ValueError('Corrected nominal TROTA did not cover all Events rows')
             receipt = dict(expected, mixed_passing=mixed, resolved_passing=resolved)
@@ -263,21 +321,179 @@ def write_friend(task, source, output):
         temporary.unlink(missing_ok=True)
 
 
-def read_friend_slice(friend_tree, original, start, stop, *, selection=None):
-    """Attach corrected Mixed tags and return the canonical Resolved map.
+class _ResolvedCandidateRow(Sequence):
+    """Materialize the legacy candidate record only when a consumer visits it."""
 
-    Call after validate_friend, for a contiguous Events slice *before* masks.
-    Event keys are compared row-by-row; weights, corrected jet momenta and
-    unrelated branches are never changed. An optional mask is applied only
-    after the complete range is aligned. There is no legacy-tag fallback.
+    def __init__(self, columns, start, stop):
+        self._columns, self._start, self._stop = columns, start, stop
+
+    def __len__(self):
+        return self._stop - self._start
+
+    def _candidate(self, i):
+        idx, j0, j1, j2, score, eta, mass = (column[i] for column in self._columns)
+        return dict(index=int(idx), jets=[int(j0), int(j1), int(j2)],
+                    score=float(score), eta=float(eta), mass=float(mass))
+
+    def __iter__(self):
+        return (self._candidate(i) for i in range(self._start, self._stop))
+
+    def __getitem__(self, i):
+        indices = range(self._start, self._stop)
+        if isinstance(i, slice):
+            return [self._candidate(j) for j in indices[i]]
+        return self._candidate(indices[index(i)])
+
+    def __eq__(self, other):
+        if not isinstance(other, Sequence):
+            return NotImplemented
+        return len(self) == len(other) and all(a == b for a, b in zip(self, other))
+
+
+class ResolvedFriendRows(Mapping):
+    """Flat candidate columns with offsets and an event-row-aligned view.
+
+    Projection and support masks share candidate buffers. Legacy lookup by
+    (file_id, entry) indexes only populated rows, lazily; aligned callers can
+    use ``row(i)`` directly without building that index.
     """
-    if start < 0 or stop < start or stop - start != len(original) or stop > friend_tree.num_entries:
+
+    def __init__(self, keys, offsets, columns, rows=None, enabled=None):
+        self._keys, self._offsets, self._columns = keys, offsets, columns
+        self._rows = np.arange(len(keys[0]), dtype=np.intp) if rows is None else rows
+        self._enabled = enabled
+
+    @property
+    def row_count(self):
+        return len(self._rows)
+
+    @cached_property
+    def _counts(self):
+        n = self._offsets[self._rows + 1] - self._offsets[self._rows]
+        return n if self._enabled is None else np.where(self._enabled, n, 0)
+
+    @property
+    def candidate_count(self):
+        return int(self._counts.sum())
+
+    def matches_rows(self, file_ids, entries):
+        return _same_identity((np.asarray(file_ids), np.asarray(entries)),
+                              tuple(k[self._rows] for k in self._keys))
+
+    def select_rows(self, selection):
+        """Take a slice, boolean mask, or distinct positional row indices."""
+        if not isinstance(selection, slice):
+            selection = np.asarray(selection)
+            kind = selection.dtype.kind
+            if (selection.ndim != 1 or kind not in 'biu'
+                    or (kind == 'b' and len(selection) != self.row_count)):
+                raise ValueError('Invalid Resolved friend row selection')
+            if kind != 'b' and (np.any(selection < 0) or np.any(selection >= self.row_count)
+                    or (np.any(selection[1:] <= selection[:-1])
+                        and len(np.unique(selection)) != len(selection))):
+                raise ValueError('Invalid Resolved friend row indices')
+        enabled = None if self._enabled is None else self._enabled[selection]
+        return type(self)(self._keys, self._offsets, self._columns,
+                          self._rows[selection], enabled)
+
+    def mask_rows(self, mask):
+        """Suppress candidates outside support without removing event rows."""
+        mask = np.asarray(mask)
+        if mask.dtype.kind != 'b' or mask.shape != (self.row_count,):
+            raise ValueError('Invalid Resolved friend row mask')
+        if mask.all():
+            return self
+        enabled = mask.copy() if self._enabled is None else self._enabled & mask
+        return type(self)(self._keys, self._offsets, self._columns, self._rows, enabled)
+
+    def row(self, i):
+        i = index(i)
+        source = self._rows[i]
+        if self._enabled is not None and not self._enabled[i]:
+            return ()
+        start, stop = map(int, self._offsets[source:source + 2])
+        return _ResolvedCandidateRow(self._columns, start, stop) if start != stop else ()
+
+    @cached_property
+    def _populated(self):
+        return np.flatnonzero(self._counts)
+
+    @cached_property
+    def _lookup(self):
+        files, entries = (c[self._rows[self._populated]] for c in self._keys)
+        # Keep integer fields separate (including uint64) and exact.
+        order = np.lexsort((entries, files))
+        keys = np.rec.fromarrays((files[order], entries[order]))
+        bounds = tuple(np.iinfo(dtype) for dtype, _ in keys.dtype.fields.values())
+        return keys, self._populated[order], bounds
+
+    def __len__(self):
+        return len(self._populated)
+
+    def __iter__(self):
+        files, entries = self._keys
+        return ((int(files[i]), int(entries[i])) for i in self._rows[self._populated])
+
+    def __getitem__(self, key):
+        keys, rows, bounds = self._lookup
+        if isinstance(key, tuple) and len(key) == 2 and len(keys):
+            try:
+                # Bounds must be checked before casting (older NumPy can wrap).
+                values = tuple(map(index, key))
+                if all(b.min <= v <= b.max for v, b in zip(values, bounds)):
+                    target = np.array(values, dtype=keys.dtype)
+                    i = keys.searchsorted(target)
+                    if i < len(keys) and keys[i] == target:
+                        return self.row(rows[i])
+            except TypeError:
+                pass
+        raise KeyError(key)
+
+
+def read_friend_slice(friend_tree, original, start, stop, *, selection=None,
+                      row_indices=None, project=None):
+    """Attach corrected Mixed tags and return row-aligned Resolved columns.
+
+    Call after validate_friend. By default, ``original`` is the whole
+    contiguous range. For a gathered Events range, ``row_indices`` are unique
+    absolute tree positions inside [start, stop), in original's order. The
+    optional projector receives sorted positions. Keys are always compared
+    row-by-row before applying the optional boolean selection. Weights,
+    kinematics and unrelated branches are not changed.
+    """
+    if start < 0 or stop < start or stop > friend_tree.num_entries:
         raise ValueError('Invalid Events range for corrected nominal friend')
     if 'is_data' in original.fields and ak.any(original['is_data']):
         raise ValueError('The nominal corrected TROTA friend is MC-only')
-    a = friend_tree.arrays([*ID_FIELDS, *MIXED, *RESOLVED], entry_start=start, entry_stop=stop)
+    fields = (*ID_FIELDS, *MIXED, *RESOLVED)
+    if row_indices is None:
+        if stop - start != len(original) or project is not None:
+            raise ValueError('Invalid Events range for corrected nominal friend')
+        a = friend_tree.arrays(list(fields), entry_start=start, entry_stop=stop)
+    else:
+        rows = np.asarray(row_indices)
+        if (rows.shape != (len(original),) or rows.dtype.kind not in 'iu'
+                or np.any(rows < start) or np.any(rows >= stop)):
+            raise ValueError('Invalid gathered positions for corrected nominal friend')
+        if not len(rows):
+            a = friend_tree.arrays(list(fields), entry_start=start, entry_stop=start)
+        else:
+            rows = rows.astype(np.int64, copy=False)
+            order = None
+            if np.any(rows[1:] <= rows[:-1]):
+                order = np.argsort(rows, kind='stable')
+                rows = rows[order]
+                if np.any(rows[1:] == rows[:-1]):
+                    raise ValueError('Duplicate gathered position for corrected nominal friend')
+            if project is None:
+                from .private_scales import project_entries
+                a = project_entries(friend_tree, fields, rows)
+            else:
+                a = project(friend_tree, rows, fields)
+            if order is not None:
+                a = a[np.argsort(order)]
     keys = _identity(original)
-    if not all(np.array_equal(x, y) for x, y in zip(_identity(a), keys)):
+    if not _same_identity(_identity(a), keys):
         raise ValueError('Corrected nominal friend event keys disagree with Events slice')
     if len(np.unique(np.rec.fromarrays(keys))) != len(original):
         raise ValueError('Duplicate event keys in corrected nominal friend slice')
@@ -298,15 +514,9 @@ def read_friend_slice(friend_tree, original, start, stop, *, selection=None):
         updated = ak.with_field(updated, a[k], k)
     prefix = 'TopResolved1pct_'
     counts = np.asarray(a['nTopResolved1pct'])
-    if not np.any(counts):
-        return updated, {}
     use = ('candidateIndex', 'sourceJetIdx0', 'sourceJetIdx1', 'sourceJetIdx2', 'QCDDiscriminant', 'eta', 'mass')
-    columns = [ak.to_list(a[prefix + k]) for k in use]
-    resolved = {}
-    for i in np.flatnonzero(counts):
-        key = (int(keys[0][i]), int(keys[1][i]))
-        if key in resolved:
-            raise ValueError('Duplicate event key in corrected Resolved friend')
-        resolved[key] = [dict(index=index, jets=[j0, j1, j2], score=score, eta=eta, mass=mass)
-                         for index, j0, j1, j2, score, eta, mass in zip(*(v[i] for v in columns))]
-    return updated, resolved
+    offsets = np.empty(len(counts) + 1, dtype=np.int64)
+    offsets[0] = 0
+    np.cumsum(counts, dtype=np.int64, out=offsets[1:])
+    columns = tuple(np.asarray(ak.flatten(a[prefix + k], axis=1)) for k in use)
+    return updated, ResolvedFriendRows(keys, offsets, columns)

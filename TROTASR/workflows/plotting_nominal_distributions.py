@@ -167,6 +167,25 @@ def physical_boundary(payload, include_systematics=False):
     return result
 
 
+def require_measurement_scope(hist, factor):
+    """Bind the measured correction to the actual histogram production."""
+    year = str(hist['contract']['year'])
+    provenance = factor.get('provenance', {})
+    if str(provenance.get('campaign_year')) != year or factor.get('status') != 'complete':
+        raise ValueError('Measured RZ does not match histogram year/status')
+    if 'tt_card_input' not in hist:
+        if factor.get('scope') != hist.get('scope') or provenance.get('top_pt_prescription'):
+            raise ValueError('Measured RZ does not match histogram scope')
+        return
+    from TROTASR.utils.top_pt import ENDPOINTS, PRESCRIPTION
+    tt = hist['tt_card_input']
+    if (str(tt.get('year')) != year or tt.get('prescription') != PRESCRIPTION
+            or provenance.get('top_pt_prescription') != PRESCRIPTION
+            or factor.get('scope', hist['scope']) != hist['scope']
+            or set(factor.get('inclusive_ttbar_endpoints', {})) != set(ENDPOINTS)):
+        raise ValueError('Current physical controls require the same measured TT replacement and endpoints')
+
+
 def dy_display_config(high, low):
     """Preserve the existing effective-RZ display prescription, not a new fit."""
     channels = {channel: {} for channel in ('DY2E', 'DY2M')}
@@ -194,8 +213,38 @@ def dy_display_config(high, low):
         factor_policy='Legacy channel-specific on-Z DY-weighted effective RZ; exact Nb factors for Nb plots'))
 
 
+def shifted_dy_boundaries(boundary, endpoints):
+    """Separate original DY leaves; use the original display mapping also at shifted RZ=0."""
+    shadows = {}
+    for ep in endpoints:
+        shadow = {k:v for k,v in boundary.items() if k.endswith('variable_specs')}
+        for regime,region_map in [('highdm',('DY2E','DY2M')),('lowdm',(SCHEMES['DY2E'],SCHEMES['DY2M']))]:
+            k = regime+'_variable_histograms'
+            shadow[k] = {}
+            for region in region_map:
+                shadow[k][region]={}
+                for variable, samples in boundary[k][region].items():
+                    shadow[k][region][variable]={sample:{'nominal':deepcopy(rec[ep])}
+                        for sample,rec in samples.items() if sample!='data_obs' and renderer.process_to_group(sample)=='DY'}
+        shadows[ep]=shadow
+    return shadows
+
+
+def apply_shifted_dy(boundary, shadows, high, low, tmp):
+    for ep,shadow in shadows.items():
+        cfg=dy_display_config(high['inclusive_ttbar_endpoints'][ep], low['inclusive_ttbar_endpoints'][ep])
+        file=Path(tmp)/(ep+'.json')
+        write_json(file,cfg)
+        renderer.apply_dy_rz(shadow,file)
+        for k in ('lowdm_variable_histograms','highdm_variable_histograms'):
+            for region,variables in shadow[k].items():
+                for var,samples in variables.items():
+                    for sample,rec in samples.items():
+                        boundary[k][region][var][sample][ep] = rec['nominal']
+
+
 @contextmanager
-def nominal_renderer(year, sources=()):
+def nominal_renderer(year, sources=(), *, current_tt=False):
     """Bind the current display bins and era settings to the shared renderer."""
     mapping = deepcopy(renderer.HIGHDM_MULTIPLICITY_PLOT_BINS)
     mapping['njet'] = dict(
@@ -208,6 +257,10 @@ def nominal_renderer(year, sources=()):
                    LUMINOSITY_RELATIVE_UNCERTAINTY=0. if analysis_era(year) in EARLY_ERAS else .016,
                    PLOT_SYSTEMATIC_SOURCES=list(sources),
                    HIGHDM_MULTIPLICITY_PLOT_BINS=mapping)
+    if current_tt:
+        components = read_json(ROOT/'jsons/analysis.json')['luminosity_model']['components']
+        updates['LUMINOSITY_RELATIVE_UNCERTAINTY'] = sum(
+            (factors.get(str(year),1.)-1.)**2 for factors in components.values())**.5
     previous = {key:getattr(renderer, key) for key in updates}
     try:
         for key,value in updates.items():
@@ -320,6 +373,12 @@ def assert_band_only(before, after):
 def _same_cr_plot_contract(previous, current):
     """Compare the requested plot layout and scope."""
     keys = ('year', 'scope', 'modes', 'regions', 'include_four_jet_bin')
+    if 'tt_card_input' in previous or 'tt_card_input' in current:
+        a,b=previous.get('tt_card_input') or {},current.get('tt_card_input') or {}
+        if not a or not b or any(a.get(k)!=b.get(k) for k in ('year','prescription','nominal_pass_only_for_jme')):
+            return False
+        if previous.get('inputs')!=current.get('inputs'):
+            return False
     return all(previous.get(key) == current.get(key) for key in keys)
 
 
@@ -425,12 +484,13 @@ def main():
     hists, high, low = (read_json(paths[n]) for n in ('hists', 'rz_high', 'rz_low'))
     year = validate_histograms(hists, a.allow_validation)
     for factor in (high, low):
-        if (str(factor['provenance'].get('campaign_year')) != str(year)
-                or factor.get('scope') != hists['scope']):
-            raise ValueError('Measured RZ does not match histogram year/scope')
+        require_measurement_scope(hists, factor)
     contract = dict(inputs={name: str(path.relative_to(ROOT)) for name,path in paths.items()},
                     year=year, scope=hists['scope'], modes=a.mode or ['highdm', 'lowdm'],
                     regions=a.region or list(REGIONS), include_four_jet_bin=True)
+    current_tt = bool(hists.get('tt_card_input'))
+    if current_tt:
+        contract['tt_card_input'] = hists['tt_card_input']
     manifest_path = output/'plot_manifest.json'
     if manifest_path.exists() and not (a.validate_only or a.export_only):
         saved = read_json(manifest_path)
@@ -447,6 +507,7 @@ def main():
     boundary = physical_boundary(hists,include_systematics=bool(sources))
     baseline=physical_boundary(hists) if sources else None
     config = dy_display_config(high, low)
+    shifts = shifted_dy_boundaries(boundary,high['inclusive_ttbar_endpoints']) if current_tt else {}
     # apply_dy_rz is byte-preserved and reads an internal compact manifest.
     # A temporary internal JSON exists only during validation, not a new event sidecar.
     import tempfile
@@ -455,11 +516,12 @@ def main():
         config_path = Path(temporary)/'dy_display.json'
         write_json(config_path, config)
         application = renderer.apply_dy_rz(boundary, config_path)
+        apply_shifted_dy(boundary,shifts,high,low,temporary)
         if baseline is not None:renderer.apply_dy_rz(baseline,config_path)
     if baseline is not None:
         with nominal_renderer(year):
             central_records=make_records(baseline,contract['modes'],contract['regions'])
-    with nominal_renderer(year,sources):
+    with nominal_renderer(year,sources,current_tt=current_tt):
         records = make_records(boundary, contract['modes'], contract['regions'])
         if baseline is not None:
             if [r[:4] for r in records]!=[r[:4] for r in central_records]:
@@ -478,7 +540,9 @@ def main():
             same_name_shifts_summed_before_envelope=True,mcstat_counted_once=True,
             central_sumw2_data_labels_axes_exactly_preserved=True,
             gcr_unit_area_normalizes_each_varied_total=True,
-            luminosity='Existing 0.016; omitted for unit-area GCR',
+            luminosity=('Current per-era quadrature of approved lumi components; omitted for unit-area GCR'
+                        if current_tt else 'Legacy display setting; omitted for unit-area GCR'),
+            tt_induced_dy_rz_shifts=list(shifts),
             measured_sr_only_shapes_not_assigned_to_cr=True,
             auxiliary_dy_rz_fit_uncertainty='Not propagated: existing channel/Nb effective display correction has no approved correlated fit-error template mapping',
             preliminary=hists.get('preliminary',False),

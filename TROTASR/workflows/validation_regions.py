@@ -5,6 +5,8 @@ from contextlib import nullcontext
 from dataclasses import dataclass
 from functools import lru_cache
 import fcntl
+import json
+import math
 from math import expm1
 import multiprocessing as mp
 from multiprocessing.connection import wait
@@ -35,6 +37,9 @@ from TROTASR.utils.sr_merge import load_merge
 from TROTASR.utils.statistics_model import nps_nuisance_name
 from TROTASR.utils.systematic_views import anchored_endpoints
 from TROTASR.utils.trota_friend import friend_production_complete, open_friend, read_friend_slice
+from TROTASR.utils.vr_binning import (
+    HIGH_VR_CATEGORIES, HIGH_VR_DEFINITION, HIGH_VR_RATE_EDGES, N_HIGH_BINS, N_LOW_BINS, N_VR_BINS,
+)
 from TROTASR.utils.trota_inference import (
     MIXED_FLOATS, MIXED_INTS, P4_FIELDS, bounded_slices, infer_chunk, load_models, p4_view,
 )
@@ -43,7 +48,7 @@ from TROTASR.workflows.resources import process_identity
 
 
 SCHEMA = "trotasr_vr_mc_nominal_v1"
-RESPONSE_SCHEMA = "trotasr_vr_background_response_v1"
+RESPONSE_SCHEMA = "trotasr_vr_background_response_v2"
 TIGHT_MIXED_SCHEMA = "trotasr_vr_tight_mixed_mc_v1"
 SIGNAL_NORM_BASIS = "registered_mc_runs_sumw_v1"
 REPLACEMENT_SIGNAL_POPULATION = "regenerated_signal_uuid"
@@ -58,15 +63,18 @@ DATA_WORKER_BYTES = 6 * GIB
 MC_SHARDS_PER_SLOT = 8
 MC_SIGNAL_WORKERS = 10
 MC_MAX_WORKERS = 24
-MC_BACKGROUND_MAX_WORKERS = 48
+MC_BACKGROUND_PHYSICAL_WORKERS = 48
+MC_BACKGROUND_MAX_WORKERS = 72
 RESPONSE_MAX_WORKERS = 4
 TIGHT_MIXED_MAX_WORKERS = 48
 RESPONSE_CHUNK = 4_000
 FRIEND_CHUNK = 8_192
 RESPONSE_ADMISSION_BYTES = 6 * GIB
 RECOIL_BINS = len(NATIVE_EDGES) - 1
-RESPONSE_CELLS = 148 * 2 * RECOIL_BINS
-LOW_RESPONSE_CELLS = 30 * 2 * RECOIL_BINS
+RESPONSE_CELLS = N_VR_BINS * 2 * RECOIL_BINS
+LOW_RESPONSE_CELLS = N_LOW_BINS * 2 * RECOIL_BINS
+HIGH_RATE_CELLS = N_HIGH_BINS * len(HIGH_VR_RATE_EDGES)
+LEGACY_VR_BINS = 148
 CARD_SAMPLES = dict(DYJet="DY", PhotonJet="GJ", QCD="QCD", Top="Top", VV="VV",
                     WJet="WtoLNu", ZJet="Zto2Nu")
 VR_SR_CHANNELS = dict(SR_lowdm_c1="lowdm", SR_highdm_c1="highdm")
@@ -87,10 +95,15 @@ def geometry(era):
     if set(low) != set(expected) or any(len(e) != 6 or not np.all(np.diff(e) > 0)
                                        or (e[0], e[-1]) != (0, 1) for e in low.values()):
         raise ValueError("Expected the six SR GNN categories with five bins each")
-    high = load_merge(grid["sr_merge"])
+    return {key: low[key] for key in expected}, HIGH_VR_CATEGORIES
+
+
+@lru_cache(maxsize=1)
+def _tight_mixed_categories():
+    high = load_merge(read_json(GRID)["sr_merge"])
     if high["bins_per_year"] != 118:
         raise ValueError("Expected the adopted 118-bin high-dM SR projection")
-    return {key: low[key] for key in expected}, high["categories"]
+    return high["categories"]
 
 
 @lru_cache(maxsize=6)
@@ -118,8 +131,8 @@ def angular_candidates(a):
     return low, high
 
 
-def template_indices(low, high, nb, nisr, tags, met, score, low_layout, high_layout):
-    """Use the SR bin order and put finite MET overflow in the open last bin."""
+def template_indices(low, high, nb, nisr, tags, met, score, low_layout, high_layout, *, mtb=None):
+    """Assign exclusive VR bins and put finite MET overflow in the last bin."""
     if np.any(low & high) or np.any(~np.isfinite(score[low])) or np.any((score[low] < 0) | (score[low] > 1)):
         raise ValueError("Overlapping VRs or invalid GNN scores")
     if np.any(~np.isfinite(met[high])) or np.any(met[high] <= 250):
@@ -138,11 +151,21 @@ def template_indices(low, high, nb, nisr, tags, met, score, low_layout, high_lay
         imask = nisr >= 2 if i == "NISR2plus" else nisr == int(i[-1])
         fill(low & bmask & imask, score, edges)
         offset += len(edges) - 1
+    def matches(values, predicate):
+        return values == predicate["eq"] if "eq" in predicate else values >= predicate["ge"]
+
+    axes = dict(zip(AXES, (nb, *tags.T)))
+    axes["Ntag"] = tags.sum(axis=1)
     for category in high_layout:
         mask = high.copy()
-        for axis, value in zip(AXES, (nb, *tags.T)):
-            pred = category["predicates"][axis]
-            mask &= value == pred["eq"] if "eq" in pred else value >= pred["ge"]
+        if "mtb_min" in category:
+            if mtb is None:
+                raise ValueError("Run 3 high-dM VR requires corrected mTb")
+            mask &= (mtb >= category["mtb_min"])
+            if category["mtb_max"] is not None:
+                mask &= (mtb < category["mtb_max"])
+        for axis, predicate in category["predicates"].items():
+            mask &= matches(axes[axis], predicate)
         fill(mask, met, category["edges"])
         offset += len(category["edges"]) - 1
     if not np.array_equal(index >= 0, low | high):
@@ -156,41 +179,51 @@ def _gnn(era):
 
 
 @lru_cache(maxsize=1)
+def _tag_models(era):
+    return load_models(era_year(era))
+
+
 def _models(era):
-    return load_models(era_year(era)), _gnn(era)
+    return _tag_models(era), _gnn(era)
 
 
-def _nominal_slices(original, era, *, cached_resolved=None):
+def _nominal_slices(original, era, *, cached_resolved=None, high_only=False):
     year = era_year(era)
     momenta = anchored_endpoints(original, year, nominal_only=True)["nominal"]
     if cached_resolved is None:
-        yield from _inferred_slices(original, era, momenta)
+        yield from _inferred_slices(original, era, momenta, high_only=high_only)
     else:
-        yield from _friend_slices(original, era, momenta, cached_resolved)
+        yield from _friend_slices(original, era, momenta, cached_resolved, high_only=high_only)
 
 
-def _friend_slices(original, era, momenta, resolved):
+def _friend_slices(original, era, momenta, resolved, *, high_only=False):
     # Mixed branches were already attached in source row order. The keyed
     # Resolved map remains valid when applying later angular/object masks.
     view = varied_view(original, momenta, year=era_year(era))
     low, high = angular_candidates(view)
+    if high_only:
+        low[:] = False
     support = low | high
     if np.any(support):
         yield view[support], resolved, low[support], high[support], _gnn(era) if np.any(low) else None
 
 
-def _inferred_slices(original, era, momenta, *, reuse=(), remember=None):
+def _inferred_slices(original, era, momenta, *, reuse=(), remember=None, high_only=False):
     year = era_year(era)
     view = varied_view(original, momenta, year=year)
     low, high = angular_candidates(view)
+    if high_only:
+        low[:] = False
     support = low | high
     if not np.any(support):
         return
     # Infer only events that can enter either VR in this view.
     inputs = p4_view(original[support], {k: momenta[k.replace("nanoaod", "corrected")][support]
                                         for k in P4_FIELDS})
-    models, gnn = _models(era)
+    models, gnn = (_tag_models(era), None) if high_only or not np.any(low) else _models(era)
     rows = np.flatnonzero(support) if reuse or remember is not None else None
+    retained = view[support]
+    low, high = low[support], high[support]
     for sl in bounded_slices(inputs, year=year):
         key = rows[sl].tobytes() if rows is not None else None
         batch = next((cache[key] for cache in reuse if key in cache), None)
@@ -200,13 +233,14 @@ def _inferred_slices(original, era, momenta, *, reuse=(), remember=None):
         if remember is not None:
             remember[key] = batch
         fields, resolved = batch
-        a = view[support][sl]
+        a = retained[sl]
         for field, values in zip(TROTA_RESULT_FIELDS, fields):
             a = ak.with_field(a, values, field)
-        yield a, resolved, low[support][sl], high[support][sl], gnn
+        yield a, resolved, low[sl], high[sl], gnn
 
 
-def _select_and_bin(a, resolved, low_angle, high_angle, model, era, layouts, *, subdivide=False):
+def _select_and_bin(a, resolved, low_angle, high_angle, model, era, layouts, *, subdivide=False,
+                    with_rate_cells=False):
     year = era_year(era)
     regions, _ = select(a, resolved, dy_mass_window=None, year=year)
     # "SR" supplies only the canonical object cleaning and input features.
@@ -215,16 +249,21 @@ def _select_and_bin(a, resolved, low_angle, high_angle, model, era, layouts, *, 
     block, tags = objects["block"], objects["counts"]
     total = tags.sum(axis=1)
     low = low_angle & (total == 0)
-    high = high_angle & (total >= 1) & np.isfinite(block.mtb) & (block.mtb >= 175.)
+    high = high_angle & (total >= 1) & np.isfinite(block.mtb) & (block.mtb >= 0.)
     for name, region in regions.items():
-        if np.any((low | high) & (region["low"] | region["high"])):
+        if np.any((low | high) & (region["low"] | region["high_search"])):
             raise ValueError("VR overlaps existing region: " + name)
     score = np.zeros(len(a), dtype=float)
     if low.any():
         score[low] = model.predict(*feature_arrays(a, block, "SR", low, year=year)[:5], batch_size=256)
-    indices = template_indices(low, high, block.nb, block.nisr, tags, block.recoil, score, *layouts)
+    indices = template_indices(low, high, block.nb, block.nisr, tags, block.recoil, score, *layouts, mtb=block.mtb)
     if subdivide:
         return _response_indices(indices, block.nb, block.recoil), objects["sf_clean"]
+    if with_rate_cells:
+        cells = np.full(len(indices), -1, dtype=int)
+        slots = np.searchsorted(HIGH_VR_RATE_EDGES[1:], block.recoil[high], side="right")
+        cells[high] = (indices[high] - N_LOW_BINS) * len(HIGH_VR_RATE_EDGES) + slots
+        return indices, objects["sf_clean"], cells
     return indices, objects["sf_clean"]
 
 
@@ -270,7 +309,7 @@ def _tight_mixed_slices(original, era, layouts, *, cached_resolved=None):
     inputs = p4_view(original[support], {k: momenta[k.replace("nanoaod", "corrected")][support]
                                         for k in P4_FIELDS})
     retained = view[support]
-    models = load_models(year)
+    models = _tag_models(era)
     for sl in bounded_slices(inputs, year=year):
         inferred, resolved, _, _ = infer_chunk(inputs[sl], models)
         a = retained[sl]
@@ -283,7 +322,7 @@ def _tight_mixed_slices(original, era, layouts, *, cached_resolved=None):
 def _response_indices(indices, nb, recoil):
     out = np.full(len(indices), -1, dtype=int)
     selected = indices >= 0
-    if (np.any(nb[selected] < 1) or np.any(~np.isfinite(recoil[selected]))
+    if (np.any(indices[selected] >= N_VR_BINS) or np.any(nb[selected] < 1) or np.any(~np.isfinite(recoil[selected]))
             or np.any(recoil[selected] <= NATIVE_EDGES[0])):
         raise ValueError("Invalid Nb or recoil in selected VR event")
     u = np.searchsorted(NATIVE_EDGES[1:-1], recoil[selected], side="right")
@@ -339,10 +378,27 @@ def _event_branches(root, friend):
             and not name.startswith(("TopMixed1pct_", "nTopMixed1pct_"))]
 
 
-def _attach_friend(friend, chunk, start, allowed):
-    if friend is None:
-        return chunk[allowed], None
-    return read_friend_slice(friend, chunk, start, start + len(chunk), selection=allowed)
+def _project_mc_samples(reader, branches, step_size, friend, metadata, kind, signals, excluded,
+                        seen, era, normalization, audit):
+    """Project MC before central correction, without using nominal kinematics to veto a shift."""
+    from TROTASR.utils.reader import gated_event_chunks
+
+    light = ("dataset_id", "mStop", "mLSP", "is_signal", "is_data", "pass_base_common", "pass_signal_trigger")
+
+    def eligible(chunk):
+        if np.any(np.asarray(chunk["is_data"], bool)):
+            raise ValueError("Observed data are forbidden in VR MC")
+        allowed = np.zeros(len(chunk), dtype=bool)
+        # Observe eligible signal mass points even if none pass the quality/trigger cuts.
+        for mask, *_ in _row_samples(chunk, metadata, kind, signals, excluded, seen, era, normalization):
+            allowed |= mask
+        return allowed & np.asarray(chunk["pass_base_common"], bool) & np.asarray(chunk["pass_signal_trigger"], bool)
+
+    for selected, start, stop, rows in gated_event_chunks(reader, branches, step_size, light, eligible, audit):
+        if friend is None:
+            yield selected, None
+        else:
+            yield read_friend_slice(friend, selected, start, stop, row_indices=rows)
 
 
 @lru_cache(maxsize=6)
@@ -444,12 +500,12 @@ def _row_samples(a, metadata, sample_kind, signals, excluded, seen, era, normali
         yield mask, dataset_id, dataset, process, is_signal, sample
 
 
-def _histogram(indices, weights):
+def _histogram(indices, weights, size=N_VR_BINS):
     if not np.all(np.isfinite(weights)):
         raise ValueError("Nonfinite MC event weight")
-    return np.stack((np.bincount(indices, weights, minlength=148),
-                     np.bincount(indices, weights**2, minlength=148),
-                     np.bincount(indices, minlength=148)), axis=1)
+    return np.stack((np.bincount(indices, weights, minlength=size),
+                     np.bincount(indices, weights**2, minlength=size),
+                     np.bincount(indices, minlength=size)), axis=1)
 
 
 def _response_card_scopes(card):
@@ -519,6 +575,8 @@ def _response_contract():
     background_only = nominal.get("background_only") is True
     expected = _background_inventory(inventory())
     if (nominal.get("schema") != SCHEMA or nominal.get("status") not in ("complete", "incomplete")
+            or nominal.get("high_definition") != HIGH_VR_DEFINITION
+            or nominal.get("high_categories") != HIGH_VR_CATEGORIES
             or nominal.get("pilot") or nominal.get("sr_observations_read") is not False
             or nominal.get("vr_observations_read") is not False
             or not _has_background_coverage(nominal, expected)
@@ -592,10 +650,10 @@ def _response_mode_slice(mode):
 
 def _check_nominal_response(accepted, computed):
     for sample in set(accepted) | set(computed):
-        expected = np.zeros((148, len(FIELDS)))
+        expected = np.zeros((N_VR_BINS, len(FIELDS)))
         for i, row in accepted.get(sample, {}).items():
             expected[int(i)] = row
-        actual = computed.get(sample, _response_empty()).reshape(148, 2, RECOIL_BINS, len(FIELDS)).sum(axis=(1, 2))
+        actual = computed.get(sample, _response_empty()).reshape(N_VR_BINS, 2, RECOIL_BINS, len(FIELDS)).sum(axis=(1, 2))
         # Independent chunking is allowed. A change in selected counts or
         # beyond floating-point accumulation in the weights is not.
         scale = np.sqrt(expected[:, 1] * expected[:, 2])
@@ -720,23 +778,13 @@ def compute_response(task, contract, *, use_friend=True):
     shape_endpoints = _shape_endpoints(era, scopes)
     shape_names = {_endpoint_name(e, era)[0] for e in shape_endpoints}
     nominal, weights, shapes, coverage = {}, defaultdict(dict), defaultdict(dict), defaultdict(dict)
-    events = 0
+    io_audit = {"events_read": 0}
     friend_context = open_friend(task, path) if use_friend else nullcontext()
     with uproot.open(path, object_cache=None, array_cache=None) as root, friend_context as friend:
         policy = topw_file_input_policy(root)
         reader = TopWEvents(root, policy)
-        for chunk in reader.iterate(_event_branches(root, friend), step_size=RESPONSE_CHUNK):
-            start = events
-            events += len(chunk)
-            if np.any(np.asarray(chunk["is_data"], bool)):
-                raise ValueError("Observed data are forbidden in VR responses")
-            allowed = np.zeros(len(chunk), dtype=bool)
-            for mask, *_ in _row_samples(chunk, metadata, "background", (), excluded, set(), era):
-                allowed |= mask
-            allowed &= np.asarray(chunk["pass_base_common"], bool) & np.asarray(chunk["pass_signal_trigger"], bool)
-            selected, resolved = _attach_friend(friend, chunk, start, allowed)
-            if not len(selected):
-                continue
+        for selected, resolved in _project_mc_samples(reader, _event_branches(root, friend), RESPONSE_CHUNK,
+                friend, metadata, "background", (), excluded, set(), era, None, io_audit):
             for original in corrected_central_chunks((selected,), year, {}):
                 central_rows = defaultdict(list)
                 for endpoint, views in _response_event_views(original, era, shape_endpoints, cached_resolved=resolved):
@@ -768,6 +816,7 @@ def compute_response(task, contract, *, use_friend=True):
                                                         weights[sample], coverage[sample])
                             else:
                                 _record_shape_endpoint(shapes[sample], index, vals, name, direction, scope)
+    events = io_audit["events_read"]
     if events != task["entries"]:
         raise ValueError("Read event coverage differs from the accepted MC inventory")
     _check_nominal_response(accepted["bins"], nominal)
@@ -775,9 +824,9 @@ def compute_response(task, contract, *, use_friend=True):
     def pairs(values):
         return {n: {d: _response_sparse(h) for d, h in pair.items()} for n, pair in values.items()}
 
-    return dict(schema=RESPONSE_SCHEMA, input=task["input"], era=era,
+    return dict(schema=RESPONSE_SCHEMA, high_definition=HIGH_VR_DEFINITION, input=task["input"], era=era,
                 card=contract["card"], cr_card=contract["cr_card"],
-                events=events, sr_observations_read=False,
+                events=events, input_preselection=io_audit["input_preselection"], sr_observations_read=False,
                 nominal={sample: _response_sparse(rows) for sample, rows in nominal.items()},
                 weight_deltas={sample: pairs(values) for sample, values in weights.items()},
                 shape_endpoints={sample: pairs(values) for sample, values in shapes.items()},
@@ -799,6 +848,8 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
     else:
         low_layout, high_layout = geometry(era)
         signals = ()
+    if tight_mixed:
+        high_layout = _tight_mixed_categories()
     replacement = task.get("signal_population") == REPLACEMENT_SIGNAL_POPULATION
     if replacement and (tight_mixed or signal_normalization is None):
         raise ValueError("Replacement signals require the approved nominal VR and their own Runs normalization")
@@ -817,15 +868,29 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
             raise ValueError("Signal shard does not belong to the registered normalization inventory")
     normalization = signal_basis["norm"] if signal_basis is not None else _normalization(era)
     excluded = excluded_ids(datasets)
-    sums, seen, events = {}, set(), 0
+    sums, high_recoil, seen, io_audit = {}, {}, set(), {"events_read": 0}
+    legacy = (None if tight_mixed or kind != "background" else
+              _read_receipt(task, legacy=True))
+    if legacy is not None:
+        for sample, rows in legacy["bins"].items():
+            fresh = np.zeros((N_VR_BINS, len(FIELDS)))
+            for i, row in rows.items():
+                if int(i) < N_LOW_BINS:
+                    fresh[int(i)] = row
+            if np.any(fresh[:, 2]):
+                sums[sample] = fresh
     overlap = Counter(dict.fromkeys((*REGIONS, "SR_preselection"), 0))
     def selections(original, resolved):
         if tight_mixed:
-            yield from _tight_mixed_slices(original, era, (low_layout, high_layout), cached_resolved=resolved)
+            for a, bins, clean, intersections in _tight_mixed_slices(
+                    original, era, (low_layout, high_layout), cached_resolved=resolved):
+                yield a, bins, clean, intersections, None
         else:
-            for a, resolved, low_angle, high_angle, gnn in _nominal_slices(original, era, cached_resolved=resolved):
-                bins, clean = _select_and_bin(a, resolved, low_angle, high_angle, gnn, era, (low_layout, high_layout))
-                yield a, bins, clean, {}
+            for a, resolved, low_angle, high_angle, gnn in _nominal_slices(
+                    original, era, cached_resolved=resolved, high_only=legacy is not None):
+                bins, clean, cells = _select_and_bin(a, resolved, low_angle, high_angle, gnn, era,
+                                                    (low_layout, high_layout), with_rate_cells=True)
+                yield a, bins, clean, {}, cells
 
     friend_context = open_friend(task, path) if use_friend and not replacement else nullcontext()
     with uproot.open(path, object_cache=None, array_cache=None) as root, friend_context as friend:
@@ -838,21 +903,10 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
             # corrected-nominal inference, so avoid decompressing them.
             branches = [name for name in branches if name not in TROTA_RESULT_FIELDS
                         and not name.startswith("nTopMixed1pct_")]
-        for chunk in reader.iterate(branches, step_size=step_size):
-            start = events
-            events += len(chunk)
-            if np.any(np.asarray(chunk["is_data"], bool)):
-                raise ValueError("Observed data are forbidden")
-            allowed = np.zeros(len(chunk), dtype=bool)
-            for mask, *_ in _row_samples(chunk, metadata, kind, signals, excluded, seen, era, normalization):
-                allowed |= mask
-            # These two flags are unchanged by the adopted central rebuild.
-            allowed &= np.asarray(chunk["pass_base_common"], bool) & np.asarray(chunk["pass_signal_trigger"], bool)
-            selected, resolved = _attach_friend(friend, chunk, start, allowed)
-            if not len(selected):
-                continue
+        for selected, resolved in _project_mc_samples(reader, branches, step_size, friend, metadata, kind,
+                signals, excluded, seen, era, normalization, io_audit):
             for original in corrected_central_chunks((selected,), year, {}):
-                for a, bins, clean, intersections in selections(original, resolved):
+                for a, bins, clean, intersections, cells in selections(original, resolved):
                     overlap.update(intersections)
                     for mask, dataset_id, dataset, process, is_signal, sample in _row_samples(
                             a, metadata, kind, signals, excluded, seen, era, normalization):
@@ -869,21 +923,33 @@ def compute(task, *, tight_mixed=False, use_friend=True, signal_normalization=No
                                                 apply_topw=False, include_variations=False)
                         tw, _ = topw_event_variations(ROOT, era, dataset, process, sub, policy,
                                                      cleaned=clean[mask], include_variations=False)
-                        value = _histogram(bins[mask], norm * base["nominal"] * tw["nominal"])
+                        weights = norm * base["nominal"] * tw["nominal"]
+                        value = _histogram(bins[mask], weights, LEGACY_VR_BINS if tight_mixed else N_VR_BINS)
                         sums[sample] = sums.get(sample, 0) + value
+                        if cells is not None and kind == "background":
+                            subcells = cells[mask]
+                            high = subcells >= 0
+                            if high.any():
+                                value = _histogram(subcells[high], weights[high], HIGH_RATE_CELLS)
+                                high_recoil[sample] = high_recoil.get(sample, 0) + value
+    events = io_audit["events_read"]
     if events != task["entries"]:
         raise ValueError("Read event coverage differs from the accepted MC inventory")
     if tight_mixed and sum(int(rows[:, 2].sum()) for rows in sums.values()) != overlap["SR_preselection"]:
         raise ValueError("Tight-Mixed weighted MC coverage disagrees with its raw selection")
     return dict(schema=TIGHT_MIXED_SCHEMA if tight_mixed else SCHEMA,
                 era=era, input=task["input"],
-                kind=kind, events=events, signal_points_seen=sorted(seen),
+                kind=kind, events=events, input_preselection=io_audit["input_preselection"],
+                signal_points_seen=sorted(seen),
                 bins={k: {str(i): x[i].tolist() for i in np.flatnonzero(x[:, 2])}
                       for k, x in sums.items()}, sr_observations_read=False,
                 **({"signal_normalization": {k: signal_basis[k] for k in ("basis", "era")}}
                    if signal_basis is not None else {}),
                 **({"signal_population": REPLACEMENT_SIGNAL_POPULATION} if replacement else {}),
-                **({"overlap": dict(overlap), "mc_only": True} if tight_mixed else {}))
+                **({"overlap": dict(overlap), "mc_only": True} if tight_mixed else
+                   {"high_definition": HIGH_VR_DEFINITION, "sr_overlap": 0,
+                    "high_recoil_bins": {k: {str(i): x[i].tolist() for i in np.flatnonzero(x[:, 2])}
+                                         for k, x in high_recoil.items()}}))
 
 
 @lru_cache(maxsize=1)
@@ -943,7 +1009,7 @@ def _receipt_path(task, response=False, tight_mixed=False):
         Path(task["input"]).stem + ".json.gz")
 
 
-def _read_receipt(task, *, tight_mixed=False):
+def _read_receipt(task, *, tight_mixed=False, legacy=False):
     path = _receipt_path(task, tight_mixed=tight_mixed)
     if not path.is_file():
         return None
@@ -960,6 +1026,21 @@ def _read_receipt(task, *, tight_mixed=False):
         if (result.get("mc_only") is not True or set(counts) != {*REGIONS, "SR_preselection"}
                 or any(counts[k] != 0 for k in REGIONS) or counts["SR_preselection"] != entries):
             raise ValueError("Invalid tight-Mixed overlap or coverage receipt: " + str(path))
+    else:
+        definition = result.get("high_definition")
+        if definition not in (None, HIGH_VR_DEFINITION):
+            raise ValueError("Unrecognized high-dM VR receipt: " + str(path))
+        if (definition is None) != legacy:
+            return None
+        if not legacy and (result.get("sr_overlap") != 0 or not isinstance(result.get("high_recoil_bins"), dict)):
+            raise ValueError("Missing VR overlap audit or normalization recoil rows: " + str(path))
+        size = LEGACY_VR_BINS if legacy else N_VR_BINS
+        for rows in result["bins"].values():
+            for i, values in rows.items():
+                if (not 0 <= int(i) < size or len(values) != len(FIELDS)
+                        or not all(math.isfinite(x) for x in values) or values[1] < 0
+                        or not 0 <= values[2] <= result["events"] or int(values[2]) != values[2]):
+                    raise ValueError("Invalid VR nominal bin receipt: " + str(path))
     return result
 
 
@@ -969,7 +1050,10 @@ def _read_response_receipt(task, contract):
         return None
     result = read_json(path)
     era = str(task["year"])
+    if result.get("schema") == "trotasr_vr_background_response_v1":
+        return None
     if (result.get("schema") != RESPONSE_SCHEMA or result.get("era", era) != era
+            or result.get("high_definition") != HIGH_VR_DEFINITION
             or result.get("events") != task["entries"]
             or result.get("nominal_receipt_reused") is not True or result.get("sr_observations_read") is not False):
         raise ValueError("Divergent VR response receipt: " + str(path))
@@ -1146,10 +1230,13 @@ def _mc_batch_kind(task):
     return "signal" if _input_kind(task) == "signal" else "standard"
 
 
-def _mc_cpu_slots(own_worker_load=0.0):
-    # Half the logical CPUs is a conservative physical-core estimate on hep2.
+def _mc_cpu_slots(own_worker_load=0.0, *, allow_smt=False):
+    # The explicit larger background pool may use both hardware threads.
+    # Charge external CPU load in either mode.
+    logical_cpus = len(os.sched_getaffinity(0))
     external_load = max(0.0, os.getloadavg()[0] - own_worker_load)
-    return max(0, int(len(os.sched_getaffinity(0)) // 2 - external_load))
+    cpu_budget = logical_cpus if allow_smt else logical_cpus // 2
+    return max(0, int(cpu_budget - external_load))
 
 
 def _worker_cpu_ticks(pid):
@@ -1192,10 +1279,13 @@ def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, repl
     signal_eras = defaultdict(set)
     samples = {}
     per_era = {}
+    recoil_by_era = {}
     overlaps = {}
+    n_bins = LEGACY_VR_BINS if tight_mixed else N_VR_BINS
     for era, tasks in all_tasks.items():
-        sums = {}
+        sums, recoil = {}, {}
         per_era[era] = sums
+        recoil_by_era[era] = recoil
         overlap = Counter(dict.fromkeys((*REGIONS, "SR_preselection"), 0))
         overlaps[era] = overlap
         for task in tasks:
@@ -1210,9 +1300,26 @@ def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, repl
             for point in result["signal_points_seen"]:
                 signal_eras[point].add(era)
             for sample, entries in result["bins"].items():
-                target = sums.setdefault(sample, np.zeros((148, 3)))
+                target = sums.setdefault(sample, np.zeros((n_bins, 3)))
                 for i, values in entries.items():
                     target[int(i)] += np.asarray(values, dtype=float)
+            for sample, entries in result.get("high_recoil_bins", {}).items():
+                target = recoil.setdefault(sample, np.zeros((HIGH_RATE_CELLS, 3)))
+                for i, values in entries.items():
+                    if not 0 <= int(i) < HIGH_RATE_CELLS:
+                        raise ValueError("Invalid normalization recoil cell")
+                    target[int(i)] += np.asarray(values, dtype=float)
+        if not tight_mixed:
+            for sample, values in sums.items():
+                if sample in signal_eras:
+                    continue
+                cells = recoil.setdefault(sample, np.zeros((HIGH_RATE_CELLS, 3)))
+                high = values[N_LOW_BINS:]
+                total = cells.reshape(N_HIGH_BINS, len(HIGH_VR_RATE_EDGES), 3).sum(axis=1)
+                if (not np.array_equal(total[:, 2], high[:, 2])
+                        or not np.allclose(total[:, 1], high[:, 1], rtol=1e-9, atol=1e-10)
+                        or np.any(np.abs(total[:, 0] - high[:, 0]) > 1e-9 * np.sqrt(high[:, 1] * high[:, 2]) + 1e-10)):
+                    raise ValueError("Normalization recoil cells disagree with nominal VR: " + sample)
         for sample, values in sums.items():
             samples[sample] = samples.get(sample, 0) + values
     complete = all(a == b for era in coverage.values() for a, b in era.values())
@@ -1221,14 +1328,16 @@ def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, repl
         signals = ()
     else:
         low, high, signals = layout("2024")
-    bkg = sum((x for k, x in samples.items() if k not in signals), np.zeros((148, 3)))
+    if tight_mixed:
+        high = _tight_mixed_categories()
+    bkg = sum((x for k, x in samples.items() if k not in signals), np.zeros((n_bins, 3)))
     full_signals = sorted(k for k in signals if signal_eras[k] == set(ERAS))
     definitions = [(mode, key, j, lo, hi, predicates) for mode, groups in (
         ("lowdm", [(key, edges, {}) for key, edges in low.items()]),
         ("highdm", [(f"class{i}", c["edges"], c["predicates"]) for i, c in enumerate(high, 1)]))
         for key, edges, predicates in groups for j, (lo, hi) in enumerate(zip(edges, edges[1:]), 1)]
     rows = []
-    zero = np.zeros((148, 3))
+    zero = np.zeros((n_bins, 3))
     for i, (mode, key, j, low_edge, high_edge, predicates) in enumerate(definitions):
         if tight_mixed and (mode != "highdm" or predicates["Nmix"] != {"eq": 1}
                             or any(predicates[k] != {"eq": 0} for k in ("Nbst", "Nres", "Nw"))):
@@ -1273,6 +1382,12 @@ def _collect(all_tasks, pilot, *, tight_mixed=False, background_only=False, repl
         extra.update(signal_population=REPLACEMENT_SIGNAL_POPULATION,
                      signal_normalization={era: {key: basis[key] for key in ("basis", "era")}
                                            for era, basis in replacement_normalizations.items()})
+    if not tight_mixed:
+        extra.update(high_definition=HIGH_VR_DEFINITION, sr_overlap=0,
+                     high_recoil_edges=list(HIGH_VR_RATE_EDGES),
+                     era_high_recoil_samples={era: {sample: cells.reshape(
+                         N_HIGH_BINS, len(HIGH_VR_RATE_EDGES), 3).tolist() for sample, cells in recoil.items()}
+                         for era, recoil in recoil_by_era.items()})
     return dict(schema=TIGHT_MIXED_SCHEMA if tight_mixed else SCHEMA,
                 status="complete" if complete and (background_only or len(full_signals) == len(signals))
                 else "incomplete", pilot=pilot, sr_observations_read=False, vr_observations_read=False,
@@ -1385,9 +1500,10 @@ def _collect_response(all_tasks, contract):
             accepted_bins = {sample: {i: row for i, row in enumerate(y) if row[2]}
                              for sample, y in accepted[era].items()}
             _check_nominal_response(accepted_bins, cubes)
-    return dict(schema=RESPONSE_SCHEMA, status="complete" if complete else "incomplete",
+    return dict(schema=RESPONSE_SCHEMA, high_definition=HIGH_VR_DEFINITION, high_categories=HIGH_VR_CATEGORIES,
+                status="complete" if complete else "incomplete",
                 coverage=coverage, source_nominal_reused=True,
-                axes=dict(vr_bin=148, nb_groups=["Nb1", "Nb2plus"], recoil_edges=NATIVE_EDGES,
+                axes=dict(vr_bin=N_VR_BINS, nb_groups=["Nb1", "Nb2plus"], recoil_edges=NATIVE_EDGES,
                           recoil_last_open=True, flat_index="(vr_bin*2+nb_index)*8+recoil_index; zero-based"),
                 fields=list(FIELDS), era_samples=era_samples, accepted_nominal_era_samples=accepted,
                 expected_shape_nuisances=contract["scopes"], evaluated=evaluated, unsupported=unavailable,
@@ -1436,7 +1552,8 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
         nominal = OUTPUT / "mc_summary.json.gz"
         if not (response or tight_mixed or replacement_signals) and nominal.is_file():
             previous = read_json(nominal)
-            if background_only and previous.get("status") == "complete" and not previous.get("background_only"):
+            if (background_only and previous.get("high_definition") == HIGH_VR_DEFINITION
+                    and previous.get("status") == "complete" and not previous.get("background_only")):
                 if (previous.get("schema") != SCHEMA or previous.get("pilot")
                         or previous.get("full_era_signal_points") != 895
                         or previous.get("sr_observations_read") is not False
@@ -1464,6 +1581,20 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
         pending = {era: [t for t in tasks if receipt(t) is None] for era, tasks in selected.items()}
         total = sum(map(len, selected.values()))
         done = total - sum(map(len, pending.values()))
+        # When replacing only a controller, let its last assigned shards
+        # finish under their original workers rather than scheduling them twice.
+        finishing = json.loads(os.environ.get("TROTASR_VR_FINISHING_BACKGROUND", "{}"))
+        if finishing and (not background_only or response or tight_mixed):
+            raise ValueError("Only a background MC restart can inherit finishing shards")
+        candidates = {t["input"]: t for group in pending.values() for t in group} if finishing else {}
+        waiting = {}
+        for name, (pid, ticks) in finishing.items():
+            live_identity = process_identity(pid)
+            if name not in candidates or live_identity is None or live_identity["start_ticks"] != ticks:
+                continue
+            if not any("multiprocessing.spawn" in arg for arg in live_identity["arguments"]):
+                raise ValueError("Finishing MC worker is not a spawned shard worker")
+            waiting[name] = (candidates[name], pid, ticks)
         signal_normalizations = (replacement_normalizations if replacement_signals else
                                  {era: _registered_signal_normalization(era) for era, tasks in pending.items()
                                   if any(_mc_batch_kind(task) == "signal" for task in tasks)})
@@ -1483,6 +1614,7 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
                 memory_reserve_gib=reserve / GIB,
                 sr_observations_read=False, vr_observations_read=False, updated=time.time(),
                 **(cpu or {}),
+                **({} if tight_mixed else {"high_definition": HIGH_VR_DEFINITION}),
                 **({"background_only": True} if background_only else {}),
                 **({"signal_population": REPLACEMENT_SIGNAL_POPULATION,
                     "scope": "replacement_signal_shards", "background_receipts_reused": True}
@@ -1490,7 +1622,7 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
 
         def run_pending():
             nonlocal done
-            tasks = deque(task for era in pending.values() for task in era)
+            tasks = deque(task for era in pending.values() for task in era if task["input"] not in waiting)
             context = mp.get_context("spawn")
             live = []
             cpu_load = _MCWorkerCPULoad() if background_only else None
@@ -1499,7 +1631,17 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
             kind = None
             memory_stopped = False
             try:
-                while tasks or live:
+                while tasks or live or waiting:
+                    for name, (task, pid, ticks) in list(waiting.items()):
+                        identity = process_identity(pid)
+                        if identity is not None and identity["start_ticks"] == ticks:
+                            continue
+                        if receipt(task) is None:
+                            tasks.appendleft(task)
+                        else:
+                            done += 1
+                        del waiting[name]
+                        last_state = 0
                     peak = max(peak, _mc_pool_high_water(live))
                     if live and _available_memory() < emergency:
                         memory_stopped = True
@@ -1511,7 +1653,8 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
 
                     active = sum(w.task is not None for w in live)
                     own_load = cpu_load.sample(w.process.pid for w in live) if cpu_load is not None else 0.0
-                    target = min(workers, max(1, _mc_cpu_slots(own_load)))
+                    target = min(max(0, workers - len(waiting)), max(1, _mc_cpu_slots(
+                        own_load, allow_smt=background_only and workers > MC_BACKGROUND_PHYSICAL_WORKERS)))
                     if tasks and active < workers:
                         slots, budget = _resource_room(reserve_vr_data=True, reserve_bytes=reserve)
                         if slots < 0:
@@ -1555,8 +1698,9 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
                         _mc_batch_kind(tasks[0]) if tasks else None)
                     now = time.monotonic()
                     if last_state == 0 or now - last_state >= 15:
-                        cpu = {"cpu_target": target, "own_cpu_load": round(own_load, 2)} if cpu_load is not None else None
-                        state("running", active, len(live), kind, peak, cpu)
+                        cpu = {"cpu_target": target + len(waiting), "own_cpu_load": round(own_load, 2),
+                               "finishing_previous": len(waiting)} if cpu_load is not None else None
+                        state("running", active + len(waiting), len(live) + len(waiting), kind, peak, cpu)
                         last_state = now
                     if not live:
                         time.sleep(2)
@@ -1605,7 +1749,7 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
                 for worker in live:
                     _reap_mc_worker(worker)
                 if memory_stopped:
-                    done = sum(_receipt_path(task, response=response, tight_mixed=tight_mixed).is_file()
+                    done = sum(receipt(task) is not None
                                for batch in selected.values() for task in batch)
                     state("memory_stopped", kind=kind, peak=peak)
 
@@ -1618,8 +1762,10 @@ def run(pilot=False, workers=4, response=False, *, tight_mixed=False, background
                                replacement_normalizations=replacement_normalizations))
             # The complete background-only result stays readable while a new
             # signal scan runs or if signal coverage does not close.
-            if not replacement_signals or (not failures and report["status"] == "complete"):
-                write_json(OUTPUT / f"{tag}_summary.json.gz", report)
+            summary = OUTPUT / f"{tag}_summary.json.gz"
+            preserve = summary.is_file() and read_json(summary).get("status") == "complete"
+            if (not replacement_signals and not preserve) or (not failures and report["status"] == "complete"):
+                write_json(summary, report)
             state("needs_attention" if failures or (not pilot and report["status"] != "complete")
                   else "pilot_complete" if pilot else "complete")
         except BaseException:

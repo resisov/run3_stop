@@ -169,6 +169,42 @@ class PhysicalPlotAdapterTests(unittest.TestCase):
         self.assertEqual(dy['nb']['DY']['nominal']['sumw2'][1:3],[16.,64.])
         self.assertEqual(dy['ut']['ST']['nominal']['sumw'],[2.]*8)
 
+    def test_tt_rz_identity_and_lumi(self):
+        from TROTASR.workflows.plotting_nominal_distributions import require_measurement_scope
+        from TROTASR.utils.top_pt import ENDPOINTS, PRESCRIPTION
+        hist=dict(contract=dict(year='2025'),scope='full_combined_systematic_production',
+                  tt_card_input=dict(year='2025',prescription=PRESCRIPTION))
+        factor=dict(status='complete',provenance=dict(campaign_year='2025',top_pt_prescription=PRESCRIPTION),
+                    inclusive_ttbar_endpoints=dict.fromkeys(ENDPOINTS))
+        require_measurement_scope(hist,factor)
+        for fld,bad in [('provenance',{'campaign_year':'2024'}),('inclusive_ttbar_endpoints',{})]:
+            with self.assertRaises(ValueError):require_measurement_scope(hist,dict(factor,**{fld:bad}))
+        with patch('TROTASR.workflows.plotting_nominal_distributions.luminosity_fb',return_value=1.):
+            with nominal_renderer('2025',current_tt=True):
+                self.assertAlmostEqual(renderer.LUMINOSITY_RELATIVE_UNCERTAINTY,.05)
+
+    def test_top_pt_dy_endpoint_from_raw_population_even_if_central_rz_zero(self):
+        from TROTASR.workflows.plotting_nominal_distributions import shifted_dy_boundaries, apply_shifted_dy
+        keys=('top_pt_reweightUp','top_pt_reweightDown')
+        def row(value):return {'sumw':[value],'sumw2':[value*value],'entries':[1]}
+        boundary={'lowdm_variable_histograms':{},'highdm_variable_histograms':{}}
+        for name,channels in [('lowdm',(SCHEMES['DY2E'],SCHEMES['DY2M'])),('highdm',('DY2E','DY2M'))]:
+            for c in channels:boundary[name+'_variable_histograms'][c]={'met':{'DY':{'nominal':row(2.),**{k:row(2.) for k in keys}}}}
+        high,low=rz_fixture('rz_high'),rz_fixture('rz_low')
+        for d,k in [(high,'rz_high'),(low,'rz_low')]:
+            d['inclusive_ttbar_endpoints']={ep:deepcopy(d) for ep in keys}
+            for c in ('DY2E','DY2M'):
+                for n in ('Nb1','Nb2plus'):
+                    d[k]['channels'][c][n]['RZ']=0.
+                    for ep,r in zip(keys,(1.,3.)):d['inclusive_ttbar_endpoints'][ep][k]['channels'][c][n]['RZ']=r
+        shadows=shifted_dy_boundaries(boundary,keys)
+        with tempfile.TemporaryDirectory(dir=ROOT/'tests') as tmp:
+            p=Path(tmp)/'central.json';write_json(p,dy_display_config(high,low))
+            renderer.apply_dy_rz(boundary,p);apply_shifted_dy(boundary,shadows,high,low,tmp)
+        dy=boundary['highdm_variable_histograms']['DY2E']['met']['DY']
+        self.assertEqual([dy[k]['sumw'][0] for k in ('nominal',*keys)],[0.,2.,6.])
+        self.assertEqual(dy[keys[1]]['sumw2'],[36.])
+
     def test_no_invalid_dy_fit_or_zero_support_unity_fallback(self):
         for change in ('status','support'):
             p=rz_fixture('rz_high')

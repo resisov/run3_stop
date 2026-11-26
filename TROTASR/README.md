@@ -1,10 +1,28 @@
 # TROTASR
 
-The approved Run 3 model combines 2022, 2022EE, 2023, 2023BPix, 2024 and 2025
+The saved Run 3 fits combine 2022, 2022EE, 2023, 2023BPix, 2024 and 2025
 in 8 channels and 214 bins. The result includes partial systematics, with SR
 observations blinded. The SR uses 118 high-dM bins and 30 low-dM GNN bins
 (six Nb × NISR categories with five score bins each). The frozen cards use
 `autoMCStats 10 1 1`.
+
+For the next cards the three high-dM CRs use five bins per Nb: 250–300,
+300–350, 350–400, 400–500 and ≥500 GeV (GCR: photon recoil). The underlying
+SR templates and transfer components are not rebinned; only the tail CR
+normalization is shared. The resulting likelihood has 208 bins and 44 free
+normalizations. Keep 500–800 and ≥800 separately for diagnostics.
+
+Background generator weights use the accepted nominal selection, jet momenta,
+tag friends and central SFs. Read original PDF/scale weights by event identity,
+accumulate signed member sums on the same events, then reduce on the final
+analysis bins. Vary μR or μF separately at fixed other scale; do not add a
+seven-point envelope on top. No new TROTA inference, jet calibration or signal
+theory variation is required. Saved fits do not include these new endpoints.
+PDF/μR/μF production is on hold. For the existing TT experimental sources use
+`histograms --run-top-pt-existing-systematics --workers 24`. It collects
+the signed top-pT pair, then produces stored non-JME and corrected JME plus
+ordinary weight variations in their original object conventions. It does not
+run fits or modify the saved card products.
 
 ## Analysis workflow
 
@@ -132,6 +150,78 @@ Preserve live processes, held locks and accepted results. Record interrupted
 diagnostics and continue with the next applicable fit recipe. Check input and
 model compatibility, SR blinding, finite values, numerical crossings and
 resource limits.
+
+### Read cheap columns before correcting or expanding candidates
+
+The 175 GeV high-dM LLCR study is retired. Use the canonical region definitions
+and the existing `histograms` stage; do not restart the cut-study dispatcher or
+substitute its yields, transfer factors or cards for the accepted inputs.
+
+In ordinary SR/CR histograms the early selection is part of the default event
+path for all physics processes, not an option specific to top-quark samples.
+Read cheap columns first and keep absolute ROOT entry numbers. Project heavy
+jet, tag and truth columns for possible contributors; then correct objects and
+evaluate the final cuts per endpoint. A row rejected from LLCR can still enter
+a different CR, SR, or an off-Z measurement. A nominal failure is not a veto
+for a kinematic variation. Reuse nominal geometry for weight-only variations.
+Full-population denominators, cutflow prefixes and row-aligned friends keep
+their required coverage; a selection is not permission to reduce those totals.
+
+The canonical inclusive ttbar correction for all six eras is defined by
+`inclusive_ttbar_top_pt` in `jsons/analysis.json`. Ordinary event weighting
+and scoped histogram replay use the same evaluator in `utils/top_pt.py`.
+Both paths use the adopted weight on hep2. The QCD response jobs and
+previously published fit inputs were not restarted or overwritten.
+The completed contributions are in `stats/run3/dataset_replay/top_pt/`:
+`nominal.json` and `uncertainty.json` list the inputs, corresponding states
+and per-input receipts record completion. Each stage covered 1,627 inputs and
+118,530,412 target events; Up and Down share one pass. Use one correlated
+`CMS_NPS26012_top_pt_reweight` shape. For grouped Top, retain the other
+processes at their nominal yields in both endpoints. In a data-driven
+estimate change only the applicable ttbar subtraction, not QCD itself.
+The saved CR-only fit, limits and central-only figure bands do not acquire
+the new uncertainty from this registration.
+
+The canonical reproduction command on hep2 is
+`bash TROTASR/workflows/run_inference.sh -m TROTASR histograms --run-top-pt-replay --workers 48`.
+It selects only `TTto2L2Nu`, `TTtoLNu2Q` and `TTto4Q`, including in mixed files.
+The first pass fills nominal on corrected nominal friend objects with the new
+top-pT SF (constant 0.973). Only after all its shards succeed does the same
+controller fill the top-pT Up (unit component) and Down (2 × nominal component
+minus 1) on those objects. Use `stats/run3/dataset_replay/top_pt/` for both
+inventories, states and contributions. These are not the full grouped Top
+templates; the command does not replace cards or run fits.
+For this replay the account budget counts a sleeping QCD pool worker and its
+identified compute child as one slot. The manager, resource tracker, unpaired
+workers, and other processes still count. Nominal targets up to 48 workers;
+the joint Up/Down pass takes at most 24 and uses its own memory samples.
+Resume only the endpoints with
+`histograms --inventory TROTASR/stats/run3/dataset_replay/top_pt/uncertainty.json --workers 24`.
+Host-memory, disk and account limits
+still apply. State reports the requested target and the available account slots.
+
+The histogram inventory dispatcher processes larger files first and records
+per-file elapsed seconds and kernel peak RSS. Size and memory scheduling applies
+to ordinary inventories as well as process-specific ones. The admission code learns only
+from newly completed workers of the same inventory, mode, era and file class;
+a reused receipt is not a new peak measurement. Ordinary inventories keep their
+configured chunks and existing bounded retry. Dataset-specific inventories use
+a fixed 1,000,000-entry outer chunk, no smaller-chunk retry and up to 48 workers with a
+32 GiB host reserve, disk and account guards. The ordinary scoped worker address
+limit is 32 GiB; the TT JES/JER + weights replay (`existing_jme_weights_nominal_pass.json`)
+does not set or require an address-space limit. It targets 24 workers without
+a sample-count gate, booking physical RAM from measured RSS. Recovery reuses
+completed shard receipts, records prior failures and retries them first.
+Only MC rows passing a corrected nominal SR, CR or existing DY mass control enter
+this replay. Shifted selections and bins are recomputed: losses and moves remain;
+migrations into the nominal union from outside are deliberately omitted. Input
+coverage and Runs normalization are unchanged. Full-migration receipts are separate.
+Scoped inventory dispatchers run one at a time. Read the inventory
+state for completed input bytes and entries (file coverage, not selected-event
+yield). Before estimating a new full run, benchmark a representative MC file in
+each requested mode at the same chunk size; report wall time, peak RSS and
+per-bin numerical agreement including sumw2. The old LLCR timings are not
+measurements of a new all-region workflow.
 
 ### Validation regions
 

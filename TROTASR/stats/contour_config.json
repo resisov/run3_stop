@@ -58,6 +58,6 @@
     "byte_identical": true,
     "physics_values_unchanged": true
   },
-  "policy": "Byte-preserved original renderer; same 600-1800 x 1-1800 GeV axes, topology-aware interpolation, Run-2 and thermal-relic overlays. No external theory shift.",
+  "policy": "Use 600-1800 x 1-1800 GeV axes and topology-aware interpolation. Omit the decay-forbidden label and its three grey mass-gap guides; retain the expected uncertainty and Run-2 contours and the thermal-relic overlay. No external theory shift.",
   "migration_note": "The T2tt reference JSON gained only a final newline; all parsed values exactly match the sources."
 }

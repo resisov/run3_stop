@@ -92,6 +92,61 @@ def topw_file_input_policy(root_file: Any) -> dict[str, Any]:
     return {"mode": "available"}
 
 
+def project_entries(tree: Any, fields: Any, entries: Any) -> ak.Array:
+    """Read selected absolute ROOT entries in order without widening gaps.
+
+    Contiguous selections use the tree reader directly. For sparse selections
+    read each branch at most once per touched basket, and pack carried values
+    before retaining them, so skipped jagged content does not accumulate.
+    """
+    fields = tuple(dict.fromkeys(fields))
+    if not fields:
+        raise ValueError("ROOT entry projection requires at least one field")
+    entries = np.asarray(entries)
+    if (entries.ndim != 1 or (entries.size and (entries.dtype.kind not in "iu"
+        or np.any(entries < 0) or np.any(entries >= tree.num_entries)
+        or np.any(entries[1:] <= entries[:-1])))):
+        raise ValueError("ROOT entries must be sorted unique in-range integers")
+    entries = entries.astype(np.int64, copy=False)
+    if not entries.size or len(entries) == int(entries[-1]) - int(entries[0]) + 1:
+        start, stop = (int(entries[0]), int(entries[-1]) + 1) if entries.size else (0, 0)
+        result = tree.arrays(fields, entry_start=start, entry_stop=stop, library="ak")
+        if len(result) != len(entries):
+            raise RuntimeError("ROOT entry projection row count mismatch")
+        return result
+
+    pack = getattr(ak, "to_packed", getattr(ak, "packed", None))
+    columns = {}
+    for name in fields:
+        branch = tree[name]
+        offsets = getattr(branch, "entry_offsets", None)
+        if offsets is None:
+            # Some readers have no basket metadata. Bound the width of any
+            # sparse read in that case instead of reading the whole span.
+            windows = entries // 8192
+            cuts = np.r_[0, np.flatnonzero(windows[1:] != windows[:-1]) + 1, len(entries)]
+        else:
+            offsets = np.asarray(offsets)
+            if (offsets.ndim != 1 or offsets.size < 2 or offsets[0] != 0
+                or offsets[-1] != tree.num_entries or np.any(offsets[1:] < offsets[:-1])):
+                raise RuntimeError("Invalid ROOT basket entry offsets: " + name)
+            cuts = np.unique(np.searchsorted(entries, offsets))
+        pieces = []
+        for left, right in zip(cuts[:-1], cuts[1:]):
+            selected = entries[left:right]
+            start, stop = int(selected[0]), int(selected[-1]) + 1
+            block = branch.array(entry_start=start, entry_stop=stop, library="ak")
+            if len(block) != stop - start:
+                raise RuntimeError("ROOT entry projection row count mismatch: " + name)
+            if len(selected) != stop - start:
+                block = block[selected - start]
+                if pack is not None:
+                    block = pack(block)
+            pieces.append(block)
+        columns[name] = pieces[0] if len(pieces) == 1 else ak.concatenate(pieces)
+    return ak.zip(columns, depth_limit=1)
+
+
 class TopWEvents:
     """Read aligned correction columns from the same integrated ROOT file."""
 
@@ -114,6 +169,22 @@ class TopWEvents:
         truth = self.root_file["TopWTruth"].arrays(
             TOPW_CORRECTION_BRANCHES, entry_start=entry_start, entry_stop=entry_stop, library="ak",
         )
+        return self._attach_truth(result, truth)
+
+    def project(self, branches: Any, entries: Any, *, library: str = "ak") -> Any:
+        """Read the same selected ROOT rows from Events and TopWTruth."""
+        if library != "ak":
+            raise ValueError("Top/W input reader requires awkward arrays")
+        available = self.policy.get("mode") == "available"
+        requested = list(dict.fromkeys([*branches, *(TOPW_EVENT_BRANCHES if available else ())]))
+        result = project_entries(self.events, requested, entries)
+        if not available:
+            return result
+        truth = project_entries(self.root_file["TopWTruth"], TOPW_CORRECTION_BRANCHES, entries)
+        return self._attach_truth(result, truth)
+
+    @staticmethod
+    def _attach_truth(result: ak.Array, truth: ak.Array) -> ak.Array:
         counts = np.asarray(ak.num(result["fatjet_source_index_all"], axis=1))
         if (not np.array_equal(counts, np.asarray(ak.num(truth["fatjet_source_index_all"], axis=1)))
             or not np.array_equal(counts, np.asarray(ak.num(truth["fatjet_decay_flavor_all"], axis=1)))):

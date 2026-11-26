@@ -26,18 +26,66 @@ def revised_record():
     from TROTASR.workflows.build_nominal_grid import CR12_POLICY, background_shape_names
     from TROTASR.workflows.merge_nominal import COMBINATION_POLICY
     shape = dict(id='jme_background_shapes_20260929',mode='shape',auto_mc_stats=[10,1,1],user_approved=True)
-    record = dict(scope='full_combined_systematic_production', bins=428,
-        statistical_revision=copy.deepcopy(CR12_POLICY), rate_parameters=96, signal_contamination=False,
+    record = dict(scope='full_combined_systematic_production', bins=416,
+        statistical_revision=copy.deepcopy(CR12_POLICY), rate_parameters=88, signal_contamination=False,
         auto_mc_stats=[10,1,1], sr_data_blinded=True, background_estimation_uncertainties=shape,
         systematic_combination=copy.deepcopy(COMBINATION_POLICY), preliminary=True,
         central_conventions_consistent=False, systematic_scope='Explicit as-is preliminary test contract',
-        channels={f'{r}_{m}_c1_{y}':['bin']*((118 if m=='highdm' else 30) if r=='SR' else (12 if m=='highdm' else 10))
+        channels={f'{r}_{m}_c1_{y}':['bin']*((118 if m=='highdm' else 30) if r=='SR' else (10 if m=='highdm' else 10))
             for r in ('SR','LLCR','QCDCR','GCR') for m in ('highdm','lowdm') for y in ('2024','2025')},
         files={'template_'+m+'_'+y+'.root':'digest' for m in ('highdm','lowdm') for y in ('2024','2025')},
         fit_compatibility=dict(background_error_shapes=dict(nuisances=34,nuisance_names=sorted(background_shape_names()),
             measured_factors_unchanged=True,existing_shape_endpoints_unchanged=True)))
     record['contract'] = {k:record[k] for k in ('statistical_revision','background_estimation_uncertainties','systematic_combination')}
     return record
+
+
+class LinkedCRCardTests(unittest.TestCase):
+    def test_link_replaces_only_low_photon_observation_and_approved_csev(self):
+        from TROTASR.workflows.cr_linked_workspace import CSEV, GAMMA, LOW, _linked_cr_card_rows
+        source = ROOT/'review_examples/datacards/datacard_cronly.txt'
+        linked_root = ROOT/'stats/run3/new_signal/llcr_mtb/cronly/linked_data_obs.root'
+        original = [line.split() for line in source.read_text().splitlines()]
+        changed, low_source, removed = _linked_cr_card_rows(source, linked_root)
+        self.assertEqual(low_source, str(source.parent/'era_merged_data_obs.root'))
+        expected = copy.deepcopy(original)
+        processes = next(row[1:] for row in original if row and row[0] == 'process')
+        channels = next(row[1:] for row in original if row and row[0] == 'bin'
+                        and len(row) == len(processes)+1)
+        csev = next(row for row in expected if row and row[0] == CSEV)
+        cleared = [i for i,(channel, process) in enumerate(zip(channels, processes), 2)
+                   if channel.startswith('GCR_') and GAMMA.fullmatch(process) and csev[i] != '-']
+        self.assertGreater(removed, 0)
+        self.assertEqual(removed, len(cleared))
+        for i in cleared:
+            csev[i] = '-'
+        if all(value == '-' for value in csev[2:]):
+            csev.clear()
+        for row in expected:
+            if row and row[0] == 'shapes':
+                row[3] = str(linked_root if row[1:3] == ['data_obs', LOW]
+                             else (source.parent / row[3]).resolve())
+        self.assertTrue(changed == expected, 'Unexpected non-Photon card changes')
+
+    def test_reading_native_observations_requires_six_crs_and_integer_bins(self):
+        from TROTASR.utils.era_merge import CHANNEL_BINS
+        from TROTASR.workflows.cr_linked_workspace import LOW, _cr_observations
+        rows = [(LOW, .5, 13.), (LOW, 4.5, 2.), (LOW, 5.5, 11.), (LOW, 10.5, 0.)]
+        data = types.SimpleNamespace(numEntries=lambda: len(rows))
+        def get(i):
+            channel, x, weight = rows[i]
+            data.weight = lambda: weight
+            return types.SimpleNamespace(getCatLabel=lambda n: channel, getRealValue=lambda n: x)
+        data.get = get
+        cats = [types.SimpleNamespace(first=n) for n in CHANNEL_BINS if not n.startswith('SR_')]
+        w = types.SimpleNamespace(cat=lambda n: cats, data=lambda n: data)
+        self.assertEqual(_cr_observations(w)[LOW], [13, 0, 0, 0, 2, 11, 0, 0, 0, 0])
+        rows[-1] = (LOW, 10.5, 1.)
+        with self.assertRaisesRegex(ValueError, 'outside'):
+            _cr_observations(w)
+        cats.append(types.SimpleNamespace(first='SR_highdm_c1'))
+        with self.assertRaisesRegex(ValueError, 'observed CR channels only'):
+            _cr_observations(w)
 
 
 class ProfileReuseTests(unittest.TestCase):
@@ -78,13 +126,13 @@ class RevisedDiagnosticPolicyTests(unittest.TestCase):
         meta = dict(record,fit_ready=True,inputs=[dict(path='results/not_created/templates',sha256='digest')])
         text = '\n'.join(['bin SR_highdm_c1_2024','bin SR_highdm_c1_2024 SR_highdm_c1_2024',
             'process Top signal','process 1 0','* autoMCStats 10 1 1']+
-            [f'par{i} rateParam SR_highdm_c1_2024 Top 1 [0.01,5]' for i in range(96)])
+            [f'par{i} rateParam SR_highdm_c1_2024 Top 1 [0.01,5]' for i in range(88)])
         def run(tm=record,metadata=meta,actual=text):
             with patch.object(common,'read_json',side_effect=lambda p:metadata if p.name=='datacard.manifest.json' else tm), \
                  patch.object(Path,'read_text',return_value=actual):
                 common.verify_revised_card(card,record)
         run()
-        for bad in (text.replace('[0.01,5]','[0,10]'),text.replace('par95 rateParam','par94 rateParam'),
+        for bad in (text.replace('[0.01,5]','[0,10]'),text.replace('par87 rateParam','par86 rateParam'),
                     text.replace('bin SR_highdm_c1_2024 SR_highdm_c1_2024','bin SR_highdm_c1_2024 GCR_highdm_c1_2024'),
                     text+'\nCMS_NPS26012_RZstat_highdm_Nb1_2024 lnN 1.1 -'):
             with self.assertRaises(ValueError): run(actual=bad)
@@ -175,25 +223,25 @@ class DiagnosticPolicyTests(unittest.TestCase):
         from TROTASR.utils.paths import ERAS
         from TROTASR.workflows.combine_limits import verify_combined_grid
         config = read_json(ROOT/'jsons/analysis.json')
-        native = dict(revised_record(), years=list(ERAS), bins=1284, rate_parameters=288,
+        native = dict(revised_record(), years=list(ERAS), bins=1248, rate_parameters=264,
                       points=[dict(model=model, mass=f'mStop{600+i}_mLSP1')
                               for model, count in (('T2tt',225),('T2bW',365),('T2tb',365))
                               for i in range(count)])
         for key in ('run3_systematics', 'systematic_evaluation_deferred', 'systematic_scope',
                     'luminosity_uncertainties', 'luminosity_model'):
             native[key] = config[key]
-        merged = dict(native, era_merged=True, bins=214, likelihood_channels=8,
-                      rate_parameters=48, floating_normalization_parameters=48)
-        accepted_previous = dict(merged, rate_parameters=288, source_bins=1284,
+        merged = dict(native, era_merged=True, bins=208, likelihood_channels=8,
+                      rate_parameters=44, floating_normalization_parameters=44)
+        accepted_previous = dict(merged, rate_parameters=264, source_bins=1248,
                                  source_likelihood_channels=48)
         for record in (native, merged, accepted_previous):
             with self.subTest(merged=record.get('era_merged'), rate_parameters=record['rate_parameters']):
                 self.assertTrue(common.require_revised_record(record))
                 verify_combined_grid(record)
-        for invalid in (dict(native, bins=214), dict(merged, bins=1284),
+        for invalid in (dict(native, bins=208), dict(merged, bins=1248),
                         dict(merged, likelihood_channels=48),
-                        dict(merged, floating_normalization_parameters=288),
-                        dict(merged, rate_parameters=288),
+                        dict(merged, floating_normalization_parameters=264),
+                        dict(merged, rate_parameters=264),
                         dict(merged, scope='full_run3_hybrid_production')):
             with self.subTest(bins=invalid['bins'], scope=invalid['scope']), self.assertRaises(ValueError):
                 verify_combined_grid(invalid)
@@ -202,8 +250,8 @@ class DiagnosticPolicyTests(unittest.TestCase):
         from TROTASR.utils.paths import ERAS
         manifest = dict(status='cards_ready', era_merged=True,
                         scope='full_run3_hybrid_production', sr_data_blinded=True,
-                        years=list(ERAS), bins=214, likelihood_channels=8,
-                        floating_normalization_parameters=48, auto_mc_stats=[10,1,1])
+                        years=list(ERAS), bins=208, likelihood_channels=8,
+                        floating_normalization_parameters=44, auto_mc_stats=[10,1,1])
         with patch.object(common, 'read_json', return_value=manifest), \
              patch.object(Path, 'read_text', side_effect=AssertionError('must not read a retired card')):
             with self.assertRaisesRegex(ValueError, 'canonical six-era merged card'):
@@ -472,8 +520,10 @@ class CommandIntegrityTests(unittest.TestCase):
             self.runner.run(['test-command'],self.work,self.work/'log.txt',[self.product])
 
     def test_interrupted_command_is_not_duplicated(self):
-        key=common.command_key(['test-command'],self.work)
-        write_json(self.work/'commands'/(key+'.json'),dict(status='running',pid=123))
+        log = self.work / 'log.txt'
+        write_json(self.work / 'commands' / 'older.json', dict(
+            status='running', pid=123, command=['test-command'],
+            cwd=str(self.work.relative_to(ROOT)), log=str(log.relative_to(ROOT))))
         with patch.object(common,'process_identity',return_value=None), patch.object(common,'admitted_popen') as popen:
             result=self.runner.run(['test-command'],self.work,self.work/'log.txt',[self.product])
             self.assertEqual(result['status'],'failed')
@@ -481,8 +531,8 @@ class CommandIntegrityTests(unittest.TestCase):
             popen.assert_not_called()
 
     def test_live_child_is_not_restarted(self):
-        key=common.command_key(['test-command'],self.work)
-        write_json(self.work/'commands'/(key+'.json'),dict(status='running',pid=123,pid_start_ticks=5))
+        path = self.runner.receipt_path(self.work / 'log.txt')
+        write_json(path, dict(status='running', pid=123, pid_start_ticks=5))
         with patch.object(common,'process_identity',return_value=5), self.assertRaises(BlockingIOError):
             self.runner.run(['test-command'],self.work,self.work/'log.txt',[self.product])
 

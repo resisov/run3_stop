@@ -1,35 +1,17 @@
-# TROTASR - final canonical analysis
+# Search for SUSY top squark production in all-hadronic final states
 
-The current inputs, results, analysis code, plotting code and fitting code were
-approved by the user as the final frozen baseline on **2026-10-31**.
+This is TROTASR, the code for CMS NPS-26-012. The search uses six Run 3 eras
+(2022–2025), with blinded signal regions and partial systematics.
 
-The sole analysis implementation is [TROTASR](TROTASR/README.md), on the
-`run3_full_analysis` branch. Its actual hep2 root is:
+- [Workflow and datacard review examples](TROTASR/README.md)
+- [Find the approved results and figures](TROTASR/NOMINAL_CONTINUATION.md)
+- The [six-era inclusive ttbar top-pT prescription](TROTASR/jsons/analysis.json) defines the central correction and its paired uncertainty; the completed contributions are listed in the results above.
+- [Object definitions](TROTASR/utils/ids.adl),
+  [event selections](TROTASR/utils/event_selections.adl), and
+  [corrections](TROTASR/utils/corrections.adl)
 
-```text
-/hep2-scratch/twkim/postprocessing/TROTASR
-```
-
-Use `python -m TROTASR <stage>` through the existing runtime documented in the
-[workflow and datacard review examples](TROTASR/README.md). Current configuration is
-`TROTASR/jsons/analysis.json`; current statistical products are `stats/run3`
-inside the hep2 TROTASR root.
-
-The official model combines 2022, 2022EE, 2023, 2023BPix, 2024 and 2025 in
-8 era-merged channels, 214 likelihood bins and 48 shared CR normalizations.
-Era templates, GNN boundaries and nuisance functions are retained. SR data
-remain blinded. The adopted systematic scope is unchanged by finalization.
-
-Completed products: 895 expected-limit points, T2tt(1200,500) impacts,
-observed CR-only pulls, prefit/postfit predictions and the approved figures.
-See [the current baseline handoff](TROTASR/NOMINAL_CONTINUATION.md) for exact paths.
-
-See [AGENTS.md](AGENTS.md) for review and execution policy.
-
-Object, region and correction definitions are documented alongside the code:
-[ids.adl](TROTASR/utils/ids.adl),
-[event_selections.adl](TROTASR/utils/event_selections.adl), and
-[corrections.adl](TROTASR/utils/corrections.adl).
-
-The [workspace map](WORKSPACE_LAYOUT.md) includes the retained hep2
-`Stop_Object_Review` material.
+The [208-bin card and template release](https://github.com/resisov/run3_stop/releases/tag/trotasr-run3-208bin)
+contains the 895 signal cards, one CR-only card, and all 13 ROOT files they
+reference. Extract the archive under `TROTASR/` to keep the relative shape
+paths intact. The shared observations file uses CR data and MC placeholders
+for SR bins. The release contains fit inputs.

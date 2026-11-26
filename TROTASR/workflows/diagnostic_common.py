@@ -1,7 +1,5 @@
 """Internal finite command execution for fit diagnostics."""
 import fcntl
-import hashlib
-import json
 import os
 from pathlib import Path
 import re
@@ -10,6 +8,7 @@ import sys
 import threading
 import time
 from TROTASR.utils.paths import ROOT, internal_path
+from TROTASR.utils.selection_contract import require_current_llcr
 from TROTASR.utils.io import read_json, write_json, without_provenance_fields
 from TROTASR.workflows.combine_limits import runtime, verify_card
 from TROTASR.workflows.resources import process_identity as live_process_identity
@@ -39,9 +38,7 @@ def native_runtime(output):
         env = runtime(internal_path(output) / 'software_runtime')
         command = ['python3', str(internal_path(sys.argv[0])),
                    *native_arguments(sys.argv[1:]), '--native-runtime']
-        # ROOT restores its initial cwd while probing the PCH. SSH's default
-        # cwd may be /home, which the adopted scratch guard correctly rejects.
-        # Resolve CLI paths FIRST so relative inputs keep their original meaning.
+        # Resolve arguments before changing directory for ROOT's PCH probe.
         os.chdir(ROOT)
         os.execvpe('python3', command, env)
     if sys.platform != 'linux':
@@ -137,6 +134,7 @@ def cr_only_support_ready(record):
 def require_revised_record(record):
     """Opt-in adopted model, without relabeling historical nominal grids."""
     from TROTASR.workflows.build_nominal_grid import require_statistical_revision, scientific_settings
+    from TROTASR.utils.cr_binning import N_BINS, N_RATES
     revised = require_statistical_revision(record.get('statistical_revision'))
     combined = record.get('scope') == 'full_combined_systematic_production'
     if combined and not revised:
@@ -148,14 +146,14 @@ def require_revised_record(record):
     count = record.get('rate_parameters')
     # Earlier accepted merged manifests left this generic count set to their
     # native model. The explicit floating count is the merged-model quantity.
-    source_count = (count == 288 and record.get('source_bins') == 1284
+    source_count = (count == 6*N_RATES and record.get('source_bins') == 6*N_BINS
                     and record.get('source_likelihood_channels') == 48)
-    if (record.get('bins') != (214 if merged else 214 * len(years))
+    if (record.get('bins') != (N_BINS if merged else N_BINS * len(years))
             or not isinstance(count, int) or count <= 0
-            or (merged and (len(years) != 6 or (count != 48 and not source_count)
+            or (merged and (len(years) != 6 or (count != N_RATES and not source_count)
                             or record.get('likelihood_channels') != 8
-                            or record.get('floating_normalization_parameters') != 48))
-            or (not merged and years == ('2024', '2025') and count != 96)
+                            or record.get('floating_normalization_parameters') != N_RATES))
+            or (not merged and years == ('2024', '2025') and count != 2*N_RATES)
             or record.get('signal_contamination') is not False
             or record.get('auto_mc_stats') != [10, 1, 1]
             or record.get('sr_data_blinded') is not True
@@ -196,7 +194,7 @@ def verify_revised_card(card, manifest):
             p == 'signal' and not c.startswith('SR_') for c, p in zip(channel_rows[1], process)):
         raise ValueError('Actual card violates the SR-only signal policy')
     expected = {f'{r}_{m}_c1_{y}': (118 if m == 'highdm' else 30) if r == 'SR'
-                else (12 if m == 'highdm' else 10) for r in ('SR', 'LLCR', 'QCDCR', 'GCR')
+                else 10 for r in ('SR', 'LLCR', 'QCDCR', 'GCR')
                 for m in ('highdm', 'lowdm') for y in years}
     if len(meta['inputs']) != 1:
         raise ValueError('Revised card must use one shared four-template model')
@@ -271,13 +269,16 @@ def published_diagnostic(output, manifest_path, kind, model='T2tt', mass='mStop1
 def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500', *,
               require_grid_ready=True):
     manifest_path = internal_path(manifest_path)
+    require_current_llcr(manifest_path)
     manifest = read_json(manifest_path)
+    require_current_llcr(record=manifest)
     if manifest.get('era_merged') is True:
+        from TROTASR.utils.cr_binning import N_BINS, N_RATES
         if ((require_grid_ready and manifest.get('status') != 'cards_ready')
                 or manifest.get('sr_data_blinded') is not True
                 or manifest.get('scope') != 'full_combined_systematic_production'
-                or manifest.get('bins') != 214 or manifest.get('likelihood_channels') != 8
-                or manifest.get('floating_normalization_parameters') != 48
+                or manifest.get('bins') != N_BINS or manifest.get('likelihood_channels') != 8
+                or manifest.get('floating_normalization_parameters') != N_RATES
                 or tuple(map(str,manifest['years'])) != ('2022','2022EE','2023','2023BPix','2024','2025')
                 or manifest.get('auto_mc_stats') != [10,1,1]):
             raise ValueError('Accepted canonical six-era merged card receipt required')
@@ -298,7 +299,7 @@ def grid_card(manifest_path, kind, model='T2tt', mass='mStop1200_mLSP500', *,
             input_check_scope='accepted_current_merged_card')
     years = record_years(manifest)
     revised = require_revised_record(manifest)
-    bins = (258 if revised else 270) * len(years)
+    bins = (252 if revised else 270) * len(years)
     if manifest.get('sr_merge'):
         from TROTASR.utils.sr_merge import load_merge
         merge = load_merge(manifest['sr_merge'])
@@ -438,29 +439,48 @@ class CommandFailure(RuntimeError):
     """A consumed command failed; the stage may select its next finite recipe."""
 
 
-def command_key(command, cwd):
-    return hashlib.sha256(json.dumps([list(map(str, command)), str(cwd)], separators=(',', ':')).encode()).hexdigest()[:24]
-
-
 class CommandRunner:
-    """One attempt per exact command; exit failures and interrupted attempts persist.
-
-    Numerical retries must have distinct, finite configurations supplied by the
-    caller. A heartbeat cannot reset retry counts or overwrite interrupted ROOT.
-    """
+    """Keep the exit status of each fit attempt, including interrupted attempts."""
     def __init__(self, output):
         self.output = internal_path(output)
-        (self.output / 'commands').mkdir(parents=True, exist_ok=True)
+        self.commands = self.output / 'commands'
+        self.commands.mkdir(parents=True, exist_ok=True)
+        self._previous = None
+        self._previous_lock = threading.Lock()
+
+    def receipt_path(self, log):
+        relative = log.relative_to(ROOT)
+        return self.commands / 'by-log' / relative.parent / (relative.name + '.json')
+
+    def previous_receipt(self, command, cwd, log):
+        # Older attempts recorded the same arguments and log in a flat directory.
+        with self._previous_lock:
+            if self._previous is None:
+                self._previous = {}
+                for path in self.commands.glob('*.json'):
+                    receipt = read_json(path)
+                    if 'log' in receipt and 'command' in receipt:
+                        self._previous.setdefault(receipt['log'], []).append((path, receipt))
+            for path, receipt in self._previous.get(str(log.relative_to(ROOT)), ()):
+                if receipt['command'] == command and receipt.get('cwd', cwd) == cwd:
+                    return path
+        return None
 
     def run(self, command, cwd, log, products=(), env=None):
         cwd, log = internal_path(cwd), internal_path(log)
         products = [internal_path(p) for p in products]
         command = list(map(str, command))
-        path = self.output / 'commands' / (command_key(command, cwd) + '.json')
+        path = self.receipt_path(log)
+        path.parent.mkdir(parents=True, exist_ok=True)
         with path.with_suffix('.lock').open('a') as lock:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            cwd_record = str(cwd.relative_to(ROOT))
+            if not path.exists():
+                path = self.previous_receipt(command, cwd_record, log) or path
             if path.exists():
                 old = read_json(path)
+                if old.get('command', command) != command:
+                    raise ValueError('This fit log already belongs to another attempt: ' + str(log))
                 if old['status'] == 'running':
                     if process_active(old) or process_active(old, 'controller_pid'):
                         raise BlockingIOError('Diagnostic command is still active: ' + str(path))

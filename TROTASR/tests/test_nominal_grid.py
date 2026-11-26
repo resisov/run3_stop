@@ -26,6 +26,95 @@ requires_layout = unittest.skipUnless(SR_LAYOUT.is_file(), 'Canonical high-dM SR
 requires_merge = unittest.skipUnless(SR_MERGE.is_file(), 'Canonical high-dM SR merge is not installed locally')
 
 
+class HighDMPhotonShapeTests(unittest.TestCase):
+    def test_preserves_nominal_z_total_and_photon_control_rates(self):
+        from TROTASR.utils.era_merge import ERAS, highdm_z_shape_coefficients, normalize_highdm_z_rates
+        from TROTASR.workflows.vr_fit_projection import _card, _factor_evaluator
+
+        background, rates, lines, initials = {}, [], [], {}
+        for era_index, era in enumerate(ERAS):
+            for nb in ('Nb1', 'Nb2plus'):
+                for recoil, integral in ((0, 120.), (4, 45.), (4, 15.)):
+                    name = f'CMS_NPS26012_sgamma_shape_highdm_{nb}_bin{recoil}'
+                    reference = .8 if recoil == 0 else 1.1
+                    initials[name] = reference
+                    start = reference + .05 * era_index
+                    source = f'ZJet_{nb}_u{recoil}_part{len(rates)}'
+                    process = f'{source}_{era}'
+                    channel = f'SR_highdm_c1_{era}'
+                    background[channel, source] = {'nominal': [integral]}
+                    rates.append(dict(target=name, source_channel=channel, source_process=source,
+                        target_channel='SR_highdm_c1', process=process, original_initial=start,
+                        reference_initial=reference))
+                    lines.append(f'{name} rateParam SR_highdm_c1 {process} {reference} [0.01,5]')
+        gcr = [f'{n} rateParam GCR_highdm_c1 PhotonJet_{i} {a} [0.01,5]'
+               for i, (n, a) in enumerate(initials.items())]
+        low = 'lowdm rateParam SR_lowdm_c1 ZJet_low 1 [0.01,5]'
+        source_rows = lines + gcr + [low]
+        columns = [line.split()[2:4] for line in source_rows]
+        plan = dict(lines=['bin ' + ' '.join(c for c, _ in columns),
+                           'process ' + ' '.join(p for _, p in columns),
+                           *source_rows, '* autoMCStats 10 1 1'],
+                    rate_map=rates, representative_initials=initials, formula_count=0)
+        projection = highdm_z_shape_coefficients(plan, background)
+        normalize_highdm_z_rates(plan, projection)
+        self.assertEqual(len(rates), plan['formula_count'])
+        self.assertTrue(all(row in plan['lines'] for row in gcr + [low]))
+        with tempfile.TemporaryDirectory() as folder:
+            card = Path(folder) / 'card.txt'
+            card.write_text('\n'.join(plan['lines']))
+            _, selected, _, _ = _card(card, projection)
+        for era in ERAS:
+            for nb in ('Nb1', 'Nb2plus'):
+                group = [r for r in rates if r['source_channel'].endswith(era)
+                         and r['source_process'].startswith(f'ZJet_{nb}_')]
+                specs = {(selected[r['target_channel'], r['process']], 1., None, ()): [] for r in group}
+                for i, r in enumerate(group):
+                    specs[selected[r['target_channel'], r['process']], 1., None, ()].append(i)
+                evaluate = _factor_evaluator({(era, 'Zto2Nu'): specs}, {}, projection)
+                yields = np.array([background[r['source_channel'], r['source_process']]['nominal'][0]
+                                   for r in group])
+                nominal = yields * [r['original_initial'] for r in group]
+                evaluated = []
+                for params in (initials, {k: v * 1.3 for k, v in initials.items()},
+                               {k: v * (1.7 if k.endswith('bin4') else .6) for k, v in initials.items()}):
+                    evaluated.append(yields * evaluate(era, 'Zto2Nu', params)[:len(group)])
+                np.testing.assert_allclose(evaluated[:2], [nominal, nominal])
+                np.testing.assert_allclose(evaluated[2].sum(), nominal.sum())
+                self.assertGreater(evaluated[2][1], nominal[1])
+
+    def test_vr_normalization_draws_preserve_correlated_z_shape(self):
+        from TROTASR.utils.era_merge import ERAS, HIGHDM_Z_SHAPE
+        from TROTASR.utils.vr_binning import (HIGH_VR_CATEGORIES, HIGH_VR_DEFINITION,
+            HIGH_VR_RATE_EDGES, N_LOW_BINS, N_VR_BINS, N_HIGH_BINS)
+        from TROTASR.workflows.vr_normalization import project
+
+        fine = np.zeros((N_HIGH_BINS, len(HIGH_VR_RATE_EDGES), 3))
+        fine[0, 0] = [10., 1., 10.]
+        fine[1, -1] = [30., 3., 30.]
+        coarse = np.vstack((np.zeros((N_LOW_BINS, 3)), fine.sum(axis=1)))
+        mc = dict(status='complete', mc_only=True, sr_observations_read=False, vr_observations_read=False,
+                  fit_or_transfer_factors_applied=False, fields=['sumw', 'sumw2', 'entries'],
+                  high_definition=HIGH_VR_DEFINITION, high_categories=HIGH_VR_CATEGORIES,
+                  high_recoil_edges=HIGH_VR_RATE_EDGES,
+                  era_samples={era: ({'Zto2Nu': coarse} if era == '2022' else {}) for era in ERAS},
+                  era_high_recoil_samples={era: ({'Zto2Nu': fine} if era == '2022' else {}) for era in ERAS},
+                  coverage={era: {'background': [1, 1]} for era in ERAS})
+        self.assertEqual(len(coarse), N_VR_BINS)
+        a, b = (f'CMS_NPS26012_sgamma_shape_highdm_Nb1_bin{i}' for i in (0, 4))
+        rates = dict(prefit={a: 1., b: 1.}, postfit={a: .5, b: 2.}, fit={},
+                     bindings={f'2022/PhotonJet/{name}': 1. for name in (a, b)},
+                     draws=[{a: 1.3, b: 1.3}, {a: .5, b: 2.}],
+                     **{HIGHDM_Z_SHAPE: {'2022': {'Nb1': {a: .25, b: .75}}}})
+        result = project(mc, rates, interim=True)
+        predicted = result['views']['highdm']['postfit']['groups']['Zto2Nu']
+        self.assertAlmostEqual(sum(predicted), 40.)
+        np.testing.assert_allclose(predicted[:2], [5. / 1.625, 60. / 1.625])
+        covariance = np.array(result['covariance']['cr_normalization'])
+        self.assertGreater(covariance[0, 0], 0.)
+        np.testing.assert_allclose(covariance.sum(axis=1), 0., atol=1e-12)
+
+
 def grid_fixture():
     return dict(models={model: [MASS] for model in MODELS},
                 expected_points_by_model={model: 1 for model in MODELS})
@@ -74,7 +163,7 @@ class CanonicalCR12Tests(unittest.TestCase):
         for kind in ('ll','qcd'):
             for nb in ('Nb1','Nb2plus'):
                 for year in ('2024','2025'):
-                    for i,j in enumerate((0,1,2,3,4,4,5,5)):
+                    for i,j in enumerate((0,1,2,3,4,4,4,4)):
                         self.assertEqual(builder.cr12_parameter(f'CMS_NPS26012_{kind}_norm_highdm_{nb}_bin{i}_{year}'),
                             f'CMS_NPS26012_{kind}_norm_highdm_{nb}_bin{j}_{year}')
         for name in ('', 'CMS_NPS26012_ll_norm_lowdm_Nb1_inclusive_2024',
@@ -86,18 +175,22 @@ class CanonicalCR12Tests(unittest.TestCase):
         for rows in old['groups'].values():
             rows[4]['backgrounds']['Top']['nominal'] = [-2.]
             rows[5]['backgrounds']['Top']['nominal'] = [3.]
-            for i in (4,5): rows[i]['backgrounds']['Top']['variations']['test']['up'] = [0.]
+            for i in (4,5,6,7): rows[i]['backgrounds']['Top']['variations']['test']['up'] = [0.]
         preserved = copy.deepcopy(old)
         grouped = builder.cr12_payload(old)
         self.assertEqual(old, preserved)
         for region, rows in grouped['groups'].items():
-            self.assertEqual(len(rows), 12)
-            self.assertEqual(rows[4]['observation'], 11)
-            self.assertEqual(rows[4]['backgrounds']['Top']['nominal'], [1.])
-            self.assertEqual(rows[4]['backgrounds']['Top']['sumw2'], [13.])
+            self.assertEqual(len(rows), 10)
+            self.assertEqual(rows[4]['observation'], 26)
+            self.assertEqual(rows[4]['backgrounds']['Top']['nominal'], [6.])
+            self.assertEqual(rows[4]['backgrounds']['Top']['sumw2'], [30.])
             self.assertEqual(rows[4]['backgrounds']['Top']['variations']['test']['up'], [0.])
+            diagnostic = builder.diagnostic_cr_payload(old)['groups'][region]
+            self.assertEqual(len(diagnostic), 12)
+            self.assertEqual([r['observation'] for r in diagnostic[4:6]], [11, 15])
+            self.assertEqual([r['backgrounds']['Top']['nominal'] for r in diagnostic[4:6]], [[1.], [5.]])
         _, data, _, _ = assemble([grouped], preserve_flat=True)
-        self.assertEqual(data['LLCR_highdm_c1_2024','Top_Nb1_u4']['nominal'][4], 1.)
+        self.assertEqual(data['LLCR_highdm_c1_2024','Top_Nb1_u4']['nominal'][4], 6.)
 
     def test_cr12_rejects_incomplete_or_mixed_bindings(self):
         for problem in ('missing', 'initial', 'extra'):
@@ -131,12 +224,13 @@ class CanonicalCR12Tests(unittest.TestCase):
         row = builder.cr12_payload(old)['groups']['LLCR_highdm'][4]
         self.assertEqual(old, preserved)
         self.assertEqual(row['rate_params']['Top'], builder.cr12_parameter(par))
-        self.assertEqual(row['backgrounds']['Top']['nominal'], [1.])
-        self.assertEqual(row['backgrounds']['Top']['sumw2'], [13.])
+        self.assertEqual(row['backgrounds']['Top']['nominal'], [6.])
+        self.assertEqual(row['backgrounds']['Top']['sumw2'], [30.])
         self.assertEqual(len(row['cr12_binding_reconciliation']), 1)
-        other = old['groups']['LLCR_highdm'][4]
-        old['cr_only_unity_audit'].append(dict(channel=other['name'], process='Top',
-            parameter=other['rate_params'].pop('Top'), previous_initial=other['rate_initial'].pop('Top'), fixed=1.))
+        for i in (4,6,7):
+            other = old['groups']['LLCR_highdm'][i]
+            old['cr_only_unity_audit'].append(dict(channel=other['name'], process='Top',
+                parameter=other['rate_params'].pop('Top'), previous_initial=other['rate_initial'].pop('Top'), fixed=1.))
         self.assertFalse(builder.cr12_payload(old)['groups']['LLCR_highdm'][4]['rate_params'])
         bad = copy.deepcopy(preserved)
         bad['cr_only_unity_audit'][0]['parameter'] = par.replace('Nb1', 'Nb2plus')
@@ -156,7 +250,7 @@ class CanonicalCR12Tests(unittest.TestCase):
         merge = dict(path=str(SR_MERGE.relative_to(ROOT)))
         old, old_data, _, old_sources = combine_cached(caches,merge)
         new, new_data, _, new_sources = combine_cached(caches,merge,statistical_revision=builder.CR12_POLICY)
-        self.assertEqual(sum(map(len,new.values())),428)
+        self.assertEqual(sum(map(len,new.values())),416)
         self.assertEqual(len(new),16)
         for key, record in old_data.items():
             if key[0].startswith('SR_') or '_lowdm_' in key[0]:
@@ -193,12 +287,12 @@ class CanonicalCR12Tests(unittest.TestCase):
                 for d,a in pair.items(): np.testing.assert_array_equal(a,saved[key]['variations'][name][d])
         for year in ('2024','2025'):
             old_key = 'QCDCR_highdm_c1_'+year,'QCD_Nb1_u6'
-            data['QCDCR_highdm_c1_'+year,'QCD_Nb1_u5'] = data.pop(old_key)
+            data['QCDCR_highdm_c1_'+year,'QCD_Nb1_u4'] = data.pop(old_key)
         for record in data.values(): record['parameter'] = builder.cr12_parameter(record['parameter'])
         other = dict(channel='SR_lowdm_c1_2024',process='other',problem='zero_integral_variation')
         fit, remaining, audit = builder.cr12_fit_background(data,issues+[other],proof)
         self.assertEqual(remaining,[other]); self.assertEqual(len(data)-len(fit),2)
-        self.assertTrue(all(r['parameter'].endswith('bin5_'+r['channel'][-4:]) for r in audit))
+        self.assertTrue(all(r['parameter'].endswith('bin4_'+r['channel'][-4:]) for r in audit))
         self.assertTrue(all(fit[k] is data[k] for k in fit))
 
     def test_combined_exclusion_cannot_hide_changed_jme_or_malformed_nonjme(self):

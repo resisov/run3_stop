@@ -8,10 +8,13 @@ import sys
 
 
 STAGES = {
+    "inference": ("tt_card_model", "Run the current six-era cards and their three statistical inference stages"),
+    "dy-top-subtraction": ("tt_dy_subtraction", "Collect the inclusive ttbar change in the on/off-Z control measurement"),
     "compile": ("compile_definitions", "Serialize the current object IDs and corrections"),
     "produce": ("produce", "Produce current signal intermediate ROOTs, one file and era per job"),
     "trota-friends": ("trota_friends", "Save corrected nominal TROTA tags for accepted MC inputs"),
     "histograms": ("build_highdm_histogram", "Build high-/low-dM histograms from integrated events"),
+    "cr-mtb": ("llcr_mtb", "Render a saved historical CR cut diagnostic; no recount or fit"),
     "vr-data": ("validation_data", "Count observed events only in the validation regions"),
     "merge": ("merge_nominal", "Merge per-file histograms for one analysis era"),
     "background": ("build_background_estimation", "Measure the adopted background estimates"),

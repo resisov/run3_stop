@@ -13,6 +13,28 @@ class TransferFactorTests(unittest.TestCase):
         self.config = read_json(ROOT/'gnn4lowdm/config.json')
         self.payload = fixture()[0]
 
+    def test_tt_card_preserves_only_preexisting_display_gaps(self):
+        from TROTASR.workflows.tt_card_model import transfer_diagnostic
+        issue=dict(mode='highdm',route='qcd_qcdcr',category='Nb1',status='unsupported_cells')
+        row=dict(status='unsupported_cells',valid=[True,False],process_coverage={'numerator':True,'denominator':True},
+                 numerator=[5.,0.],denominator=[8.,2.],numerator_sumw2=[6.,0.],denominator_sumw2=[9.,3.])
+        baseline=dict(year='2022',schema='tf',status='unsupported_cells',issues=[issue],
+                      highdm={'records':{'qcd_qcdcr':{'Nb1':row}}})
+        current=copy.deepcopy(baseline)
+        audit=transfer_diagnostic('2022',current,baseline)
+        self.assertEqual(audit,dict(status='unsupported_cells',issues=[issue],card_input=False))
+        self.assertEqual(current,baseline)
+        transfer_diagnostic('2024',dict(current,year=2024),dict(baseline,year='2024'))
+        with self.assertRaises(ValueError):
+            transfer_diagnostic('2025',dict(current,year=2024),dict(baseline,year='2025'))
+        current['highdm']['records']['qcd_qcdcr']['Nb1']['denominator'][1]=0.
+        with self.assertRaises(AssertionError):
+            transfer_diagnostic('2022',current,baseline)
+        current=copy.deepcopy(baseline)
+        current['issues'].append(dict(issue,route='top_llcr'))
+        with self.assertRaises(ValueError):
+            transfer_diagnostic('2022',current,baseline)
+
     def test_high_process_denominators_are_not_combined_by_rate_parameter(self):
         out = build_transfer_factors(self.payload, self.config)
         top = out['highdm']['records']['top_llcr']['Nb1']
