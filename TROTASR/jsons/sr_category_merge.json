@@ -2,6 +2,7 @@
   "schema": "trotasr_sr_category_merge_v1",
   "threshold": 2,
   "threshold_scope": "2024+2025_category_integral",
+  "decision_payload": "stats/nominal_20260923/plots/predictions/prediction_payload.json",
   "categories_per_year": 21,
   "bins_per_year": 118,
   "source_bins_per_year": 162,
