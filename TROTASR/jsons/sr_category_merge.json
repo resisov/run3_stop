@@ -1,0 +1,273 @@
+{
+  "schema": "trotasr_sr_category_merge_v1",
+  "threshold": 2,
+  "threshold_scope": "2024+2025_category_integral",
+  "categories_per_year": 21,
+  "bins_per_year": 118,
+  "source_bins_per_year": 162,
+  "lowdm_bins": 30,
+  "cr_binning_changed": false,
+  "category_axis_order": [
+    "Nb",
+    "Nbst",
+    "Nmix",
+    "Nres",
+    "Nw"
+  ],
+  "recoil_bin_merges": [
+    {
+      "class_1based": 2,
+      "source_categories_1based": [2],
+      "operation": "merge_last_into_previous",
+      "source_edges": [250, 300, 350, 400, 500, 800, 1500],
+      "removed_boundary": 800
+    },
+    {
+      "class_1based": 15,
+      "source_categories_1based": [21],
+      "operation": "merge_last_into_previous",
+      "source_edges": [250, 300, 350, 400, 500, 800, 1500],
+      "removed_boundary": 800
+    },
+    {
+      "class_1based": 20,
+      "source_categories_1based": [26],
+      "operation": "merge_last_into_previous",
+      "source_edges": [250, 300, 350, 400, 500, 800, 1500],
+      "removed_boundary": 800
+    }
+  ],
+  "categories": [
+    {
+      "predicates": {
+        "Nb": {"ge": 1},
+        "Nbst": {"eq": 0},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 1},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [1]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 1},
+        "Nbst": {"eq": 0},
+        "Nmix": {"eq": 0},
+        "Nres": {"ge": 1},
+        "Nw": {"ge": 1}
+      },
+      "edges": [250, 300, 350, 400, 500, 1500],
+      "source_categories_1based": [2]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 1},
+        "Nbst": {"eq": 0},
+        "Nmix": {"eq": 0},
+        "Nres": {"ge": 2},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 1500],
+      "source_categories_1based": [3]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 1},
+        "Nbst": {"eq": 0},
+        "Nmix": {"ge": 1},
+        "Nres": {"ge": 1},
+        "Nw": {"ge": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [4, 5]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 1},
+        "Nbst": {"eq": 0},
+        "Nmix": {"ge": 2},
+        "Nres": {"eq": 0},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 1500],
+      "source_categories_1based": [6]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 1},
+        "Nbst": {"ge": 1},
+        "Nmix": {"eq": 0},
+        "Nres": {"ge": 1},
+        "Nw": {"ge": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [7, 8]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 1},
+        "Nbst": {"ge": 1},
+        "Nmix": {"ge": 1},
+        "Nres": {"ge": 0},
+        "Nw": {"ge": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [9, 10, 11, 12]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 1},
+        "Nbst": {"ge": 2},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 0},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 1500],
+      "source_categories_1based": [13]
+    },
+    {
+      "predicates": {
+        "Nb": {"eq": 1},
+        "Nbst": {"eq": 0},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 0},
+        "Nw": {"ge": 1}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [14]
+    },
+    {
+      "predicates": {
+        "Nb": {"eq": 1},
+        "Nbst": {"eq": 0},
+        "Nmix": {"eq": 1},
+        "Nres": {"eq": 0},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [15]
+    },
+    {
+      "predicates": {
+        "Nb": {"eq": 1},
+        "Nbst": {"eq": 0},
+        "Nmix": {"ge": 1},
+        "Nres": {"eq": 0},
+        "Nw": {"ge": 1}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [16]
+    },
+    {
+      "predicates": {
+        "Nb": {"eq": 1},
+        "Nbst": {"eq": 1},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 0},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [17]
+    },
+    {
+      "predicates": {
+        "Nb": {"eq": 1},
+        "Nbst": {"ge": 1},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 0},
+        "Nw": {"ge": 1}
+      },
+      "edges": [250, 300, 350, 400, 500, 1500],
+      "source_categories_1based": [18]
+    },
+    {
+      "predicates": {
+        "Nb": {"eq": 2},
+        "Nbst": {"eq": 0},
+        "Nmix": {"eq": 1},
+        "Nres": {"eq": 0},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [20]
+    },
+    {
+      "predicates": {
+        "Nb": {"eq": 2},
+        "Nbst": {"eq": 0},
+        "Nmix": {"ge": 1},
+        "Nres": {"eq": 0},
+        "Nw": {"ge": 1}
+      },
+      "edges": [250, 300, 350, 400, 500, 1500],
+      "source_categories_1based": [21]
+    },
+    {
+      "predicates": {
+        "Nb": {"eq": 2},
+        "Nbst": {"eq": 1},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 0},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [22]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 2},
+        "Nbst": {"eq": 0},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 0},
+        "Nw": {"ge": 1}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [19, 24]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 2},
+        "Nbst": {"ge": 1},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 0},
+        "Nw": {"ge": 1}
+      },
+      "edges": [250, 300, 350, 400, 500, 1500],
+      "source_categories_1based": [23, 28]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 3},
+        "Nbst": {"eq": 0},
+        "Nmix": {"eq": 1},
+        "Nres": {"eq": 0},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [25]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 3},
+        "Nbst": {"eq": 0},
+        "Nmix": {"ge": 1},
+        "Nres": {"eq": 0},
+        "Nw": {"ge": 1}
+      },
+      "edges": [250, 300, 350, 400, 500, 1500],
+      "source_categories_1based": [26]
+    },
+    {
+      "predicates": {
+        "Nb": {"ge": 3},
+        "Nbst": {"eq": 1},
+        "Nmix": {"eq": 0},
+        "Nres": {"eq": 0},
+        "Nw": {"eq": 0}
+      },
+      "edges": [250, 300, 350, 400, 500, 800, 1500],
+      "source_categories_1based": [27]
+    }
+  ]
+}

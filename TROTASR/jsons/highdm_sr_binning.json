@@ -1,0 +1,196 @@
+{
+  "schema": "trotasr_adopted_sr_binning_v1",
+  "category_axis_order": [
+    "Nb",
+    "Nbst",
+    "Nmix",
+    "Nres",
+    "Nw"
+  ],
+  "categories_per_year": 28,
+  "bins_per_year": 162,
+  "nb_partitions": {
+    "pooled": [
+      {"ge": 1}
+    ],
+    "split": [
+      {"eq": 1},
+      {"eq": 2},
+      {"ge": 3}
+    ]
+  },
+  "met_binning": {
+    "six": {
+      "lower_edges_GeV": [250, 300, 350, 400, 500, 800],
+      "last_bin_open_ended": true
+    },
+    "five": {
+      "lower_edges_GeV": [250, 300, 350, 400, 500],
+      "last_bin_open_ended": true
+    }
+  },
+  "topology_rules": [
+    {
+      "id": 1,
+      "nb_partition": "split",
+      "Nbst": {"eq": 0},
+      "Nmix": {"eq": 0},
+      "Nres": {"eq": 0},
+      "Nw": {"ge": 1},
+      "met": "six"
+    },
+    {
+      "id": 2,
+      "nb_partition": "pooled",
+      "Nbst": {"eq": 0},
+      "Nmix": {"eq": 0},
+      "Nres": {"eq": 1},
+      "Nw": {"eq": 0},
+      "met": "six"
+    },
+    {
+      "id": 3,
+      "nb_partition": "pooled",
+      "Nbst": {"eq": 0},
+      "Nmix": {"eq": 0},
+      "Nres": {"ge": 2},
+      "Nw": {"eq": 0},
+      "met": "five"
+    },
+    {
+      "id": 4,
+      "nb_partition": "pooled",
+      "Nbst": {"eq": 0},
+      "Nmix": {"eq": 0},
+      "Nres": {"ge": 1},
+      "Nw": {"ge": 1},
+      "met": "six"
+    },
+    {
+      "id": 5,
+      "nb_partition": "split",
+      "Nbst": {"eq": 0},
+      "Nmix": {"eq": 1},
+      "Nres": {"eq": 0},
+      "Nw": {"eq": 0},
+      "met": "six"
+    },
+    {
+      "id": 6,
+      "nb_partition": "pooled",
+      "Nbst": {"eq": 0},
+      "Nmix": {"ge": 2},
+      "Nres": {"eq": 0},
+      "Nw": {"eq": 0},
+      "met": "five"
+    },
+    {
+      "id": 7,
+      "nb_partition": "split",
+      "Nbst": {"eq": 0},
+      "Nmix": {"ge": 1},
+      "Nres": {"eq": 0},
+      "Nw": {"ge": 1},
+      "met": "six"
+    },
+    {
+      "id": 8,
+      "nb_partition": "pooled",
+      "Nbst": {"eq": 0},
+      "Nmix": {"ge": 1},
+      "Nres": {"ge": 1},
+      "Nw": {"eq": 0},
+      "met": "six"
+    },
+    {
+      "id": 9,
+      "nb_partition": "pooled",
+      "Nbst": {"eq": 0},
+      "Nmix": {"ge": 1},
+      "Nres": {"ge": 1},
+      "Nw": {"ge": 1},
+      "met": "six"
+    },
+    {
+      "id": 10,
+      "nb_partition": "split",
+      "Nbst": {"eq": 1},
+      "Nmix": {"eq": 0},
+      "Nres": {"eq": 0},
+      "Nw": {"eq": 0},
+      "met": "six"
+    },
+    {
+      "id": 11,
+      "nb_partition": "pooled",
+      "Nbst": {"ge": 2},
+      "Nmix": {"eq": 0},
+      "Nres": {"eq": 0},
+      "Nw": {"eq": 0},
+      "met": "five"
+    },
+    {
+      "id": 12,
+      "nb_partition": "split",
+      "Nbst": {"ge": 1},
+      "Nmix": {"eq": 0},
+      "Nres": {"eq": 0},
+      "Nw": {"ge": 1},
+      "met": "five"
+    },
+    {
+      "id": 13,
+      "nb_partition": "pooled",
+      "Nbst": {"ge": 1},
+      "Nmix": {"eq": 0},
+      "Nres": {"ge": 1},
+      "Nw": {"eq": 0},
+      "met": "six"
+    },
+    {
+      "id": 14,
+      "nb_partition": "pooled",
+      "Nbst": {"ge": 1},
+      "Nmix": {"eq": 0},
+      "Nres": {"ge": 1},
+      "Nw": {"ge": 1},
+      "met": "six"
+    },
+    {
+      "id": 15,
+      "nb_partition": "pooled",
+      "Nbst": {"ge": 1},
+      "Nmix": {"ge": 1},
+      "Nres": {"eq": 0},
+      "Nw": {"eq": 0},
+      "met": "six"
+    },
+    {
+      "id": 16,
+      "nb_partition": "pooled",
+      "Nbst": {"ge": 1},
+      "Nmix": {"ge": 1},
+      "Nres": {"eq": 0},
+      "Nw": {"ge": 1},
+      "met": "six"
+    },
+    {
+      "id": 17,
+      "nb_partition": "pooled",
+      "Nbst": {"ge": 1},
+      "Nmix": {"ge": 1},
+      "Nres": {"ge": 1},
+      "Nw": {"eq": 0},
+      "met": "six"
+    },
+    {
+      "id": 18,
+      "nb_partition": "pooled",
+      "Nbst": {"ge": 1},
+      "Nmix": {"ge": 1},
+      "Nres": {"ge": 1},
+      "Nw": {"ge": 1},
+      "met": "six"
+    }
+  ]
+}

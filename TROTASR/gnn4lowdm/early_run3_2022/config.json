@@ -1,0 +1,51 @@
+{
+  "schema_version": "gnn_lowdm_canonical_v1",
+  "target_eras": [
+    "2022",
+    "2022EE",
+    "2023",
+    "2023BPix"
+  ],
+  "model": {
+    "id": "2022pre_lr020",
+    "portable_numpy": "gnn4lowdm/early_run3_2022/diagonal_v3_numpy.npz"
+  },
+  "sr_binning": {
+    "bins_per_category": 5,
+    "category_labels": [
+      "Nb1_NISR0",
+      "Nb1_NISR1",
+      "Nb1_NISR2plus",
+      "Nb2plus_NISR0",
+      "Nb2plus_NISR1",
+      "Nb2plus_NISR2plus"
+    ],
+    "edges_by_category": {
+      "Nb1_NISR0": [0, 0.4947104419393318, 0.8802799301560159, 0.9329295871585365, 0.9872045482250295, 1],
+      "Nb1_NISR1": [0, 0.17732999842635896, 0.8477062201512475, 0.9198338362214074, 0.9590229955178978, 1],
+      "Nb1_NISR2plus": [0, 0.2918665771733814, 0.7542665351301062, 0.8860382887303526, 0.9708012593081471, 1],
+      "Nb2plus_NISR0": [0, 0.33081412095132134, 0.7239574109255767, 0.8625402708811658, 0.9638746739049382, 1],
+      "Nb2plus_NISR1": [0, 0.8756831015761537, 0.9471460466628849, 0.9719822066311786, 0.9820129070370458, 1],
+      "Nb2plus_NISR2plus": [0, 0.6732873679901549, 0.889542392989193, 0.9297229485539933, 0.9716846853170567, 1]
+    },
+    "status": "adopted_20261021",
+    "total_bins": 30
+  },
+  "cr_binning": {
+    "bins_per_category": 5,
+    "category_labels": [
+      "Nb1_NISR0",
+      "Nb1_NISR1plus",
+      "Nb2plus_NISR0",
+      "Nb2plus_NISR1plus"
+    ],
+    "regions": [
+      "LLCR",
+      "QCDCR",
+      "GCR",
+      "DY2E",
+      "DY2M"
+    ],
+    "score_edges": [0, 0.7087745055357697, 0.8666955795676624, 0.9283805475420253, 0.9610429653306511, 1]
+  }
+}
