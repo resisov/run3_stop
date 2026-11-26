@@ -682,6 +682,154 @@ def historical_success_commands(point, workspace, output, previous_commands=()):
         source=str(source), rmax_seed=rmax)
 
 
+def same_point_reference(work, point, state):
+    """Use a previous accepted median to choose a probe coordinate."""
+    key = point['model'] + '/' + point['mass']
+    for plan in state.get('terminal_reference_plans', ()):
+        if plan['reference_point'] == key:
+            return plan['reference_expected_median'], plan['rmax']
+    primary = read_json(work / 'state.json')
+    attempted_bounds = []
+    for attempt in (*primary.get('attempts', ()), *state['attempts']):
+        cmd = attempt.get('command', ())
+        if '--rMax' in cmd:
+            attempted_bounds.append(float(cmd[cmd.index('--rMax') + 1]))
+    if not attempted_bounds:
+        return None
+    for directory in ('stats/run3/limits', 'stats/references/era_merged_recoil/limits'):
+        path = ROOT / directory / 'workflow_state.json'
+        if not path.is_file():
+            continue
+        grid = read_json(path)
+        saved = grid.get('results', {}).get(key, {})
+        attempt = saved.get('accepted_attempt') or {}
+        median = (saved.get('validation') or {}).get('quantiles', {}).get('0.5')
+        if (grid.get('observed_sr_used') is False and saved.get('status') == 'complete'
+                and attempt.get('passed') is True and attempt.get('exit_code') == 0
+                and isinstance(median, (int, float)) and 0 < median < max(attempted_bounds)):
+            return median, max(attempted_bounds)
+    return None
+
+
+def run_profile_probe(command, folder, previous, env, state, state_path, progress, lock_fd):
+    """Consume a probe once under the existing point lock."""
+    probes = state.setdefault('profile_probes', {})
+    phase = folder.name
+    stored = probes.get(phase)
+    if stored is None:
+        receipt = previous / 'execution.json'
+        if receipt.is_file():
+            previous_record = read_json(receipt)
+            if previous_record.get('command') == command:
+                products = list(previous.glob('higgsCombine*.MultiDimFit.mH120*.root'))
+                if previous_record.get('exit_code') != 0 or len(products) != 1:
+                    return None
+                return previous / 'combine.log', products[0]
+        elif (previous / 'combine.log').is_file():
+            return None
+        folder.mkdir(parents=True, exist_ok=True)
+        log = folder / 'combine.log'
+        if log.exists():
+            return None
+        (folder / 'tmp').mkdir(exist_ok=True)
+        stored = dict(command=command, log=str(log.relative_to(ROOT)), started=time.time(), exit_code=None)
+        probes[phase] = stored
+        write_json(state_path, state)
+        with log.open('x') as stream:
+            proc = subprocess.Popen(command, cwd=folder, env=dict(env, TMPDIR=str(folder / 'tmp')),
+                stdin=subprocess.DEVNULL, stdout=stream, stderr=subprocess.STDOUT, pass_fds=(lock_fd,))
+            state.update(child_identity(proc.pid), phase=phase, command=command)
+            write_json(state_path, state)
+            progress(phase, proc.pid)
+            stored['exit_code'] = wait_for_inference(proc, log)
+        stored['finished'] = time.time()
+        state['pid'] = None
+        write_json(state_path, state)
+    if stored.get('exit_code') != 0 or stored.get('command') != command:
+        return None
+    products = list(folder.glob('higgsCombine*.MultiDimFit.mH120*.root'))
+    return (folder / 'combine.log', products[0]) if len(products) == 1 else None
+
+
+def recover_from_profile_grid(point, work, env, state, progress, lock_fd):
+    """Measure five crossings in a fresh blind fit with an evidence-based range."""
+    from TROTASR.workflows.limit_recovery import (
+        fixed_reference_command, fixed_reference_nll, profile_grid_command, profile_grid_envelope)
+
+    reference = same_point_reference(work, point, state)
+    if reference is None:
+        return None
+    median, maximum = reference
+    for previous in state['attempts']:
+        cmd = previous.get('command', ())
+        if '--rMax' in cmd:
+            maximum = max(maximum, float(cmd[cmd.index('--rMax') + 1]))
+    workspace = work / 'workspace.root'
+    mass = point['mass']
+    folder = work / 'recovery' / 'profile_grid'
+    former = work / 'recovery' / 'same_point_reference'
+    state_path = work / 'workflow.json'
+    try:
+        command = fixed_reference_command(workspace, mass, maximum, median)
+        first = run_profile_probe(command, folder / 'first', former / 'first', env,
+                                  state, state_path, progress, lock_fd)
+        if first is None:
+            return None
+        first_nll = fixed_reference_nll(*first, median)
+        combined_grid = profile_grid_command(workspace, mass, maximum, median)
+    except (OSError, KeyError, ValueError) as error:
+        state['profile_probe_error'] = str(error)
+        write_json(state_path, state)
+        return None
+
+    migrad_grid = combined_grid.copy()
+    migrad_grid[migrad_grid.index('--cminDefaultMinimizerStrategy') + 1] = '0'
+    migrad_grid[migrad_grid.index('--cminDefaultMinimizerAlgo') + 1] = 'Migrad'
+    failures = {}
+    for name, command in (('grid', combined_grid), ('grid_migrad', migrad_grid)):
+        try:
+            grid = run_profile_probe(command, folder / name, former / name, env,
+                                     state, state_path, progress, lock_fd)
+            if grid is None:
+                raise ValueError('No successful conditional fit to read')
+            envelope = profile_grid_envelope(command, *grid)
+            break
+        except (OSError, KeyError, ValueError) as error:
+            failures[name] = str(error)
+    else:
+        state['profile_probe_error'] = failures
+        write_json(state_path, state)
+        return None
+
+    state.pop('profile_probe_error', None)
+    state['profile_probe_evidence'] = dict(envelope, first_r=median, first_delta_nll=first_nll,
+                                         grid=str(grid[1].relative_to(ROOT)), failed_grids=failures)
+    write_json(state_path, state)
+    rmax = envelope['proposed_rmax']
+    migrad = fit_command(workspace, mass, rmax, .001)
+    migrad[migrad.index('--cminFallbackAlgo') + 1] = 'Minuit2,Combined,1:0.001'
+    migrad += ['--X-rtd', 'MINIMIZER_MaxCalls=2000000']
+    combined = migrad.copy()
+    combined[combined.index('--cminDefaultMinimizerStrategy') + 1] = '1'
+    combined[combined.index('--cminFallbackAlgo') + 1] = 'Minuit2,Migrad,0:0.001'
+    combined += ['--cminDefaultMinimizerAlgo', 'Combined']
+    for name, command in (('bisection', migrad), ('bisection_combined', combined)):
+        if any(a.get('command') == command for a in state['attempts']):
+            continue
+        spec = dict(name='profile_grid_' + name, stage='crossings', tolerance=.001,
+                    command=command, rmax=rmax, range_evidence=str(grid[1].relative_to(ROOT)))
+        attempt = integrated_attempt(point, folder / name, spec, env, state, state_path, progress, lock_fd)
+        if attempt.get('passed') is True and attempt.get('exit_code') == 0:
+            break
+    else:
+        return None
+    state.update(status='complete', finished=time.time(), accepted_attempt=attempt,
+                 output=attempt['output'], validation=attempt['validation'], pid=None)
+    state.pop('error', None)
+    write_json(state_path, state)
+    return accepted_fit_record(point, state, str(state_path.relative_to(ROOT)))
+
+
 def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
     """One point lock and one slot for primary -> all finite recovery -> receipt."""
     from TROTASR.workflows.limit_recovery import (
@@ -811,8 +959,11 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
                         for a in history if a.get('log') and internal_path(ROOT/a['log']).is_file()]
                 previous_attempts = [a for a in history if a.get('command')]
                 if stage in ('crossings', 'branches'):
+                    # Interrupted attempts still count toward the budget and command ledger.
                     previous_attempts = [a for a in state['attempts']
-                                         if a.get('stage') in ('minima', 'crossings', 'branches')]
+                                         if a.get('stage') in ('minima', 'crossings', 'branches')
+                                         and not (a.get('exit_code') is None and a.get('interruption')
+                                                  and a.get('passed') is False)]
                 previous = dict(status='failed', pid=None, attempts=previous_attempts)
                 plans = ledger.setdefault('plans', [])
                 known = {tuple(command) for command in commands}
@@ -853,6 +1004,10 @@ def run_integrated_point(point, output, env, progress=lambda phase, pid: None):
             if ledger['status'] == 'pending':
                 ledger['status'] = 'exhausted'
             write_json(state_path, state)
+        if output == ROOT/'stats/run3/top_pt/limits':
+            measured = recover_from_profile_grid(point, work, env, state, progress, lock.fileno())
+            if measured is not None:
+                return measured
         state.update(status='failed', error='all_applicable_finite_methods_exhausted',
                      pid=None, finished=time.time())
         write_json(state_path, state)

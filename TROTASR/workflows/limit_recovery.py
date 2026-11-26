@@ -31,6 +31,100 @@ def target_nll(q):
     return .5*(normal.inv_cdf(q)+normal.inv_cdf(1-q*.05))**2
 
 
+def profile_grid_command(workspace, mass, rmax, reference_median):
+    """Probe small positive r on the full range, in one nominal B-only Asimov fit."""
+    if not 0 < reference_median < rmax or not math.isfinite(rmax):
+        raise ValueError('Need a finite reference median within the existing POI range')
+    # Only the sample spacing uses the old result. MultiDimFit keeps [0, rmax].
+    steps = 3 * (rmax / reference_median)
+    if not math.isfinite(steps) or steps > 2**32 - 2:
+        raise ValueError('Probe grid exceeds the native unsigned point count')
+    intervals = max(8, math.ceil(steps))
+    return ['combine', '-M', 'MultiDimFit', str(workspace), '-m', '120',
+            '-n', '_' + mass, '-t', '-1', '--expectSignal', '0', '--unbinned',
+            '--algo', 'grid', '--alignEdges', '1', '--points', str(intervals + 1),
+            '--firstPoint', '1', '--lastPoint', '8', '--rMin', '0', '--rMax', str(rmax),
+            '--cminDefaultMinimizerStrategy', '1', '--cminDefaultMinimizerAlgo', 'Combined',
+            '--cminDefaultMinimizerTolerance', '0.001',
+            '--X-rtd', 'MINIMIZER_MaxCalls=2000000', '-v', '3']
+
+
+def check_profile_minimization(initial, conditional):
+    # Combine can print a success summary after the actual Minuit status.
+    status = re.compile(r'^[ 	]*Minimization finished with status\s*=\s*([+-]?\d+)', re.M)
+    baseline = [int(code) for code in status.findall(initial)]
+    if not baseline or any(code not in (0, 1) for code in baseline):
+        raise ValueError('The common minimum did not converge')
+    if 1 in baseline:
+        valid = re.findall(r'Minuit2Minimizer\s*:\s*Valid minimum\s*-\s*status\s*=\s*1\b', initial)
+        edm = re.findall(r'^[ \t]*Edm\s*=\s*([-+\d.eE]+)[ \t]*$', initial, re.M)
+        if (len(valid) < baseline.count(1)
+                or 'covariance matrix forced positive definite' not in initial
+                or not edm or not 0 <= float(edm[-1]) < math.inf):
+            raise ValueError('The common minimum lacks a valid covariance-only diagnosis')
+    for section in conditional:
+        evaluated = [int(code) for code in status.findall(section)]
+        if not evaluated or any(code != 0 for code in evaluated):
+            raise ValueError('A conditional probe fit did not converge')
+
+
+def fixed_reference_nll(log, product, reference):
+    import uproot
+
+    text = log.read_text(errors='replace')
+    sections = re.split(r'^[ 	]*Evaluating fixed point with r\s*=', text, maxsplit=1, flags=re.M)
+    if len(sections) != 2:
+        raise ValueError('The first fixed coordinate is missing from the fit log')
+    check_profile_minimization(sections[0], sections[1:])
+    with uproot.open(product) as source:
+        rows = source['limit'].arrays(['r', 'deltaNLL'], library='np')
+    if (len(rows['r']) != 2 or not math.isclose(float(rows['r'][1]), reference, rel_tol=2e-6)
+            or not math.isfinite(float(rows['deltaNLL'][1])) or rows['deltaNLL'][1] < 0):
+        raise ValueError('The first fit did not measure the previous same-point coordinate')
+    return float(rows['deltaNLL'][1])
+
+
+def profile_grid_envelope(command, log, product):
+    """A new limit range requires measured conditional minima around every target."""
+    import uproot
+    text = log.read_text(errors='replace')
+    groups = re.split(r'^Point (\d+)/\d+\s+r\s*=.*$', text, flags=re.M)
+    if [int(i) for i in groups[1::2]] != list(range(1, 9)):
+        raise ValueError('Expected the eight positive probe coordinates')
+    check_profile_minimization(groups[0], groups[2::2])
+    with uproot.open(product) as source:
+        rows = source['limit'].arrays(['r', 'deltaNLL', 'quantileExpected'], library='np')
+    values = list(zip(map(float, rows['r']), map(float, rows['deltaNLL'])))
+    if len(values) != 9 or rows['quantileExpected'][0] != -1 or values[0][1] != 0:
+        raise ValueError('Missing common minimum or conditional rows in probe ROOT')
+    maximum = float(command[command.index('--rMax') + 1])
+    spacing = maximum / (int(command[command.index('--points') + 1]) - 1)
+    best_r = values[0][0]
+    if not 0 <= best_r < spacing:
+        raise ValueError('First probe does not lie above the fitted Asimov minimum')
+    for index, (r, nll) in enumerate(values[1:], 1):
+        if (not math.isclose(r, index * spacing, rel_tol=2e-6) or
+                not math.isfinite(nll) or not values[index - 1][1] < nll < 9990):
+            raise ValueError('Inconsistent conditional likelihood grid')
+    brackets = []
+    for q in QUANTILES:
+        target = target_nll(q)
+        pair = next(((lo, hi) for lo, hi in zip(values[1:], values[2:])
+                     if lo[1] <= target <= hi[1]), None)
+        if pair is None:
+            raise ValueError(f'Conditional grid does not bracket quantile {q}')
+        brackets.append(dict(quantile=q, target_delta_nll=target, below=pair[0], above=pair[1]))
+    upper = min(maximum, 1.25 * brackets[-1]['above'][0])
+    return dict(fitted_r=best_r, brackets=brackets, sampled_points=values[1:],
+                original_rmax=maximum, proposed_rmax=upper)
+
+
+def fixed_reference_command(workspace, mass, maximum, median):
+    command = profile_grid_command(workspace, mass, maximum, median)
+    start, stop = command.index('--algo'), command.index('--rMin')
+    return command[:start]+['--algo','fixed','--fixedPointPOIs','r='+repr(float(median))]+command[stop:]
+
+
 def choose_range(logs, previous_rmax):
     """A search-range seed only, never an accepted/extrapolated limit.
 
